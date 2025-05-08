@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('persediaan_bibit', function (Blueprint $table) {
             $table->id();
             $table->string("jenis_bibit");
-            $table->foreignId('kategori_bibit_id')->references('id')->on('kategori_bibit');
+            $table->foreignId("kategori_bibit_id")->constrained("kategori_bibit");
             $table->integer("jumlah_persediaan");
             $table->string("keterangan")->nullable();
             $table->timestamps();
-
         });
     }
 
