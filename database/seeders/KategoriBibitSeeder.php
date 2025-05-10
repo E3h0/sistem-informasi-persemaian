@@ -26,11 +26,10 @@ class KategoriBibitSeeder extends Seeder
         // ];
 
         // KategoriBibit::insert($data);
+
+        KategoriBibit::create(["nama_kategori" => "Kayu-kayuan"]);
+        KategoriBibit::create(["nama_kategori" => "Estetika"]);
+        KategoriBibit::create(["nama_kategori" => "Hasil Hutan Non Kayu"]);
         
-        KategoriBibit::create([
-           ["nama_kategori" => "Kayu-kayuan"],
-           ["nama_kategori" => "Estetika"],
-           ["nama_kategori" => "Hasil Hutan Non Kayu"]
-        ]);
     }
 }
