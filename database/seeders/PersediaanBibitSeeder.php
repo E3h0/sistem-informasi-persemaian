@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\PersediaanBibit;
-use Faker\Factory as Faker;
 
 class PersediaanBibitSeeder extends Seeder
 {
@@ -14,7 +13,7 @@ class PersediaanBibitSeeder extends Seeder
      */
     public function run(): void
     {
-        
+
         PersediaanBibit::create([
             'jenis_bibit' => 'Sengon',
             'kategori_bibit_id' => 1,
@@ -31,6 +30,12 @@ class PersediaanBibitSeeder extends Seeder
             'jenis_bibit' => 'Pala',
             'kategori_bibit_id' => 1,
             'jumlah_persediaan' => 10000,
+            'keterangan' => '',
+        ]);
+        PersediaanBibit::create([
+            'jenis_bibit' => 'Jati',
+            'kategori_bibit_id' => 1,
+            'jumlah_persediaan' => 100000,
             'keterangan' => '',
         ]);
         PersediaanBibit::create([
