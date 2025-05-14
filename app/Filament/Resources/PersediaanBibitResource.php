@@ -4,8 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PersediaanBibitResource\Pages;
 use App\Filament\Resources\PersediaanBibitResource\RelationManagers;
+use App\Models\KategoriBibit;
 use App\Models\PersediaanBibit;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -26,7 +30,19 @@ class PersediaanBibitResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            //
+            TextInput::make("jenis_bibit")
+            ->label("Jenis Bibit")->required()->placeholder("Masukkan Nama Bibit"),
+
+            Select::make("kategori_bibit_id")
+            ->options(KategoriBibit::all()->pluck('nama_kategori', 'id'))
+            ->placeholder("Pilih Kategori Bibit")
+            ->label("Kategori Bibit")
+            ->required(),
+
+            TextInput::make("jumlah_persediaan")
+            ->numeric()->required()->placeholder("Masukkan jumlah Persediaan"),
+
+            Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")
         ]);
     }
 
@@ -36,7 +52,9 @@ class PersediaanBibitResource extends Resource
             ->columns([
                 TextColumn::make('jenis_bibit')->label('Nama Bibit'),
                 TextColumn::make('kategori.nama_kategori')->label('Kategori Bibit'),
-                TextColumn::make('jumlah_persediaan')->numeric(thousandsSeparator: '.')->label('Jumlah Stok')
+                TextColumn::make('jumlah_persediaan')
+                ->numeric(thousandsSeparator: '.')
+                ->label('Jumlah Stok')
             ])
             ->filters([
                 //
