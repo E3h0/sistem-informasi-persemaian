@@ -17,43 +17,37 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PersediaanBibitResource extends Resource
 {
     protected static ?string $model = PersediaanBibit::class;
-
+    protected static ?string $modelLabel = "Persediaan Bibit";
+    protected static ?string $pluralModelLabel = "Persediaan Bibit";
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                //
-            ]);
+        return $form->schema([
+            //
+        ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make("jenis_bibit")->label("Nama Bibit"),
-                TextColumn::make("kategori_bibit_id"),
-                TextColumn::make("jumlah_persediaan")->label("Jumlah Stok")
+                TextColumn::make('jenis_bibit')->label('Nama Bibit'),
+                TextColumn::make('kategori.nama_kategori')->label('Kategori Bibit'),
+                TextColumn::make('jumlah_persediaan')->numeric(thousandsSeparator: '.')->label('Jumlah Stok')
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->actions([Tables\Actions\EditAction::make()])
+            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 
     public static function getPages(): array
