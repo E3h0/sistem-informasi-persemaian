@@ -9,4 +9,6 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePersediaanBibit extends CreateRecord
 {
     protected static string $resource = PersediaanBibitResource::class;
+    protected static ?string $title = 'Tambah Data  Persediaan Bibit';
+    protected static ?string $breadcrumb = "Tambah Data Persediaan Bibit";
 }

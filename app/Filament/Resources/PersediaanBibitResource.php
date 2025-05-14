@@ -19,7 +19,9 @@ class PersediaanBibitResource extends Resource
     protected static ?string $model = PersediaanBibit::class;
     protected static ?string $modelLabel = "Persediaan Bibit";
     protected static ?string $pluralModelLabel = "Persediaan Bibit";
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'tabler-seeding';
+    protected static ?string $slug = "persediaan-bibit";
+    protected static ?string $breadcrumb = "Persediaan Bibit";
 
     public static function form(Form $form): Form
     {
