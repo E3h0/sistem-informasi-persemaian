@@ -13,4 +13,12 @@ class EditTargetProduksi extends EditRecord
     protected static ?string $title = 'Edit Data Target Produksi';
 
     protected static ?string $breadcrumb = 'Edit Data Target Produksi';
+
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getSaveFormAction()->label("Simpan Perubahan"),
+            $this->getCancelFormAction()->label("Batalkan")
+        ];
+    }
 }

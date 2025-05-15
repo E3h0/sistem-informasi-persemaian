@@ -27,7 +27,7 @@ class TargetProduksiResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Target Produksi';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fluentui-target-arrow-20-o';
 
     protected static ?string $navigationLabel = 'Target Produksi';
 
