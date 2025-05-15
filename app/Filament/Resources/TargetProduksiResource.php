@@ -4,8 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TargetProduksiResource\Pages;
 use App\Filament\Resources\TargetProduksiResource\RelationManagers;
+use App\Models\PersediaanBibit;
 use App\Models\TargetProduksi;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -13,6 +16,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+use function Laravel\Prompts\textarea;
 
 class TargetProduksiResource extends Resource
 {
@@ -35,7 +40,22 @@ class TargetProduksiResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Select::make('bibit_id')
+                ->options(PersediaanBibit::all()->pluck('jenis_bibit', 'id'))
+                ->label('Jenis Bibit')->placeholder('Pilih Jenis Bibit')
+                ->required()->searchable()->searchPrompt('Cari Nama Bibit'),
+
+                TextInput::make('target_produksi')->numeric()->required()
+                ->label('Target Produksi')->placeholder('Masukkan Target Produksi'),
+
+                TextInput::make('sudah_diproduksi')->numeric()->required()
+                ->label('Sudah Diproduksi')->placeholder('Masukkan Jumlah Bibit Yang Sudah Diproduksi'),
+
+                TextInput::make('sudah_distribusi')->numeric()->required()
+                ->label('Sudah Distribusi')->placeholder('Masukkan Jumlah Bibit Yang Sudah Distribusi'),
+
+                TextInput::make('stok_akhir')->numeric()->required()
+                ->label('Stok Akhir')->placeholder('Masukkan Jumlah Stok Akhir')
             ]);
     }
 
