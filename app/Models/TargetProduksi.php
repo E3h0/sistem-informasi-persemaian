@@ -10,7 +10,7 @@ class TargetProduksi extends Model
     protected $table = "target_produksi";
     protected $fillable = ["bibit_id", "target_produksi", "sudah_diproduksi", "sudah_distribusi", "stok_akhir"];
 
-    protected function bibit(): BelongsTo {
+    public function bibit(): BelongsTo {
         return $this->belongsTo(PersediaanBibit::class, "bibit_id");
     }
 }
