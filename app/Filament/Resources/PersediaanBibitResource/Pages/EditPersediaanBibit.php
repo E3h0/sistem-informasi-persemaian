@@ -17,4 +17,12 @@ class EditPersediaanBibit extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getSaveFormAction()->label("Simpan Perubahan"),
+            $this->getCancelFormAction()->label("Batalkan")
+        ];
+    }
 }

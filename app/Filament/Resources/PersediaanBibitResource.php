@@ -29,7 +29,8 @@ class PersediaanBibitResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->schema([
+        return $form
+        ->schema([
             TextInput::make("jenis_bibit")
             ->label("Jenis Bibit")->required()->placeholder("Masukkan Nama Bibit"),
 
