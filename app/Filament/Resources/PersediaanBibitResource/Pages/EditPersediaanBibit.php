@@ -25,4 +25,9 @@ class EditPersediaanBibit extends EditRecord
             $this->getCancelFormAction()->label("Batalkan")
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

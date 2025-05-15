@@ -20,4 +20,9 @@ class CreatePersediaanBibit extends CreateRecord
             $this->getCancelFormAction()->label("Batalkan")
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
