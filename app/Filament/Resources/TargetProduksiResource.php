@@ -18,7 +18,18 @@ class TargetProduksiResource extends Resource
 {
     protected static ?string $model = TargetProduksi::class;
 
+    protected static ?string $modelLabel = 'Target Produksi';
+
+    protected static ?string $pluralModelLabel = 'Target Produksi';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationLabel = 'Target Produksi';
+
+    protected static ?string $slug = "target-produksi";
+
+    protected static ?string $breadcrumb = 'Target Produksi';
+
 
     public static function form(Form $form): Form
     {

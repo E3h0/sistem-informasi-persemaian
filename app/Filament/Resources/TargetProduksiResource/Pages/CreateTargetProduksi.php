@@ -9,4 +9,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateTargetProduksi extends CreateRecord
 {
     protected static string $resource = TargetProduksiResource::class;
+
+    protected static ?string $title = 'Tambah Data Target Produksi';
+
+    protected static ?string $breadcrumb = 'Tambah Data Target Produksi';
 }

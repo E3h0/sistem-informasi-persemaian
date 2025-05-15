@@ -10,10 +10,7 @@ class EditTargetProduksi extends EditRecord
 {
     protected static string $resource = TargetProduksiResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
+    protected static ?string $title = 'Edit Data Target Produksi';
+
+    protected static ?string $breadcrumb = 'Edit Data Target Produksi';
 }
