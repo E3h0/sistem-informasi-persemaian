@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class PersediaanBibit extends Model
 {
@@ -12,5 +13,9 @@ class PersediaanBibit extends Model
 
     public function kategori(): BelongsTo {
         return $this->belongsTo(KategoriBibit::class, "kategori_bibit_id");
+    }
+
+    public function targetProduksi(): HasOne {
+        return $this->hasOne(targetProduksi::class, "bibit_id", "id");
     }
 }
