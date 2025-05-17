@@ -17,8 +17,6 @@ class DatabaseSeeder extends Seeder
             KategoriBibitSeeder::class,
             PersediaanBibitSeeder::class,
             TargetProduksiSeeder::class,
-            AreaPenanamanSeeder::class,
-            BlokPenanamanSeeder::class,
             MutasiBibitSeeder::class,
         ]);
     }
