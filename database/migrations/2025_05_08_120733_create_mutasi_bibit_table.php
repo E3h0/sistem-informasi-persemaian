@@ -14,9 +14,19 @@ return new class extends Migration
         Schema::create('mutasi_bibit', function (Blueprint $table) {
             $table->id();
             $table->foreignId("bibit_id")->constrained("persediaan_bibit");
-            $table->foreignId("area_id")->constrained("area_penanaman");
-            $table->foreignId("blok_id")->constrained("blok_penanaman");
-            $table->integer("jumlah_bibit");
+            $table->integer("gha1");
+            $table->integer("gha2");
+            $table->integer("gha3");
+            $table->integer("gha4");
+            $table->integer("aha1");
+            $table->integer("aha2");
+            $table->integer("aha3");
+            $table->integer("aha4");
+            $table->integer("oga1");
+            $table->integer("oga2");
+            $table->integer("oga3");
+            $table->integer("oga4");
+            $table->integer("siap_distribusi")->nullable();
             $table->string("keterangan")->nullable();
             $table->timestamps();
         });
