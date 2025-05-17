@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MutasiBibit extends Model
 {
     protected $table = "mutasi_bibit";
-    protected $fillable = ["bibit_id", "area_id", "blok_id", "jumlah_bibit", "keterangan"];
+    protected $guarded = [];
+
+    public function bibit(): BelongsTo {
+        return $this->belongsTo(PersediaanBibit::class, "bibit_id");
+    }
 }

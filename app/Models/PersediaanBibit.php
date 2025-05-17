@@ -16,6 +16,10 @@ class PersediaanBibit extends Model
     }
 
     public function targetProduksi(): HasOne {
-        return $this->hasOne(targetProduksi::class, "bibit_id", "id");
+        return $this->hasOne(TargetProduksi::class, "bibit_id", "id");
+    }
+
+    public function mutasiBibit(): HasOne {
+        return $this->hasOne(MutasiBibit::class, "bibit_id", "id");
     }
 }
