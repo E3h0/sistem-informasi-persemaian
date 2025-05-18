@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\TargetProduksiResource\Pages;
 
-use App\Filament\Resources\TargetProduksiResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\TargetProduksiResource;
 
 class CreateTargetProduksi extends CreateRecord
 {
@@ -25,5 +26,14 @@ class CreateTargetProduksi extends CreateRecord
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
+    }
+
+    protected function getCreatedNotification(): ?Notification
+    {
+        return Notification::make()
+        ->success()->title('Berhasil Ditambahkan')
+        ->body('Data baru berhasil ditambahkan')
+        ->color('success')
+        ->seconds(3);
     }
 }

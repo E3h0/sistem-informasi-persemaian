@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\TargetProduksiResource\Pages;
 
-use App\Filament\Resources\TargetProduksiResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\TargetProduksiResource;
 
 class EditTargetProduksi extends EditRecord
 {
@@ -25,5 +26,13 @@ class EditTargetProduksi extends EditRecord
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
+    }
+
+    protected function getSavedNotification(): ?Notification
+    {
+        return Notification::make()
+        ->success()->title('Berhasil Diedit')->body('Data berhasil diedit')
+        ->color('success')
+        ->seconds(3);
     }
 }

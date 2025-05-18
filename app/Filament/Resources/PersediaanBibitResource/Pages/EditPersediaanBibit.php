@@ -4,6 +4,7 @@ namespace App\Filament\Resources\PersediaanBibitResource\Pages;
 
 use App\Filament\Resources\PersediaanBibitResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPersediaanBibit extends EditRecord
@@ -29,5 +30,13 @@ class EditPersediaanBibit extends EditRecord
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
+    }
+
+    protected function getSavedNotification(): ?Notification
+    {
+        return Notification::make()
+        ->success()->title('Berhasil Diedit')->body('Data berhasil diedit')
+        ->color('success')
+        ->seconds(3);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\PersediaanBibitResource\Pages;
 
 use App\Filament\Resources\PersediaanBibitResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use illuminate\Contracts\Support\Htmlable;
 
@@ -24,5 +25,14 @@ class CreatePersediaanBibit extends CreateRecord
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
+    }
+
+    protected function getCreatedNotification(): ?Notification
+    {
+        return Notification::make()
+        ->success()->title('Berhasil Ditambahkan')
+        ->body('Data baru berhasil ditambahkan')
+        ->color('success')
+        ->seconds(3);
     }
 }
