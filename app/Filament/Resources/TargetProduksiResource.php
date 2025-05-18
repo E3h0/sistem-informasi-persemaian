@@ -66,15 +66,17 @@ class TargetProduksiResource extends Resource
                 TextColumn::make("bibit.jenis_bibit")->label("Jenis Bibit"),
 
                 TextColumn::make("target_produksi")->label("Target Produksi")
-                ->numeric(thousandsSeparator: '.'),
+                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
 
                 TextColumn::make("sudah_diproduksi")->label("Sudah Diproduksi")
-                ->numeric(thousandsSeparator: '.'),
+                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
 
                 TextColumn::make("sudah_distribusi")->label("Sudah Distribusi")
-                ->numeric(thousandsSeparator: '.'),
+                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
 
-                TextColumn::make("stok_akhir")->label("Stok Akhir")->numeric(thousandsSeparator: '.')
+                TextColumn::make("stok_akhir")->label("Stok Akhir")
+                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                
             ])
             ->filters([
                 //

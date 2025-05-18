@@ -103,22 +103,34 @@ class MutasiBibitResource extends Resource
             ->columns([
                 TextColumn::make('bibit.jenis_bibit')->label('Jenis Bibit'),
                 ColumnGroup::make('GHA', [
-                    TextColumn::make('gha1')->label('Blok 1'),
-                    TextColumn::make('gha2')->label('Blok 2'),
-                    TextColumn::make('gha3')->label('Blok 3'),
-                    TextColumn::make('gha4')->label('Blok 4')
+                    TextColumn::make('gha1')->label('Blok 1')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                    TextColumn::make('gha2')->label('Blok 2')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                    TextColumn::make('gha3')->label('Blok 3')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                    TextColumn::make('gha4')->label('Blok 4')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
                 ])->alignment(Alignment::Center),
                   ColumnGroup::make('AHA', [
-                    TextColumn::make('aha1')->label('Blok 1'),
-                    TextColumn::make('aha2')->label('Blok 2'),
-                    TextColumn::make('aha3')->label('Blok 3'),
-                    TextColumn::make('aha4')->label('Blok 4')
+                    TextColumn::make('aha1')->label('Blok 1')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                    TextColumn::make('aha2')->label('Blok 2')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                    TextColumn::make('aha3')->label('Blok 3')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                    TextColumn::make('aha4')->label('Blok 4')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
                 ])->alignment(Alignment::Center),
                   ColumnGroup::make('OGA', [
-                    TextColumn::make('oga1')->label('Blok 1'),
-                    TextColumn::make('oga2')->label('Blok 2'),
-                    TextColumn::make('oga3')->label('Blok 3'),
-                    TextColumn::make('oga4')->label('Blok 4')
+                    TextColumn::make('oga1')->label('Blok 1')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                    TextColumn::make('oga2')->label('Blok 2')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                    TextColumn::make('oga3')->label('Blok 3')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                    TextColumn::make('oga4')->label('Blok 4')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    
                 ])->alignment(Alignment::Center),
             ])
             ->filters([
