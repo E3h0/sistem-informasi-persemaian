@@ -26,7 +26,17 @@ class MutasiBibitResource extends Resource
 {
     protected static ?string $model = MutasiBibit::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-path-rounded-square';
+
+    protected static ?string $navigationLabel = 'Mutasi Bibit';
+
+    protected static ?string $modelLabel = 'Mutasi Bibit';
+
+    protected static ?string $pluralModelLabel = 'Mutasi Bibit';
+
+    protected static ?string $breadcrumb = 'Mutasi Bibit';
+
+     protected static ?string $slug = 'mutasi-bibit';
 
     public static function form(Form $form): Form
     {

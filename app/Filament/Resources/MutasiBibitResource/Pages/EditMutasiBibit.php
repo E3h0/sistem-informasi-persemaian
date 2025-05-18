@@ -10,10 +10,7 @@ class EditMutasiBibit extends EditRecord
 {
     protected static string $resource = MutasiBibitResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
+    protected static ?string $title = 'Edit Data Mutasi Bibit';
+
+    protected static ?string $breadcrumb = 'Edit Data Target Produksi';
 }

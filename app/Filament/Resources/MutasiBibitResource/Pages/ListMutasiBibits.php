@@ -10,6 +10,8 @@ class ListMutasiBibits extends ListRecords
 {
     protected static string $resource = MutasiBibitResource::class;
 
+    protected static ?string $breadcrumb = 'Daftar Mutasi Bibit';
+
     protected function getHeaderActions(): array
     {
         return [
