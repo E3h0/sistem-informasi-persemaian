@@ -14,7 +14,7 @@ class CreateTargetProduksi extends CreateRecord
 
     protected static ?string $breadcrumb = 'Tambah Data Target Produksi';
 
-     protected function getFormActions(): array
+    protected function getFormActions(): array
     {
         return [
             $this->getCreateFormAction()->label("Simpan"),

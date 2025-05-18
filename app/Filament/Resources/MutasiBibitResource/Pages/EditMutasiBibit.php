@@ -13,4 +13,17 @@ class EditMutasiBibit extends EditRecord
     protected static ?string $title = 'Edit Data Mutasi Bibit';
 
     protected static ?string $breadcrumb = 'Edit Data Target Produksi';
+
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getSaveFormAction()->label('Simpan Perubahan'),
+            $this->getCancelFormAction()->label('Batalkan')
+        ];
+    }
+
+    protected function getRedirectUrl(): ?string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
