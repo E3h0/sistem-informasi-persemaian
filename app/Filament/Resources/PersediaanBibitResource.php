@@ -26,6 +26,8 @@ class PersediaanBibitResource extends Resource
     protected static ?string $navigationIcon = 'tabler-seeding';
     protected static ?string $slug = "persediaan-bibit";
     protected static ?string $breadcrumb = "Persediaan Bibit";
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationGroup = 'Kelola Bibit';
 
     public static function form(Form $form): Form
     {

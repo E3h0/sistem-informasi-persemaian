@@ -35,6 +35,10 @@ class TargetProduksiResource extends Resource
 
     protected static ?string $breadcrumb = 'Target Produksi';
 
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $navigationGroup = 'Kelola Bibit';
+
 
     public static function form(Form $form): Form
     {

@@ -36,7 +36,11 @@ class MutasiBibitResource extends Resource
 
     protected static ?string $breadcrumb = 'Mutasi Bibit';
 
-     protected static ?string $slug = 'mutasi-bibit';
+    protected static ?string $slug = 'mutasi-bibit';
+
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationGroup = 'Kelola Bibit';
 
     public static function form(Form $form): Form
     {
