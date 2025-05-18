@@ -57,7 +57,8 @@ class PersediaanBibitResource extends Resource
                 TextColumn::make('kategori.nama_kategori')->label('Kategori Bibit'),
                 TextColumn::make('jumlah_persediaan')
                 ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
-                ->label('Jumlah Stok')
+                ->label('Jumlah Stok'),
+                TextColumn::make('created_at')->label('Dibuat Pada')->dateTime('l, j M Y')
             ])
             ->filters([
                 //

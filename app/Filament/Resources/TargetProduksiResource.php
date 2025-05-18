@@ -79,7 +79,9 @@ class TargetProduksiResource extends Resource
                 ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
 
                 TextColumn::make("stok_akhir")->label("Stok Akhir")
-                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                TextColumn::make('created_at')->label('Dibuat Pada')->dateTime('l, j M Y')
 
             ])
             ->filters([
