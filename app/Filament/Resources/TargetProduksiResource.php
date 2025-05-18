@@ -66,6 +66,7 @@ class TargetProduksiResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(false)
             ->columns([
                 TextColumn::make("bibit.jenis_bibit")->label("Jenis Bibit"),
 

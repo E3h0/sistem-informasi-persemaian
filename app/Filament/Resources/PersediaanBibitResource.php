@@ -52,6 +52,7 @@ class PersediaanBibitResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(false)
             ->columns([
                 TextColumn::make('jenis_bibit')->label('Nama Bibit'),
                 TextColumn::make('kategori.nama_kategori')->label('Kategori Bibit'),
