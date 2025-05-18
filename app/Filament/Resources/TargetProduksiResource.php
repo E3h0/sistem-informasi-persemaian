@@ -76,13 +76,14 @@ class TargetProduksiResource extends Resource
 
                 TextColumn::make("stok_akhir")->label("Stok Akhir")
                 ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
-                
+
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()->label('Hapus')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
