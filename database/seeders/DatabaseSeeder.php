@@ -18,6 +18,16 @@ class DatabaseSeeder extends Seeder
             PersediaanBibitSeeder::class,
             TargetProduksiSeeder::class,
             MutasiBibitSeeder::class,
+            KategoriAlatKerjaSeeder::class,
+            PersediaanAlatKerjaSeeder::class,
+            KategoriPupukSeeder::class,
+            SatuanPupukSeeder::class,
+            BentukPupukSeeder::class,
+            PupukSeeder::class,
+            KategoriPestisidaSeeder::class,
+            SatuanPestisidaSeeder::class,
+            BentukPestisidaSeeder::class,
+            PestisidaSeeder::class
         ]);
     }
 }

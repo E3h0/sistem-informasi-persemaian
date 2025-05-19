@@ -174,15 +174,32 @@ test('Memastikan PestisidaSeeder dapat berjalan dengan baik', function() {
     expect(Pestisida::count())->toBeGreaterThan(0);
 
 });
-// test("Memastikan DatabaseSeeder dapat berjalan dengan baik", function() {
+test("Memastikan DatabaseSeeder dapat berjalan dengan baik", function() {
 
-//     DB::table("kategori_bibit")->truncate();
-//     DB::table("persediaan_bibit")->truncate();
+    DB::table("kategori_bibit")->truncate();
+    DB::table("persediaan_bibit")->truncate();
+    DB::table("kategori_alat_kerja")->truncate();
+    DB::table("kategori_pestisida")->truncate();
+    DB::table("satuan_pestisida")->truncate();
+    DB::table("bentuk_pestisida")->truncate();
+    DB::table("kategori_pupuk")->truncate();
+    DB::table("satuan_pupuk")->truncate();
+    DB::table("bentuk_pupuk")->truncate();
 
-//     $this->seed(DatabaseSeeder::class);
+    $this->seed(DatabaseSeeder::class);
 
-//     expect(KategoriBibit::count())->toBeGreaterThan(0);
-//     expect(PersediaanBibit::count())->toBeGreaterThan(0);
-//     expect(TargetProduksi::count())->toBeGreaterThan(0);
-//     expect(MutasiBibit::count())->toBeGreaterThan(0);
-// });
+    expect(KategoriBibit::count())->toBeGreaterThan(0);
+    expect(PersediaanBibit::count())->toBeGreaterThan(0);
+    expect(TargetProduksi::count())->toBeGreaterThan(0);
+    expect(MutasiBibit::count())->toBeGreaterThan(0);
+    expect(KategoriAlatKerja::count())->toBeGreaterThan(0);
+    expect(PersediaanAlatKerja::count())->toBeGreaterThan(0);
+    expect(KategoriPupuk::count())->toBeGreaterThan(0);
+    expect(SatuanPupuk::count())->toBeGreaterThan(0);
+    expect(BentukPupuk::count())->toBeGreaterThan(0);
+    expect(Pupuk::count())->toBeGreaterThan(0);
+    expect(KategoriPestisida::count())->toBeGreaterThan(0);
+    expect(SatuanPestisida::count())->toBeGreaterThan(0);
+    expect(BentukPestisida::count())->toBeGreaterThan(0);
+    expect(Pestisida::count())->toBeGreaterThan(0);
+});
