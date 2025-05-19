@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pupuk', function (Blueprint $table) {
+        Schema::create('pestisida', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_pupuk');
-            $table->foreignId("satuan_pupuk_id")->constrained("satuan_pupuk");
-            $table->foreignId("bentuk_pupuk_id")->constrained("bentuk_pupuk");
-            $table->foreignId("kategori_pupuk_id")->constrained("kategori_pupuk");
+            $table->string('nama_pestisida');
+            $table->foreignId("satuan_pestisida_id")->constrained("satuan_pestisida");
+            $table->foreignId("bentuk_pestisida_id")->constrained("bentuk_pestisida");
+            $table->foreignId("kategori_pestisida_id")->constrained("kategori_pestisida");
             $table->integer('jumlah_persediaan');
             $table->integer('jumlah_dipakai');
             $table->integer('sisa');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pupuk');
+        Schema::dropIfExists('pestisida');
     }
 };
