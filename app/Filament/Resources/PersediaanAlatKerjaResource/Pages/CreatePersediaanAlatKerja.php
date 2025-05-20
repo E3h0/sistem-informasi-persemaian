@@ -9,4 +9,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePersediaanAlatKerja extends CreateRecord
 {
     protected static string $resource = PersediaanAlatKerjaResource::class;
+
+    protected static ?string $title = 'Tambah Data Alat Kerja';
+    protected static ?string $breadcrumb = "Tambah Data Alat Kerja";
+
 }

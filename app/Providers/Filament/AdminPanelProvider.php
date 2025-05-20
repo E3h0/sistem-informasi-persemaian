@@ -54,6 +54,10 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->sidebarFullyCollapsibleOnDesktop();
+            ->sidebarFullyCollapsibleOnDesktop()
+            ->navigationGroups([
+                'Kelola Bibit',
+                'Kelola Barang'
+            ]);
     }
 }

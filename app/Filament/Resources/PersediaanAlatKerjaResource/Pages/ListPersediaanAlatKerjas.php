@@ -9,7 +9,8 @@ use Filament\Resources\Pages\ListRecords;
 class ListPersediaanAlatKerjas extends ListRecords
 {
     protected static string $resource = PersediaanAlatKerjaResource::class;
-
+    protected static ?string $title = 'Persediaan Alat Kerja';
+    protected static ?string $breadcrumb = "Daftar Alat Kerja";
     protected function getHeaderActions(): array
     {
         return [

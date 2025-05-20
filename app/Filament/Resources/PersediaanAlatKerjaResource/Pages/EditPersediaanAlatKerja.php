@@ -10,10 +10,6 @@ class EditPersediaanAlatKerja extends EditRecord
 {
     protected static string $resource = PersediaanAlatKerjaResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
+    protected static ?string $title = 'Edit Data Alat Kerja';
+    protected static ?string $breadcrumb = "Edit Data Alat Kerja";
 }

@@ -22,7 +22,20 @@ class PersediaanAlatKerjaResource extends Resource
 {
     protected static ?string $model = PersediaanAlatKerja::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = "Persediaan Alat Kerja";
+
+    protected static ?string $pluralModelLabel = "Persediaan Alat Kerja";
+
+    protected static ?string $navigationIcon = 'css-toolbox';
+
+    protected static ?string $slug = "persediaan-alat-kerja";
+
+    protected static ?string $breadcrumb = "Persediaan Alat Kerja";
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationGroup = 'Kelola Barang';
+
 
     public static function form(Form $form): Form
     {

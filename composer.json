@@ -10,6 +10,7 @@
         "blade-ui-kit/blade-ui-kit": "^0.7.0",
         "codeat3/blade-fluentui-system-icons": "^1.34",
         "filament/filament": "^3.3",
+        "khatabwedaa/blade-css-icons": "^1.5",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "secondnetwork/blade-tabler-icons": "^3.31"
