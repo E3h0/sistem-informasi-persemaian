@@ -13,4 +13,11 @@ class CreatePersediaanAlatKerja extends CreateRecord
     protected static ?string $title = 'Tambah Data Alat Kerja';
     protected static ?string $breadcrumb = "Tambah Data Alat Kerja";
 
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getCreateFormAction()->label("Simpan"),
+            $this->getCancelFormAction()->label("Batalkan")
+        ];
+    }
 }

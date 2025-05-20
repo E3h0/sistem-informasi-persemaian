@@ -12,13 +12,7 @@ class EditPersediaanBibit extends EditRecord
     protected static string $resource = PersediaanBibitResource::class;
     protected static ?string $title = 'Edit Data Bibit';
     protected static ?string $breadcrumb = "Edit Persediaan Bibit";
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
-
+    
     protected function getFormActions(): array
     {
         return [

@@ -12,4 +12,12 @@ class EditPersediaanAlatKerja extends EditRecord
 
     protected static ?string $title = 'Edit Data Alat Kerja';
     protected static ?string $breadcrumb = "Edit Data Alat Kerja";
+
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getSaveFormAction()->label("Simpan Perubahan"),
+            $this->getCancelFormAction()->label("Batalkan")
+        ];
+    }
 }
