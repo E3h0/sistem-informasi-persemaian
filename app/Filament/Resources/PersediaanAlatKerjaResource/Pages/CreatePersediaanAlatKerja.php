@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\PersediaanAlatKerjaResource\Pages;
 
-use App\Filament\Resources\PersediaanAlatKerjaResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\PersediaanAlatKerjaResource;
 
 class CreatePersediaanAlatKerja extends CreateRecord
 {
@@ -19,5 +20,19 @@ class CreatePersediaanAlatKerja extends CreateRecord
             $this->getCreateFormAction()->label("Simpan"),
             $this->getCancelFormAction()->label("Batalkan")
         ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    protected function getCreatedNotification(): ?Notification
+    {
+        return Notification::make()
+        ->success()->title('Berhasil Ditambahkan')
+        ->body('Data baru berhasil ditambahkan')
+        ->color('success')
+        ->seconds(3);
     }
 }
