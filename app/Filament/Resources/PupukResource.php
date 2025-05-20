@@ -23,7 +23,21 @@ class PupukResource extends Resource
 {
     protected static ?string $model = Pupuk::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = "Persediaan Pupuk";
+
+    protected static ?string $pluralModelLabel = "Persediaan Pupuk";
+
+    protected static ?string $navigationLabel = 'Pupuk';
+
+    protected static ?string $navigationIcon = 'carbon-sprout';
+
+    protected static ?string $slug = "persediaan-pupuk";
+
+    protected static ?string $breadcrumb = "Persediaan Pupuk";
+
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $navigationGroup = 'Kelola Barang';
 
     public static function form(Form $form): Form
     {

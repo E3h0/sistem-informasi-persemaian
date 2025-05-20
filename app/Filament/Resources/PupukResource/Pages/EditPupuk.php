@@ -10,10 +10,6 @@ class EditPupuk extends EditRecord
 {
     protected static string $resource = PupukResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
+    protected static ?string $title = 'Edit Data Pupuk';
+    protected static ?string $breadcrumb = "Edit Data Pupuk";
 }

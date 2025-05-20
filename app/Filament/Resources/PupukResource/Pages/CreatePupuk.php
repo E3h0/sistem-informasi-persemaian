@@ -9,4 +9,7 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePupuk extends CreateRecord
 {
     protected static string $resource = PupukResource::class;
+
+    protected static ?string $title = 'Tambah Data Pupuk';
+    protected static ?string $breadcrumb = "Tambah Data Pupuk";
 }

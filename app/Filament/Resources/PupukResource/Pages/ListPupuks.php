@@ -9,6 +9,8 @@ use Filament\Resources\Pages\ListRecords;
 class ListPupuks extends ListRecords
 {
     protected static string $resource = PupukResource::class;
+    protected static ?string $title = 'Persediaan Pupuk';
+    protected static ?string $breadcrumb = "Daftar Pupuk";
 
     protected function getHeaderActions(): array
     {
