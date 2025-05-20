@@ -58,7 +58,7 @@ class PupukResource extends Resource
 
                 TextInput::make('jumlah_dipakai')->label('Jumlah dipakai')->placeholder('Masukkan jumlah dipakai')->required(),
 
-                TextInput::make('sia')->label('Sisa')->placeholder('Masukkan jumlah sisa')->required(),
+                TextInput::make('sisa')->label('Sisa')->placeholder('Masukkan jumlah sisa')->required(),
             ]);
     }
 
@@ -79,6 +79,7 @@ class PupukResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()->label('Hapus')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
