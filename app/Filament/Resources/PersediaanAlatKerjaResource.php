@@ -4,8 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PersediaanAlatKerjaResource\Pages;
 use App\Filament\Resources\PersediaanAlatKerjaResource\RelationManagers;
+use App\Models\KategoriAlatKerja;
 use App\Models\PersediaanAlatKerja;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -24,7 +28,18 @@ class PersediaanAlatKerjaResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('nama_barang')->label('Nama Barang')->required()
+                ->placeholder('Masukkan nama barang'),
+
+                Select::make('kategori_id')->label('Kategori')->options(KategoriAlatKerja::all()->pluck('nama_kategori', 'id'))->placeholder('Pilih kategori barang')->required(),
+
+                TextInput::make('jumlah_persediaan')->numeric()->label('Jumlah Persediaan')
+                ->placeholder('Masukkan jumlah persediaan')->required(),
+
+                TextInput::make('jumlah_dipakai')->numeric()->label('Jumlah Dipakai')
+                ->placeholder('Masukkan jumlah persediaan')->required(),
+
+                Textarea::make('keterangan')->label('Keterangan')->placeholder('Masukkan keterangan')->columnSpanFull()
             ]);
     }
 
