@@ -22,6 +22,11 @@ class CreatePupuk extends CreateRecord
         ];
     }
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function getCreatedNotification(): ?Notification
     {
         return Notification::make()
