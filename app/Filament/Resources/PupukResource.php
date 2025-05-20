@@ -4,8 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PupukResource\Pages;
 use App\Filament\Resources\PupukResource\RelationManagers;
+use App\Models\BentukPupuk;
+use App\Models\KategoriPupuk;
 use App\Models\Pupuk;
+use App\Models\SatuanPupuk;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -24,7 +29,22 @@ class PupukResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('nama_pupuk')->label('Nama Pupuk')->placeholder('Masukkan nama pupuk')->required(),
+
+                Select::make('satuan_pupuk_id')->label('Satuan')->placeholder('Pilih satuan pupuk')
+                ->options(SatuanPupuk::all()->pluck('nama_satuan', 'id'))->required(),
+
+                Select::make('bentuk_pupuk_id')->label('Bentuk')->placeholder('Pilih bentuk pupuk')
+                ->options(BentukPupuk::all()->pluck('nama_bentuk', 'id'))->required(),
+
+                Select::make('kategori_pupuk_id')->label('Kategori')->placeholder('Pilih kategori pupuk')
+                ->options(KategoriPupuk::all()->pluck('nama_kategori', 'id'))->required(),
+
+                TextInput::make('jumlah_persediaan')->label('Jumlah Persediaan')->placeholder('Masukkan jumlah persediaan')->required(),
+
+                TextInput::make('jumlah_dipakai')->label('Jumlah dipakai')->placeholder('Masukkan jumlah dipakai')->required(),
+
+                TextInput::make('sia')->label('Sisa')->placeholder('Masukkan jumlah sisa')->required(),
             ]);
     }
 
