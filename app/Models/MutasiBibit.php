@@ -13,4 +13,8 @@ class MutasiBibit extends Model
     public function bibit(): BelongsTo {
         return $this->belongsTo(PersediaanBibit::class, "bibit_id");
     }
+
+    public function totalGha(){
+        return  $this->gha1 + $this->gha2 + $this->gha3 + $this->gha4;
+    }
 }
