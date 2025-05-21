@@ -9,6 +9,8 @@ use Filament\Resources\Pages\ListRecords;
 class ListPestisidas extends ListRecords
 {
     protected static string $resource = PestisidaResource::class;
+    protected static ?string $title = 'Persediaan Pestisida';
+    protected static ?string $breadcrumb = "Daftar Pestisida";
 
     protected function getHeaderActions(): array
     {

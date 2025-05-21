@@ -9,4 +9,6 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePestisida extends CreateRecord
 {
     protected static string $resource = PestisidaResource::class;
+    protected static ?string $title = 'Tambah Data Pestisida';
+    protected static ?string $breadcrumb = "Tambah Data Pestisida";
 }

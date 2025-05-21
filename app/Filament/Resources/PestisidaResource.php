@@ -23,16 +23,27 @@ class PestisidaResource extends Resource
 {
     protected static ?string $model = Pestisida::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = "Persediaan Pestisida";
+
+    protected static ?string $pluralModelLabel = "Persediaan Pestisida";
+
+    protected static ?string $navigationLabel = 'Pestisida';
+
+    protected static ?string $navigationIcon = 'heroicon-o-beaker';
+
+    protected static ?string $slug = "persediaan-pestisida";
+
+    protected static ?string $breadcrumb = "Persediaan Pestisida";
+
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationGroup = 'Kelola Barang';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('nama_pestisida')->label('Nama Pestisida')->placeholder('Masukkan nama pestisida')->required(),
-
-                Select::make('satuan_pestisida_id')->label('Satuan')->placeholder('Pilih satuan pestisida')
-                ->options(SatuanPestisida::all()->pluck('nama_satuan', 'id'))->required(),
 
                 Select::make('bentuk_pestisida_id')->label('Bentuk')->placeholder('Pilih bentuk pestisida')
                 ->options(BentukPestisida::all()->pluck('nama_bentuk', 'id'))->required(),
@@ -41,6 +52,9 @@ class PestisidaResource extends Resource
                 ->options(KategoriPestisida::all()->pluck('nama_kategori', 'id'))->required(),
 
                 TextInput::make('jumlah_persediaan')->numeric()->label('Jumlah Persediaan')->placeholder('Masukkan jumlah persediaan')->required(),
+
+                Select::make('satuan_pestisida_id')->label('Satuan')->placeholder('Pilih satuan pestisida')
+                ->options(SatuanPestisida::all()->pluck('nama_satuan', 'id'))->required(),
 
                 TextInput::make('jumlah_dipakai')->numeric()->label('Jumlah dipakai')->placeholder('Masukkan jumlah dipakai')->required(),
 
