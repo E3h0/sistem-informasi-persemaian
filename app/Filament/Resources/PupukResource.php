@@ -54,11 +54,11 @@ class PupukResource extends Resource
                 Select::make('kategori_pupuk_id')->label('Kategori')->placeholder('Pilih kategori pupuk')
                 ->options(KategoriPupuk::all()->pluck('nama_kategori', 'id'))->required(),
 
-                TextInput::make('jumlah_persediaan')->label('Jumlah Persediaan')->placeholder('Masukkan jumlah persediaan')->required(),
+                TextInput::make('jumlah_persediaan')->numeric()->label('Jumlah Persediaan')->placeholder('Masukkan jumlah persediaan')->required(),
 
-                TextInput::make('jumlah_dipakai')->label('Jumlah dipakai')->placeholder('Masukkan jumlah dipakai')->required(),
+                TextInput::make('jumlah_dipakai')->numeric()->label('Jumlah dipakai')->placeholder('Masukkan jumlah dipakai')->required(),
 
-                TextInput::make('sisa')->label('Sisa')->placeholder('Masukkan jumlah sisa')->required(),
+                TextInput::make('sisa')->label('Sisa')->numeric()->placeholder('Masukkan jumlah sisa')->required(),
             ]);
     }
 

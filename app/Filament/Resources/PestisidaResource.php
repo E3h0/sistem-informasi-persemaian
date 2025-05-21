@@ -2,17 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PestisidaResource\Pages;
-use App\Filament\Resources\PestisidaResource\RelationManagers;
-use App\Models\Pestisida;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Form;
+use App\Models\Pestisida;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PestisidaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PestisidaResource\RelationManagers;
+use App\Models\BentukPestisida;
+use App\Models\KategoriPestisida;
+use App\Models\SatuanPestisida;
 
 class PestisidaResource extends Resource
 {
@@ -24,7 +29,22 @@ class PestisidaResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('nama_pestisida')->label('Nama Pestisida')->placeholder('Masukkan nama pestisida')->required(),
+
+                Select::make('satuan_pestisida_id')->label('Satuan')->placeholder('Pilih satuan pestisida')
+                ->options(SatuanPestisida::all()->pluck('nama_satuan', 'id'))->required(),
+
+                Select::make('bentuk_pestisida_id')->label('Bentuk')->placeholder('Pilih bentuk pestisida')
+                ->options(BentukPestisida::all()->pluck('nama_bentuk', 'id'))->required(),
+
+                Select::make('kategori_pestisida_id')->label('Kategori')->placeholder('Pilih kategori pestisida')
+                ->options(KategoriPestisida::all()->pluck('nama_kategori', 'id'))->required(),
+
+                TextInput::make('jumlah_persediaan')->numeric()->label('Jumlah Persediaan')->placeholder('Masukkan jumlah persediaan')->required(),
+
+                TextInput::make('jumlah_dipakai')->numeric()->label('Jumlah dipakai')->placeholder('Masukkan jumlah dipakai')->required(),
+
+                TextInput::make('sisa')->label('Sisa')->numeric()->placeholder('Masukkan jumlah sisa')->required(),
             ]);
     }
 
