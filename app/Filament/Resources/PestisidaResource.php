@@ -7,17 +7,18 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use App\Models\Pestisida;
 use Filament\Tables\Table;
+use App\Models\BentukPestisida;
+use App\Models\SatuanPestisida;
 use Filament\Resources\Resource;
+use App\Models\KategoriPestisida;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\PestisidaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PestisidaResource\RelationManagers;
-use App\Models\BentukPestisida;
-use App\Models\KategoriPestisida;
-use App\Models\SatuanPestisida;
 
 class PestisidaResource extends Resource
 {
@@ -79,7 +80,10 @@ class PestisidaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()->label('Hapus')
+                ->modalHeading('Konfirmasi Penghapusan')->modalDescription('Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat dikembalikan!')->successNotification(
+                    Notification::make()->success()->title('Berhasil Dihapus')->body('Data Berhasil Dihapus')->color('success')->seconds(3)
+                ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
