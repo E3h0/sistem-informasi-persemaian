@@ -11,6 +11,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class StatsOverview extends BaseWidget
 {
     protected static bool $isDiscovered = false;
+    protected static bool $isLazy = false;
     protected function getStats(): array
     {
         $bibit = PersediaanBibit::count();

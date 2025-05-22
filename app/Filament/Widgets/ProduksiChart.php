@@ -2,34 +2,28 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\TargetProduksi;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\DB;
 
-class MutasiBibitChart extends ChartWidget
+class ProduksiChart extends ChartWidget
 {
-    protected static ?string $heading = 'Mutasi Bibit';
+    protected static ?string $heading = 'Realisasi Produksi';
     protected static bool $isDiscovered = false;
     protected static bool $isLazy = false;
-    protected static ?string $description = 'Menunjukkan total persebaran bibit di masing-masing area.';
+    protected static ?string $description = 'Menunjukkan jumlah bibit yang sudah diproduksi, didistribusi dan sisanya.';
     protected function getData(): array
     {
-        $Gha = DB::table('mutasi_bibit')
-        ->selectRaw('SUM(gha1 + gha2 + gha3 + gha4) as gha')
-        ->value('gha');
 
-        $aha = DB::table('mutasi_bibit')
-        ->selectRaw('SUM(aha1 + aha2 + aha3 + aha4) as aha')
-        ->value('aha');
-
-        $oga = DB::table('mutasi_bibit')
-        ->selectRaw('SUM(oga1 + oga2 + oga3 + oga4) as oga')
-        ->value('oga');
+        $realisasi_produksi = TargetProduksi::sum('sudah_diproduksi');
+        $realisasi_distribusi = TargetProduksi::sum('sudah_distribusi');
+        $sisa_stok = TargetProduksi::sum('stok_akhir');
 
         return [
             'datasets' => [
                 [
                     'label' => 'Blog posts created',
-                    'data' => [$Gha, $aha, $oga],
+                    'data' => [$realisasi_produksi, $realisasi_distribusi, $sisa_stok],
                     'backgroundColor'=> [
                         'oklch(57.7% 0.245 27.325)',
                         'oklch(55.8% 0.288 302.321)',
@@ -37,7 +31,7 @@ class MutasiBibitChart extends ChartWidget
                     ],
                 ],
             ],
-            'labels' => ['GHA', 'AHA', 'OGA'],
+            'labels' => ['Bibit Diproduksi', 'Bibit Didistribusi', 'Bibit Sisa'],
         ];
     }
 
@@ -46,7 +40,7 @@ class MutasiBibitChart extends ChartWidget
         return 'pie';
     }
 
-    protected static ?array $options = [
+     protected static ?array $options = [
         'scales' => [
             'x' => [
                 'display' => false

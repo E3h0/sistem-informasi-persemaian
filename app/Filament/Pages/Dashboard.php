@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Widgets\MutasiBibitChart;
+use App\Filament\Widgets\ProduksiChart;
 use App\Filament\Widgets\StatsOverview;
 
 class Dashboard extends \Filament\Pages\Dashboard
@@ -14,7 +15,8 @@ class Dashboard extends \Filament\Pages\Dashboard
     {
         return [
             StatsOverview::class,
-            MutasiBibitChart::class
+            MutasiBibitChart::class,
+            ProduksiChart::class,
         ];
     }
 }
