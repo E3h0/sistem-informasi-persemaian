@@ -60,6 +60,7 @@ class PersediaanAlatKerjaResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
             ->columns([
                 TextColumn::make('nama_barang')->label('Nama Barang'),
                 TextColumn::make('kategori.nama_kategori')->label('Kategori'),

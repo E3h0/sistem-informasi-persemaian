@@ -105,6 +105,7 @@ class MutasiBibitResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+         ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
             ->recordUrl(false)
             ->columns([
                 TextColumn::make('bibit.jenis_bibit')->label('Jenis Bibit'),

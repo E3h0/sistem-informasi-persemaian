@@ -66,6 +66,7 @@ class PupukResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
             ->columns([
                 TextColumn::make('nama_pupuk')->label('Nama Pupuk')->alignCenter(),
                 TextColumn::make('satuan.nama_satuan')->label('Satuan')->alignCenter(),
