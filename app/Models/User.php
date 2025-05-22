@@ -3,15 +3,29 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Panel;
+use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use phpDocumentor\Reflection\Types\Boolean;
+use phpDocumentor\Reflection\Types\This;
+use PhpParser\Node\Expr\Cast\Bool_;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    const ROLE_ADMIN = 'Admin';
+    const ROLE_EDITOR = 'Editor';
+    const ROLE_VIEWIER = 'Viewer';
+
+    const ROLES = [
+        self::ROLE_ADMIN => 'Admin',
+        self::ROLE_EDITOR => 'Editor',
+        self::ROLE_VIEWIER => 'Viewer'
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +35,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -45,4 +60,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->isAdmin() || $this->isEditor() || $this->isViewer();
+    }
+
+    public function isAdmin(): bool {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function isEditor(): bool {
+        return $this->role === self::ROLE_EDITOR;
+    }
+
+    public function isViewer(): bool {
+        return $this->role === self::ROLE_VIEWIER;
+    }
+
 }

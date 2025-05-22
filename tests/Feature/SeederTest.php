@@ -16,6 +16,7 @@ use Database\Seeders\PupukSeeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\PersediaanAlatKerja;
 use App\Models\Pestisida;
+use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\PestisidaSeeder;
 use Database\Seeders\BentukPupukSeeder;
@@ -30,10 +31,20 @@ use Database\Seeders\SatuanPestisidaSeeder;
 use Database\Seeders\KategoriAlatKerjaSeeder;
 use Database\Seeders\KategoriPestisidaSeeder;
 use Database\Seeders\PersediaanAlatKerjaSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 // Refresh Db
 uses(RefreshDatabase::class);
+
+test('Memastikan UserSeeder dapat berjalan dengan baik', function () {
+
+    // jalankan seeder
+    $this->seed(UserSeeder::class);
+
+    // konfirmasi data di database
+    expect(User::count())->toBeGreaterThan(0);
+});
 
 test('Memastikan KategoriBibitSeeder dapat berjalan dengan baik', function () {
 
@@ -187,7 +198,8 @@ test("Memastikan DatabaseSeeder dapat berjalan dengan baik", function() {
     DB::table("bentuk_pupuk")->truncate();
 
     $this->seed(DatabaseSeeder::class);
-
+    
+    expect(User::count())->toBeGreaterThan(0);
     expect(KategoriBibit::count())->toBeGreaterThan(0);
     expect(PersediaanBibit::count())->toBeGreaterThan(0);
     expect(TargetProduksi::count())->toBeGreaterThan(0);
