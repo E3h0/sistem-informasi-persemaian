@@ -7,6 +7,7 @@ use Filament\Panel;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\This;
@@ -78,4 +79,7 @@ class User extends Authenticatable implements FilamentUser
         return $this->role === self::ROLE_VIEWIER;
     }
 
+    public function userPupuk(): HasMany {
+        return $this->hasMany(PenggunaanPupuk::class, 'user_id', 'id');
+    }
 }

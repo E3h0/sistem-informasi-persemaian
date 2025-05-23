@@ -18,8 +18,6 @@ return new class extends Migration
             $table->foreignId("bentuk_pupuk_id")->constrained("bentuk_pupuk");
             $table->foreignId("kategori_pupuk_id")->constrained("kategori_pupuk");
             $table->integer('jumlah_persediaan');
-            $table->integer('jumlah_dipakai');
-            $table->integer('sisa');
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });

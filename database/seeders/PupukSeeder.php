@@ -18,9 +18,7 @@ class PupukSeeder extends Seeder
             'satuan_pupuk_id' => 1,
             'bentuk_pupuk_id' => 1,
             'kategori_pupuk_id' => 2,
-            'jumlah_persediaan' => 10,
-            'jumlah_dipakai' => 5,
-            'sisa' => 5,
+            'jumlah_persediaan' => 100,
             'keterangan' => '',
         ]);
     }
