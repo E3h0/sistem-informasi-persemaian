@@ -56,10 +56,6 @@ class PupukResource extends Resource
                 ->options(KategoriPupuk::all()->pluck('nama_kategori', 'id'))->required(),
 
                 TextInput::make('jumlah_persediaan')->numeric()->label('Jumlah Persediaan')->placeholder('Masukkan jumlah persediaan')->required(),
-
-                TextInput::make('jumlah_dipakai')->numeric()->label('Jumlah dipakai')->placeholder('Masukkan jumlah dipakai')->required(),
-
-                TextInput::make('sisa')->label('Sisa')->numeric()->placeholder('Masukkan jumlah sisa')->required(),
             ]);
     }
 
@@ -73,8 +69,6 @@ class PupukResource extends Resource
                 TextColumn::make('bentuk.nama_bentuk')->label('Bentuk')->alignCenter(),
                 TextColumn::make('kategori.nama_kategori')->label('Kategori')->alignCenter(),
                 TextColumn::make('jumlah_persediaan')->label('Jumlah Persediaan')->alignCenter(),
-                TextColumn::make('jumlah_dipakai')->label('Jumlah Dipakai')->alignCenter(),
-                TextColumn::make('sisa')->label('Sisa')->alignCenter(),
             ])
             ->filters([
                 //
