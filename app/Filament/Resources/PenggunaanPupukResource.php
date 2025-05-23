@@ -21,7 +21,21 @@ class PenggunaanPupukResource extends Resource
 {
     protected static ?string $model = PenggunaanPupuk::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fluentui-data-usage-20-o';
+
+    protected static ?string $modelLabel = "Penggunaan Pupuk";
+
+    protected static ?string $pluralModelLabel = "Penggunaan Pupuk";
+
+    protected static ?string $navigationLabel = 'Penggunaan Pupuk';
+
+    protected static ?string $breadcrumb = "Penggunaan Pupuk";
+
+    protected static ?string $slug = 'penggunaan-pupuk';
+
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationGroup = 'Kelola Barang';
 
     public static function form(Form $form): Form
     {
@@ -38,10 +52,10 @@ class PenggunaanPupukResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('pupuk_id')->label('Nama Pupuk'),
+                TextColumn::make('pupuk.nama_pupuk')->label('Nama Pupuk'),
                 TextColumn::make('jumlah_penggunaan')->label('Jumlah Penggunaan')->numeric(),
                 TextColumn::make('tanggal_penggunaan')->label('Tanggal Penggunaan'),
-                TextColumn::make('user_id')->label('Pencatat')
+                TextColumn::make('pencatat.name')->label('Pencatat')
 
             ])
             ->filters([

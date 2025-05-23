@@ -10,10 +10,7 @@ class EditPenggunaanPupuk extends EditRecord
 {
     protected static string $resource = PenggunaanPupukResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
+    protected static ?string $title = 'Edit Data Penggunaan Pupuk';
+    protected static ?string $breadcrumb = "Edit Data Penggunaan Pupuk";
+
 }

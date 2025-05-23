@@ -10,6 +10,10 @@ class ListPenggunaanPupuks extends ListRecords
 {
     protected static string $resource = PenggunaanPupukResource::class;
 
+    protected static ?string $title = 'Penggunaan Pupuk';
+    
+    protected static ?string $breadcrumb = "Daftar Penggunaan Pupuk";
+
     protected function getHeaderActions(): array
     {
         return [

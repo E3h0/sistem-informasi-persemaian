@@ -36,7 +36,7 @@ class PestisidaResource extends Resource
 
     protected static ?string $breadcrumb = "Persediaan Pestisida";
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationGroup = 'Kelola Barang';
 
