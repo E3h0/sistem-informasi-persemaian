@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PenggunaanPupukResource\Pages;
 use App\Filament\Resources\PenggunaanPupukResource\RelationManagers;
 use App\Models\PenggunaanPupuk;
+use App\Models\Pupuk;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
@@ -41,7 +42,8 @@ class PenggunaanPupukResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('pupuk_id')->relationship('pupuk', 'nama_pupuk')->label('Nama Pupuk')->required(),
+                Select::make('pupuk_id')->options(Pupuk::all()->pluck('nama_pupuk', 'id'))->label('Nama Pupuk')->required()->placeholder('Pilih pupuk')->searchable()->searchPrompt('Cari pupuk'),
+
                 TextInput::make('jumlah_penggunaan')->numeric()->required(),
                 DateTimePicker::make('tanggal_penggunaan')->format('d/m/y')->seconds(false)->required(),
                 Select::make('user_id')->relationship('pencatat', 'name')->label('Pencatat')->required(),
