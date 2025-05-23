@@ -41,10 +41,10 @@ class PenggunaanPupukResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('pupuk_id')->relationship('pupuk', 'nama_pupuk')->label('Nama Pupuk'),
+                Select::make('pupuk_id')->relationship('pupuk', 'nama_pupuk')->label('Nama Pupuk')->required(),
                 TextInput::make('jumlah_penggunaan')->numeric()->required(),
                 DateTimePicker::make('tanggal_penggunaan')->format('d/m/y')->seconds(false)->required(),
-                Select::make('user_id')->relationship('pencatat', 'name')->label('Pencatat')
+                Select::make('user_id')->relationship('pencatat', 'name')->label('Pencatat')->required(),
             ]);
     }
 
@@ -63,6 +63,7 @@ class PenggunaanPupukResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

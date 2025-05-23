@@ -13,4 +13,11 @@ class EditPenggunaanPupuk extends EditRecord
     protected static ?string $title = 'Edit Data Penggunaan Pupuk';
     protected static ?string $breadcrumb = "Edit Data Penggunaan Pupuk";
 
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getSaveFormAction()->label("Simpan Perubahan"),
+            $this->getCancelFormAction()->label("Batalkan")
+        ];
+    }
 }

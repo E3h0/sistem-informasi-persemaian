@@ -12,4 +12,12 @@ class CreatePenggunaanPupuk extends CreateRecord
 
     protected static ?string $title = 'Tambah Data Penggunaan Pupuk';
     protected static ?string $breadcrumb = "Tambah Data Penggunaan Pupuk";
+
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getCreateFormAction()->label("Simpan"),
+            $this->getCancelFormAction()->label("Batalkan")
+        ];
+    }
 }
