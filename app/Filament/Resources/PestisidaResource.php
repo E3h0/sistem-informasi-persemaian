@@ -69,8 +69,6 @@ class PestisidaResource extends Resource
                 TextColumn::make('bentuk.nama_bentuk')->label('Bentuk')->alignCenter(),
                 TextColumn::make('kategori.nama_kategori')->label('Kategori')->alignCenter(),
                 TextColumn::make('jumlah_persediaan')->label('Jumlah Persediaan')->alignCenter(),
-                TextColumn::make('jumlah_dipakai')->label('Jumlah Dipakai')->alignCenter(),
-                TextColumn::make('sisa')->label('Sisa')->alignCenter(),
             ])
             ->filters([
                 //

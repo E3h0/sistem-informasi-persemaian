@@ -7,6 +7,7 @@ use App\Filament\Resources\PenggunaanPupukResource\RelationManagers;
 use App\Models\PenggunaanPupuk;
 use App\Models\Pupuk;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -45,7 +46,7 @@ class PenggunaanPupukResource extends Resource
                 Select::make('pupuk_id')->options(Pupuk::all()->pluck('nama_pupuk', 'id'))->label('Nama Pupuk')->required()->placeholder('Pilih pupuk')->searchable()->searchPrompt('Cari pupuk'),
 
                 TextInput::make('jumlah_penggunaan')->numeric()->required(),
-                DateTimePicker::make('tanggal_penggunaan')->format('d/m/y')->seconds(false)->required(),
+                DatePicker::make('tanggal_penggunaan')->required(),
                 Select::make('user_id')->relationship('pencatat', 'name')->label('Pencatat')->required(),
             ]);
     }
