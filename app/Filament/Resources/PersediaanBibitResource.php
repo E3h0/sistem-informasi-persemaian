@@ -38,10 +38,10 @@ class PersediaanBibitResource extends Resource
             ->label("Jenis Bibit")->required()->placeholder("Masukkan Nama Bibit"),
 
             Select::make("kategori_bibit_id")
-            ->options(KategoriBibit::all()->pluck('nama_kategori', 'id'))
-            ->placeholder("Pilih Kategori Bibit")
-            ->label("Kategori Bibit")
-            ->required(),
+                ->relationship('kategori', 'nama_kategori')
+                ->createOptionForm([
+                    TextInput::make('nama_kategori')->required()
+                ])->createOptionModalHeading('inihead'),
 
             TextInput::make("jumlah_persediaan")
             ->numeric()->required()->placeholder("Masukkan jumlah Persediaan"),
