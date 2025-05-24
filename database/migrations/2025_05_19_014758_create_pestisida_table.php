@@ -18,8 +18,6 @@ return new class extends Migration
             $table->foreignId("bentuk_pestisida_id")->constrained("bentuk_pestisida");
             $table->foreignId("kategori_pestisida_id")->constrained("kategori_pestisida");
             $table->integer('jumlah_persediaan');
-            $table->integer('jumlah_dipakai');
-            $table->integer('sisa');
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });

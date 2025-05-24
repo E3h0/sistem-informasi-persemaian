@@ -19,8 +19,6 @@ class PestisidaSeeder extends Seeder
             'bentuk_pestisida_id' => 1,
             'kategori_pestisida_id' => 2,
             'jumlah_persediaan' => 1000,
-            'jumlah_dipakai' => 500,
-            'sisa' => 500,
             'keterangan' => ''
         ]);
     }
