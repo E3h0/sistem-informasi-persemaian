@@ -56,10 +56,6 @@ class PestisidaResource extends Resource
 
                 Select::make('satuan_pestisida_id')->label('Satuan')->placeholder('Pilih satuan pestisida')
                 ->options(SatuanPestisida::all()->pluck('nama_satuan', 'id'))->required(),
-
-                TextInput::make('jumlah_dipakai')->numeric()->label('Jumlah dipakai')->placeholder('Masukkan jumlah dipakai')->required(),
-
-                TextInput::make('sisa')->label('Sisa')->numeric()->placeholder('Masukkan jumlah sisa')->required(),
             ]);
     }
 

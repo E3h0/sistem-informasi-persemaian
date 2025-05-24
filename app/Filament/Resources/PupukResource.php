@@ -65,10 +65,10 @@ class PupukResource extends Resource
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
             ->columns([
                 TextColumn::make('nama_pupuk')->label('Nama Pupuk')->alignCenter(),
-                TextColumn::make('satuan.nama_satuan')->label('Satuan')->alignCenter(),
                 TextColumn::make('bentuk.nama_bentuk')->label('Bentuk')->alignCenter(),
                 TextColumn::make('kategori.nama_kategori')->label('Kategori')->alignCenter(),
                 TextColumn::make('jumlah_persediaan')->label('Jumlah Persediaan')->alignCenter(),
+                TextColumn::make('satuan.nama_satuan')->label('Satuan')->alignCenter(),
             ])
             ->filters([
                 //

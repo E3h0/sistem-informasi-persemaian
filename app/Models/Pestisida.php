@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pestisida extends Model
 {
@@ -20,5 +21,9 @@ class Pestisida extends Model
 
     public function kategori(): BelongsTo {
         return $this->belongsTo(KategoriPestisida::class, 'kategori_pestisida_id');
+    }
+
+    public function penggunaan(): HasMany {
+        return $this->hasMany(PenggunaanPestisida::class, 'pestisida_id', 'id');
     }
 }
