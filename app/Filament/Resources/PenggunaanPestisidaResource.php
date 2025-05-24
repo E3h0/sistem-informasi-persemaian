@@ -22,7 +22,21 @@ class PenggunaanPestisidaResource extends Resource
 {
     protected static ?string $model = PenggunaanPestisida::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fluentui-data-usage-20-o';
+
+    protected static ?string $modelLabel = "Penggunaan Pestisida";
+
+    protected static ?string $pluralModelLabel = "Penggunaan Pestisida";
+
+    protected static ?string $navigationLabel = 'Penggunaan Pestisida';
+
+    protected static ?string $breadcrumb = "Penggunaan Pestisida";
+
+    protected static ?string $slug = 'penggunaan-pestisida';
+
+    protected static ?int $navigationSort = 5;
+
+    protected static ?string $navigationGroup = 'Kelola Barang';
 
     public static function form(Form $form): Form
     {

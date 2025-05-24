@@ -9,4 +9,7 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePenggunaanPestisida extends CreateRecord
 {
     protected static string $resource = PenggunaanPestisidaResource::class;
+
+    protected static ?string $title = 'Tambah Data Penggunaan Pestisida';
+    protected static ?string $breadcrumb = "Tambah Data Penggunaan Pestisida";
 }

@@ -10,10 +10,8 @@ class EditPenggunaanPestisida extends EditRecord
 {
     protected static string $resource = PenggunaanPestisidaResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
+    protected static ?string $title = 'Edit Data Penggunaan Pestisida';
+    protected static ?string $breadcrumb = "Edit Data Penggunaan Pestisida";
+
+    
 }
