@@ -25,9 +25,9 @@ class ProduksiChart extends ChartWidget
                     'label' => 'Blog posts created',
                     'data' => [$realisasi_produksi, $realisasi_distribusi, $sisa_stok],
                     'backgroundColor'=> [
-                        'oklch(57.7% 0.245 27.325)',
-                        'oklch(55.8% 0.288 302.321)',
-                        'oklch(54.6% 0.245 262.881)'
+                        'rgb(245 158 11)',
+                        'rgb(220 38 38)',
+                        'rgb(74 222 128)'
                     ],
                 ],
             ],
