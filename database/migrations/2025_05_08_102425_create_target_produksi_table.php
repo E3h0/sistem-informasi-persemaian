@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer("sudah_diproduksi");
             $table->integer("sudah_distribusi");
             $table->integer("stok_akhir");
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }

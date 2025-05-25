@@ -10,7 +10,7 @@ class ListTargetProduksis extends ListRecords
 {
     protected static string $resource = TargetProduksiResource::class;
 
-    protected static ?string $breadcrumb = 'Daftar Target Produksi';
+    protected static ?string $breadcrumb = 'Daftar Target & Realisasi Produksi';
 
     protected function getHeaderActions(): array
     {

@@ -2,39 +2,43 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TargetProduksiResource\Pages;
-use App\Filament\Resources\TargetProduksiResource\RelationManagers;
-use App\Models\PersediaanBibit;
-use App\Models\TargetProduksi;
 use Filament\Forms;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Notifications\Notification;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Support\RawJs;
+use App\Models\TargetProduksi;
+use App\Models\PersediaanBibit;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use function Laravel\Prompts\textarea;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-use function Laravel\Prompts\textarea;
+use App\Filament\Resources\TargetProduksiResource\Pages;
+
 
 class TargetProduksiResource extends Resource
 {
     protected static ?string $model = TargetProduksi::class;
 
-    protected static ?string $modelLabel = 'Target Produksi';
+    protected static ?string $modelLabel = 'Target & Realisasi Produksi';
 
-    protected static ?string $pluralModelLabel = 'Target Produksi';
+    protected static ?string $pluralModelLabel = 'Target & Realisasi Produksi';
 
     protected static ?string $navigationIcon = 'fluentui-target-arrow-20-o';
 
-    protected static ?string $navigationLabel = 'Target Produksi';
+    protected static ?string $navigationLabel = 'Target & Realisasi Produksi';
 
     protected static ?string $slug = "target-produksi";
 
-    protected static ?string $breadcrumb = 'Target Produksi';
+    protected static ?string $breadcrumb = 'Target & Realisasi Produksi';
 
     protected static ?int $navigationSort = 2;
 
@@ -46,21 +50,49 @@ class TargetProduksiResource extends Resource
         return $form
             ->schema([
                 Select::make('bibit_id')
-                ->options(PersediaanBibit::all()->pluck('jenis_bibit', 'id'))
-                ->label('Jenis Bibit')->placeholder('Pilih Jenis Bibit')
-                ->required()->searchable()->searchPrompt('Cari Nama Bibit'),
+                    ->options(PersediaanBibit::all()->pluck('jenis_bibit', 'id'))
+                    ->label('Jenis Bibit')->placeholder('Pilih Jenis Bibit')
+                    ->searchable()->searchPrompt('Cari Nama Bibit')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                TextInput::make('target_produksi')->numeric()->required()
-                ->label('Target Produksi')->placeholder('Masukkan Target Produksi'),
+                TextInput::make('target_produksi')
+                    ->numeric()
+                    ->label('Target Produksi')->placeholder('Masukkan Target Produksi')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                TextInput::make('sudah_diproduksi')->numeric()->required()
-                ->label('Sudah Diproduksi')->placeholder('Masukkan Jumlah Bibit Yang Sudah Diproduksi'),
+                TextInput::make('sudah_diproduksi')
+                    ->numeric()
+                    ->label('Sudah Diproduksi')->placeholder('Masukkan Jumlah Bibit Yang Sudah Diproduksi')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                TextInput::make('sudah_distribusi')->numeric()->required()
-                ->label('Sudah Distribusi')->placeholder('Masukkan Jumlah Bibit Yang Sudah Distribusi'),
+                TextInput::make('sudah_distribusi')
+                    ->reactive()
+                    ->afterStateUpdated(function (Set $set, Get $get, $state){
+                        $sudah_prod = $get('sudah_diproduksi');
+                        $set('stok_akhir', $sudah_prod-$state);
+                    })
+                    ->numeric()
+                    ->label('Sudah Distribusi')->placeholder('Masukkan Jumlah Bibit Yang Sudah Distribusi')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                TextInput::make('stok_akhir')->numeric()->required()
-                ->label('Stok Akhir')->placeholder('Masukkan Jumlah Stok Akhir')
+
+                TextInput::make('stok_akhir')
+                    ->numeric()
+                    ->label('Stok Akhir')->placeholder('Masukkan Jumlah Stok Akhir')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
+
+                Textarea::make('keterangan')
+                ->label('Keterangan')->placeholder('Tambahkan Keterangan')
             ]);
     }
 
@@ -70,23 +102,35 @@ class TargetProduksiResource extends Resource
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
             ->recordUrl(false)
             ->columns([
-                TextColumn::make("bibit.jenis_bibit")->label("Jenis Bibit"),
+                TextColumn::make("bibit.jenis_bibit")
+                    ->label("Jenis Bibit")
+                    ->searchable()->sortable(),
 
-                TextColumn::make("target_produksi")->label("Target Produksi")
-                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                TextColumn::make("target_produksi")
+                    ->label("Target Produksi")
+                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    ->sortable(),
 
                 TextColumn::make("sudah_diproduksi")->label("Sudah Diproduksi")
-                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    ->sortable(),
 
                 TextColumn::make("sudah_distribusi")->label("Sudah Distribusi")
-                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    ->sortable(),
 
                 TextColumn::make("stok_akhir")->label("Stok Akhir")
-                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    ->sortable(),
 
                 TextColumn::make('created_at')->label('Dibuat Pada')->dateTime('l, j M Y')
+                    ->sortable(),
 
-            ])
+                TextColumn::make('keterangan')->label('Keterangan')
+                    ->placeholder('Tidak ada keterangan yang ditambahkan.')
+                    ->toggleable(isToggledHiddenByDefault:true)
+
+            ])->searchPlaceholder('Cari nama bibit')->searchDebounce('300ms')
             ->filters([
                 //
             ])
