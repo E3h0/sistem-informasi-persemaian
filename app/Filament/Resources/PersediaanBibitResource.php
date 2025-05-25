@@ -35,16 +35,44 @@ class PersediaanBibitResource extends Resource
         return $form
         ->schema([
             TextInput::make("jenis_bibit")
-            ->label("Jenis Bibit")->required()->placeholder("Masukkan Nama Bibit"),
+                ->label("Jenis Bibit")->placeholder("Masukkan Nama Bibit")
+                ->rules(['required','min:3'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                        'min' => 'Minimal Harus 3 karakter'
+                ])->markAsRequired(),
 
             Select::make("kategori_bibit_id")
                 ->relationship('kategori', 'nama_kategori')
+                ->placeholder('Pilih kategori bibit')
                 ->createOptionForm([
-                    TextInput::make('nama_kategori')->required()
-                ])->createOptionModalHeading('inihead'),
+                    TextInput::make('nama_kategori')
+                        ->required()
+                        ->label('Nama Kategori')->placeholder('Masukkan Nama Kategori')
+                        ->rules(['min:3'])->validationMessages([
+                            'min' => 'Minimal harus 3 karakter'
+                        ])
+                ])->createOptionModalHeading('Tambah Kategori Bibit')
+                ->createOptionUsing(function (array $data) {
+                    $category = KategoriBibit::create($data);
+                    Notification::make()
+                    ->title('Sukses')
+                    ->body('Kategori baru berhasil ditambahkan.')
+                    ->success()
+                    ->seconds(3)
+                    ->send();
+                    return $category->id;
+                })
+                ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
             TextInput::make("jumlah_persediaan")
-            ->numeric()->required()->placeholder("Masukkan jumlah Persediaan"),
+                ->numeric()->label('Jumlah Persediaan')
+                ->placeholder("Masukkan jumlah Persediaan")
+                ->rules(['required','min:3'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'min' => 'Minimal Harus 3 karakter'
+                        ])->markAsRequired(),
 
             Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")
         ]);
@@ -56,13 +84,25 @@ class PersediaanBibitResource extends Resource
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
             ->recordUrl(false)
             ->columns([
-                TextColumn::make('jenis_bibit')->label('Nama Bibit'),
-                TextColumn::make('kategori.nama_kategori')->label('Kategori Bibit'),
+                TextColumn::make('jenis_bibit')
+                    ->label('Nama Bibit')
+                    ->searchable()->sortable(),
+
+                TextColumn::make('kategori.nama_kategori')
+                    ->label('Kategori Bibit'),
+
                 TextColumn::make('jumlah_persediaan')
-                ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
-                ->label('Jumlah Stok'),
-                TextColumn::make('created_at')->label('Dibuat Pada')->dateTime('l, j M Y')
-            ])
+                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    ->label('Jumlah Stok')->sortable(),
+
+                TextColumn::make('created_at')
+                    ->label('Dibuat Pada')->dateTime('l, j M Y')
+                    ->sortable(),
+
+                TextColumn::make('keterangan')->label('Keterangan')
+                    ->placeholder('Tidak ada keterangan yang ditambahkan.')
+                    ->toggleable(isToggledHiddenByDefault:true)
+            ])->searchPlaceholder('Cari nama bibit')->searchDebounce('300ms')
             ->filters([
                 //
             ])

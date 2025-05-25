@@ -48,13 +48,16 @@ class UserResource extends Resource
                         'required' => 'Tolong isi bagian ini.',
                         'min' => 'Minimal Harus 3 karakter'
                     ])->markAsRequired(),
+
                 TextInput::make('email')
                     ->label('Email')->placeholder('Masukkan Email')
                     ->email()
-                    ->rules(['required','min:3'])->validationMessages([
+                    ->rules(['required','min:3', 'lowercase'])->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
-                        'min' => 'Minimal Harus 3 karakter'
+                        'min' => 'Minimal Harus 3 karakter.',
+                        'lowercase' => 'Gunakan huruf kecil semua.'
                     ])->markAsRequired(),
+
                 TextInput::make('password')
                     ->label('Password')->placeholder('Masukkan Password')
                     ->password()
