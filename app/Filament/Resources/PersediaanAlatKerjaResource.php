@@ -42,18 +42,52 @@ class PersediaanAlatKerjaResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('nama_barang')->label('Nama Barang')->required()
-                ->placeholder('Masukkan nama barang'),
+                TextInput::make('nama_barang')->label('Nama Barang')
+                    ->placeholder('Masukkan nama barang')
+                    ->rules(['required','min:3'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                        'min' => 'Minimal Harus 3 karakter'
+                ])->markAsRequired(),
 
-                Select::make('kategori_id')->label('Kategori')->options(KategoriAlatKerja::all()->pluck('nama_kategori', 'id'))->placeholder('Pilih kategori barang')->required(),
+                Select::make('kategori_id')
+                    ->label('Kategori')->options(KategoriAlatKerja::all()->pluck('nama_kategori', 'id'))
+                    ->placeholder('Pilih kategori barang')->createOptionForm([
+                    TextInput::make('nama_kategori')
+                        ->required()
+                        ->label('Nama Kategori')->placeholder('Masukkan Nama Kategori')
+                        ->rules(['min:3'])->validationMessages([
+                            'min' => 'Minimal harus 3 karakter'
+                        ])
+                    ])->createOptionModalHeading('Tambah Kategori Barang')
+                    ->createOptionUsing(function (array $data) {
+                        $category = KategoriAlatKerja::create($data);
+                        Notification::make()
+                        ->title('Sukses')
+                        ->body('Kategori baru berhasil ditambahkan.')
+                        ->success()
+                        ->seconds(3)
+                        ->send();
+                })
+                ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                TextInput::make('jumlah_persediaan')->numeric()->label('Jumlah Persediaan')
-                ->placeholder('Masukkan jumlah persediaan')->required(),
+                TextInput::make('jumlah_persediaan')
+                    ->numeric()->label('Jumlah Persediaan')
+                    ->placeholder('Masukkan jumlah persediaan')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                TextInput::make('jumlah_dipakai')->numeric()->label('Jumlah Dipakai')
-                ->placeholder('Masukkan jumlah persediaan')->required(),
+                TextInput::make('jumlah_dipakai')
+                    ->numeric()->label('Jumlah Dipakai')
+                    ->placeholder('Masukkan jumlah persediaan')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                Textarea::make('keterangan')->label('Keterangan')->placeholder('Masukkan keterangan')->columnSpanFull()
+                Textarea::make('keterangan')
+                    ->label('Keterangan')->placeholder('Masukkan keterangan')->columnSpanFull()
             ]);
     }
 
@@ -61,18 +95,34 @@ class PersediaanAlatKerjaResource extends Resource
     {
         return $table
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
+            ->recordUrl(false)
             ->columns([
-                TextColumn::make('nama_barang')->label('Nama Barang'),
-                TextColumn::make('kategori.nama_kategori')->label('Kategori'),
+                TextColumn::make('nama_barang')
+                    ->label('Nama Barang')->searchable()
+                    ->sortable(),
 
-                TextColumn::make('jumlah_persediaan')->label('Jumlah Persediaan')
-                ->numeric(),
+                TextColumn::make('kategori.nama_kategori')
+                    ->label('Kategori')
+                    ->sortable(),
 
-                TextColumn::make('jumlah_dipakai')->label('Jumlah Dipakai')
-                ->numeric(),
+                TextColumn::make('jumlah_persediaan')
+                    ->label('Jumlah Persediaan')
+                    ->numeric()->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    ->sortable(),
 
-                TextColumn::make('keterangan')->label('Keterangan'),
-            ])
+                TextColumn::make('jumlah_dipakai')
+                ->label('Jumlah Dipakai')
+                ->sortable()
+                ->numeric()->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                TextColumn::make('keterangan')->label('Keterangan')
+                    ->placeholder('Tidak ada keterangan yang ditambahkan.')
+                    ->toggleable(isToggledHiddenByDefault:false),
+
+                TextColumn::make('created_at')
+                    ->label('Dibuat Pada')->dateTime('l, j M Y')
+                    ->sortable(),
+            ])->searchPlaceholder('Cari nama barang')->searchDebounce('300ms')
             ->filters([
                 //
             ])
