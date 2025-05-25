@@ -12,14 +12,15 @@ use Filament\Resources\Resource;
 use function Laravel\Prompts\select;
 use Filament\Forms\Components\Select;
 use Filament\Support\Enums\Alignment;
-use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ColumnGroup;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
 use App\Filament\Resources\MutasiBibitResource\Pages;
 use App\Filament\Resources\MutasiBibitResource\RelationManagers;
 
@@ -48,57 +49,108 @@ class MutasiBibitResource extends Resource
         return $form
             ->schema([
                 Select::make('bibit_id')
-                ->options(PersediaanBibit::all()->pluck('jenis_bibit', 'id'))->label('Jenis Bibit')
-                ->searchable()->searchPrompt('Cari nama bibit')->placeholder('Pilih Jenis Bibit')->required()
-                ->columnSpanFull(),
+                    ->options(PersediaanBibit::all()->pluck('jenis_bibit', 'id'))->label('Jenis Bibit')
+                    ->searchable()->searchPrompt('Cari nama bibit')->placeholder('Pilih Jenis Bibit')->required()
+                    ->columnSpanFull(),
 
-                Fieldset::make('GHA')
-                ->schema([
-                    TextInput::make('gha1')->label('Blok 1')->numeric()->columnSpan(1)->required()
-                    ->placeholder('Masukkan jumlah bibit'),
+                Section::make('GHA')
+                    ->description('Germination House Area')
+                    ->schema([
+                        TextInput::make('gha1')->label('Blok 1')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                        ])->markAsRequired(),
 
-                    TextInput::make('gha2')->label('Blok 2')->numeric()->columnSpan(1)->required()
-                    ->placeholder('Masukkan jumlah bibit'),
+                        TextInput::make('gha2')->label('Blok 2')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                        ])->markAsRequired(),
 
-                    TextInput::make('gha3')->label('Blok 3')->numeric()->columnSpan(1)->required()
-                    ->placeholder('Masukkan jumlah bibit'),
+                        TextInput::make('gha3')->label('Blok 3')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                        ])->markAsRequired(),
 
-                    TextInput::make('gha4')->label('Blok 4')->numeric()->columnSpan(1)->required()
-                    ->placeholder('Masukkan jumlah bibit'),
-
+                        TextInput::make('gha4')->label('Blok 4')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                        ])->markAsRequired(),
                 ])->columns(4),
 
-                Fieldset::make('AHA')
-                ->schema([
-                    TextInput::make('aha1')->label('Blok 1')->numeric()->columnSpan(1)
-                    ->required()->placeholder('Masukkan jumlah bibit'),
+                Section::make('AHA')
+                    ->description('Aclimatization House Area')
+                    ->schema([
+                        TextInput::make('aha1')->label('Blok 1')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                        ])->markAsRequired(),
 
-                    TextInput::make('aha2')->label('Blok 2')->numeric()->columnSpan(1)
-                    ->required()->placeholder('Masukkan jumlah bibit'),
+                        TextInput::make('aha2')->label('Blok 2')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                        ])->markAsRequired(),
 
-                    TextInput::make('aha3')->label('Blok 3')->numeric()->columnSpan(1)
-                    ->required()->placeholder('Masukkan jumlah bibit'),
+                        TextInput::make('aha3')->label('Blok 3')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                        ])->markAsRequired(),
 
-                    TextInput::make('aha4')->label('Blok 4')->numeric()->columnSpan(1)
-                    ->required()->placeholder('Masukkan jumlah bibit'),
+                        TextInput::make('aha4')->label('Blok 4')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                        ])->markAsRequired(),
+                    ])->columns(4),
 
-                ])->columns(4),
+                Section::make('OGA')
+                    ->description('Open Growth Area')
+                    ->schema([
+                        TextInput::make('oga1')->label('Blok 1')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                            ])->markAsRequired(),
 
-                Fieldset::make('OGA')
-                ->schema([
-                    TextInput::make('oga1')->label('Blok 1')->numeric()->columnSpan(1)
-                    ->required()->placeholder('Masukkan jumlah bibit'),
+                        TextInput::make('oga2')->label('Blok 2')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                            ])->markAsRequired(),
 
-                    TextInput::make('oga2')->label('Blok 2')->numeric()->columnSpan(1)
-                    ->required()->placeholder('Masukkan jumlah bibit'),
+                        TextInput::make('oga3')->label('Blok 3')
+                            ->numeric()->columnSpan(1)
+                            ->placeholder('Masukkan jumlah bibit')
+                            ->rules(['required'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                            ])->markAsRequired(),
 
-                    TextInput::make('oga3')->label('Blok 3')->numeric()->columnSpan(1)
-                    ->required()->placeholder('Masukkan jumlah bibit'),
+                        TextInput::make('oga4')->label('Blok 4')
+                        ->numeric()->columnSpan(1)
+                        ->placeholder('Masukkan jumlah bibit')
+                        ->rules(['required'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                        ])->markAsRequired(),
+                    ])->columns(4),
 
-                    TextInput::make('oga4')->label('Blok 4')->numeric()->columnSpan(1)
-                    ->required()->placeholder('Masukkan jumlah bibit'),
-
-                ])->columns(4)
+                Textarea::make("keterangan")
+                    ->placeholder("Tambahkan Keterangan")->columnSpanFull()
             ]);
     }
 
@@ -108,38 +160,71 @@ class MutasiBibitResource extends Resource
          ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
             ->recordUrl(false)
             ->columns([
-                TextColumn::make('bibit.jenis_bibit')->label('Jenis Bibit'),
+                TextColumn::make('bibit.jenis_bibit')
+                    ->label('Jenis Bibit')->searchable(),
                 ColumnGroup::make('GHA', [
-                    TextColumn::make('gha1')->label('Blok 1')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    TextColumn::make('gha1')->label('Blok 1')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
 
-                    TextColumn::make('gha2')->label('Blok 2')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    TextColumn::make('gha2')->label('Blok 2')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
 
-                    TextColumn::make('gha3')->label('Blok 3')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    TextColumn::make('gha3')->label('Blok 3')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
 
-                    TextColumn::make('gha4')->label('Blok 4')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
-
-                ])->alignment(Alignment::Center),
-                  ColumnGroup::make('AHA', [
-                    TextColumn::make('aha1')->label('Blok 1')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
-
-                    TextColumn::make('aha2')->label('Blok 2')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
-
-                    TextColumn::make('aha3')->label('Blok 3')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
-
-                    TextColumn::make('aha4')->label('Blok 4')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    TextColumn::make('gha4')->label('Blok 4')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
 
                 ])->alignment(Alignment::Center),
-                  ColumnGroup::make('OGA', [
-                    TextColumn::make('oga1')->label('Blok 1')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                ColumnGroup::make('AHA', [
+                    TextColumn::make('aha1')->label('Blok 1')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
 
-                    TextColumn::make('oga2')->label('Blok 2')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    TextColumn::make('aha2')->label('Blok 2')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
 
-                    TextColumn::make('oga3')->label('Blok 3')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    TextColumn::make('aha3')->label('Blok 3')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
 
-                    TextColumn::make('oga4')->label('Blok 4')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    TextColumn::make('aha4')->label('Blok 4')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
 
                 ])->alignment(Alignment::Center),
-            ])
+                ColumnGroup::make('OGA', [
+                    TextColumn::make('oga1')->label('Blok 1')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
+
+                    TextColumn::make('oga2')->label('Blok 2')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
+
+                    TextColumn::make('oga3')->label('Blok 3')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable(),
+
+                    TextColumn::make('oga4')->label('Blok 4')
+                        ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                        ->sortable()
+
+                ])->alignment(Alignment::Center),
+                TextColumn::make('created_at')
+                    ->label('Dibuat Pada')->dateTime('l, j M Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault:true),
+
+                TextColumn::make('keterangan')->label('Keterangan')
+                    ->placeholder('Tidak ada keterangan yang ditambahkan.')
+                    ->toggleable(isToggledHiddenByDefault:true)
+            ])->searchPlaceholder('Cari nama bibit')->searchDebounce('300ms')
             ->filters([
                 //
             ])
