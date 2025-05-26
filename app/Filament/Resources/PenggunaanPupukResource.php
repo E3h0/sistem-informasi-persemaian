@@ -113,7 +113,7 @@ class PenggunaanPupukResource extends Resource
 
                 TextColumn::make('tanggal_penggunaan')
                     ->label('Tanggal Penggunaan')
-                    ->sortable(),
+                    ->sortable()->dateTime('l, j M Y'),
 
                 TextColumn::make('keterangan')->label('Keterangan')
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')

@@ -5,13 +5,19 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
+use App\Models\Pestisida;
 use Filament\Tables\Table;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use App\Models\PenggunaanPestisida;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Factories\Relationship;
@@ -43,42 +49,85 @@ class PenggunaanPestisidaResource extends Resource
         return $form
             ->schema([
                 Select::make('pestisida_id')
-                    ->relationship('pestisida', 'nama_pestisida')
-                    ->placeholder('Pilih pestisida')
-                    ->required(),
+                    ->options(Pestisida::all()->pluck('nama_pestisida', 'id'))
+                    ->label('Nama Pestisida')->placeholder('Pilih pestisida')->searchable()->searchPrompt('Cari pestisida')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
+
                 TextInput::make('jumlah_penggunaan')
-                    ->required()
-                    ->numeric(),
+                    ->label('Jumlah Penggunaan')->placeholder('Masukkan jumlah penggunaan')
+                    ->numeric()
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
+
                 DatePicker::make('tanggal_penggunaan')
-                    ->required(),
-                Select::make('user_id')
-                    ->relationship('pencatat', 'name')
-                    ->required(),
+                    ->native(false)->placeholder('Masukkan tanggal penggunaan')
+                    ->displayFormat('l, j M Y')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
+
+                TextInput::make('#')
+                    ->helperText('Otomatis diambil dari user yang login saat ini.')
+                    ->label('Pencatat')->placeholder(Filament::auth()->user()->name)
+                    ->dehydrated(false)
+                    ->markAsRequired()
+                    ->readOnly(),
+
+                Hidden::make('user_id')
+                    ->default(Filament::auth()->user()->id)
+                    ->dehydrated(),
+
+                Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")->columnSpanFull()
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
+            ->recordUrl(false)
             ->columns([
-                TextColumn::make('pestisida.id')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('pestisida.nama_pestisida')
+                    ->label('Nama Pestisida')
+                    ->searchable()->sortable(),
+
+                TextColumn::make('bentukPestisida.nama_bentuk')
+                    ->label('Bentuk'),
+
+                TextColumn::make('kategoriPestisida.nama_kategori')
+                    ->label('Kategori'),
+
                 TextColumn::make('jumlah_penggunaan')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Jumlah Penggunaan')->numeric()->alignCenter()
+                    ->sortable()
+                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                TextColumn::make('satuanPestisida.nama_satuan')
+                    ->label('Satuan'),
+
+                TextColumn::make('pencatat.name')
+                    ->label('Pencatat'),
+
                 TextColumn::make('tanggal_penggunaan')
-                    ->date()
-                    ->sortable(),
-                TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Tanggal Penggunaan')
+                    ->sortable()->dateTime('l, j M Y'),
+
+                TextColumn::make('keterangan')->label('Keterangan')
+                    ->placeholder('Tidak ada keterangan yang ditambahkan.')
+                    ->toggleable(isToggledHiddenByDefault:true)
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                DeleteAction::make()->label('Hapus')
+                ->modalHeading('Konfirmasi Penghapusan')->modalDescription('Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat dikembalikan!')->successNotification(
+                    Notification::make()->success()->title('Berhasil Dihapus')->body('Data Berhasil Dihapus')->color('success')->seconds(3)
+                ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
