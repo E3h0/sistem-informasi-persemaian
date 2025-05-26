@@ -2,22 +2,27 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Forms;
+use Filament\Tables;
+use App\Models\Pupuk;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Facades\Filament;
+use App\Models\PenggunaanPupuk;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\DeleteAction;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\DateTimePicker;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PenggunaanPupukResource\Pages;
 use App\Filament\Resources\PenggunaanPupukResource\RelationManagers;
-use App\Models\PenggunaanPupuk;
-use App\Models\Pupuk;
-use Filament\Forms;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PenggunaanPupukResource extends Resource
 {
@@ -43,30 +48,86 @@ class PenggunaanPupukResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('pupuk_id')->options(Pupuk::all()->pluck('nama_pupuk', 'id'))->label('Nama Pupuk')->required()->placeholder('Pilih pupuk')->searchable()->searchPrompt('Cari pupuk'),
+                Select::make('pupuk_id')
+                    ->options(Pupuk::all()->pluck('nama_pupuk', 'id'))
+                    ->label('Nama Pupuk')->placeholder('Pilih pupuk')->searchable()->searchPrompt('Cari pupuk')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                TextInput::make('jumlah_penggunaan')->numeric()->required(),
-                DatePicker::make('tanggal_penggunaan')->required(),
-                Select::make('user_id')->relationship('pencatat', 'name')->label('Pencatat')->required(),
+                TextInput::make('jumlah_penggunaan')
+                    ->label('Jumlah Penggunaan')->placeholder('Masukkan jumlah penggunaan')
+                    ->numeric()
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
+
+                DatePicker::make('tanggal_penggunaan')
+                    ->native(false)->placeholder('Masukkan tanggal penggunaan')
+                    ->displayFormat('l, j M Y')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
+
+                TextInput::make('#')
+                    ->helperText('Otomatis diambil dari user yang login saat ini.')
+                    ->label('Pencatat')->placeholder(Filament::auth()->user()->name)
+                    ->dehydrated(false)
+                    ->markAsRequired()
+                    ->readOnly(),
+
+                Hidden::make('user_id')
+                    ->default(Filament::auth()->user()->id)
+                    ->dehydrated(),
+
+                Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")->columnSpanFull()
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
+            ->recordUrl(false)
             ->columns([
-                TextColumn::make('pupuk.nama_pupuk')->label('Nama Pupuk'),
-                TextColumn::make('jumlah_penggunaan')->label('Jumlah Penggunaan')->numeric(),
-                TextColumn::make('tanggal_penggunaan')->label('Tanggal Penggunaan'),
-                TextColumn::make('pencatat.name')->label('Pencatat')
+                TextColumn::make('pupuk.nama_pupuk')
+                    ->label('Nama Pupuk')
+                    ->searchable()->sortable(),
 
+                TextColumn::make('bentukPupuk.nama_bentuk')
+                    ->label('Bentuk'),
+
+                TextColumn::make('kategoriPupuk.nama_kategori')
+                    ->label('Kategori'),
+
+                TextColumn::make('jumlah_penggunaan')
+                    ->label('Jumlah Penggunaan')->numeric()->alignCenter()
+                    ->sortable()
+                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                TextColumn::make('satuanPupuk.nama_satuan')
+                    ->label('Satuan'),
+
+                TextColumn::make('pencatat.name')
+                    ->label('Pencatat'),
+
+                TextColumn::make('tanggal_penggunaan')
+                    ->label('Tanggal Penggunaan')
+                    ->sortable(),
+
+                TextColumn::make('keterangan')->label('Keterangan')
+                    ->placeholder('Tidak ada keterangan yang ditambahkan.')
+                    ->toggleable(isToggledHiddenByDefault:true)
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                DeleteAction::make()->label('Hapus')
+                ->modalHeading('Konfirmasi Penghapusan')->modalDescription('Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat dikembalikan!')->successNotification(
+                    Notification::make()->success()->title('Berhasil Dihapus')->body('Data Berhasil Dihapus')->color('success')->seconds(3)
+                ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

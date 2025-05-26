@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class KategoriPupuk extends Model
 {
@@ -12,5 +13,9 @@ class KategoriPupuk extends Model
 
     public function pupuk(): HasMany {
         return $this->hasMany(Pupuk::class, 'kategori_pupuk_id', 'id');
+    }
+
+    public function penggunaanPupuk(): HasManyThrough {
+        return $this->hasManyThrough(PenggunaanPupuk::class, Pupuk::class, 'kategori_pupuk_id', 'pupuk_id');
     }
 }
