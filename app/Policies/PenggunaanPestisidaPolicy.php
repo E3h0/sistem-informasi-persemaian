@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\PenggunaanPupuk;
+use App\Models\PenggunaanPestisida;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class PenggunaanPupukPolicy
+class PenggunaanPestisidaPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class PenggunaanPupukPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, PenggunaanPupuk $penggunaanPupuk): bool
+    public function view(User $user, PenggunaanPestisida $penggunaanPestisida): bool
     {
         return $user->isAdmin() || $user->isEditor() || $user->isViewer();
     }
@@ -35,7 +35,7 @@ class PenggunaanPupukPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, PenggunaanPupuk $penggunaanPupuk): bool
+    public function update(User $user, PenggunaanPestisida $penggunaanPestisida): bool
     {
         return $user->isAdmin() || $user->isEditor();
     }
@@ -43,7 +43,7 @@ class PenggunaanPupukPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, PenggunaanPupuk $penggunaanPupuk): bool
+    public function delete(User $user, PenggunaanPestisida $penggunaanPestisida): bool
     {
         return $user->isAdmin();
     }
@@ -51,7 +51,7 @@ class PenggunaanPupukPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, PenggunaanPupuk $penggunaanPupuk): bool
+    public function restore(User $user, PenggunaanPestisida $penggunaanPestisida): bool
     {
         return $user->isAdmin();
     }
@@ -59,7 +59,7 @@ class PenggunaanPupukPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, PenggunaanPupuk $penggunaanPupuk): bool
+    public function forceDelete(User $user, PenggunaanPestisida $penggunaanPestisida): bool
     {
         return $user->isAdmin();
     }
