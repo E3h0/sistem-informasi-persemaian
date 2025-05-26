@@ -12,6 +12,7 @@ use App\Models\SatuanPestisida;
 use Filament\Resources\Resource;
 use App\Models\KategoriPestisida;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -44,18 +45,88 @@ class PestisidaResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('nama_pestisida')->label('Nama Pestisida')->placeholder('Masukkan nama pestisida')->required(),
+                TextInput::make('nama_pestisida')
+                    ->label('Nama Pestisida')->placeholder('Masukkan nama pestisida')
+                    ->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                Select::make('bentuk_pestisida_id')->label('Bentuk')->placeholder('Pilih bentuk pestisida')
-                ->options(BentukPestisida::all()->pluck('nama_bentuk', 'id'))->required(),
+                Select::make('satuan_pestisida_id')->label('Satuan')
+                    ->placeholder('Pilih satuan pestisida')
+                    ->relationship('satuan', 'nama_satuan')
+                    ->createOptionForm([
+                    TextInput::make('nama_satuan')
+                        ->required()
+                        ->label('Nama Satuan')->placeholder('Masukkan Nama Satuan')
+                        ->rules(['min:3'])->validationMessages([
+                            'min' => 'Minimal harus 3 karakter'
+                        ])
+                ])->createOptionModalHeading('Tambah Satuan')
+                ->createOptionUsing(function (array $data) {
+                    SatuanPestisida::create($data);
+                    Notification::make()
+                    ->title('Sukses')
+                    ->body('Satuan baru berhasil ditambahkan.')
+                    ->success()
+                    ->seconds(3)
+                    ->send();
+                })->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                Select::make('kategori_pestisida_id')->label('Kategori')->placeholder('Pilih kategori pestisida')
-                ->options(KategoriPestisida::all()->pluck('nama_kategori', 'id'))->required(),
+                Select::make('bentuk_pestisida_id')
+                    ->label('Bentuk')->placeholder('Pilih bentuk pestisida')
+                    ->relationship('bentuk', 'nama_bentuk')
+                    ->createOptionForm([
+                    TextInput::make('nama_bentuk')
+                        ->required()
+                        ->label('Nama Bentuk')->placeholder('Masukkan Nama Bentuk')
+                        ->rules(['min:3'])->validationMessages([
+                            'min' => 'Minimal harus 3 karakter'
+                        ])
+                ])->createOptionModalHeading('Tambah Bentuk')
+                ->createOptionUsing(function (array $data) {
+                    BentukPestisida::create($data);
+                    Notification::make()
+                    ->title('Sukses')
+                    ->body('Bentuk baru berhasil ditambahkan.')
+                    ->success()
+                    ->seconds(3)
+                    ->send();
+                })->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                TextInput::make('jumlah_persediaan')->numeric()->label('Jumlah Persediaan')->placeholder('Masukkan jumlah persediaan')->required(),
+                Select::make('kategori_pestisida_id')
+                    ->label('Kategori')->placeholder('Pilih kategori pestisida')
+                    ->relationship('kategori', 'nama_kategori')
+                    ->createOptionForm([
+                    TextInput::make('nama_kategori')
+                        ->required()
+                        ->label('Nama Kategori')->placeholder('Masukkan Nama Kategori')
+                        ->rules(['min:3'])->validationMessages([
+                            'min' => 'Minimal harus 3 karakter'
+                        ])
+                ])->createOptionModalHeading('Tambah Kategori')
+                ->createOptionUsing(function (array $data) {
+                    KategoriPestisida::create($data);
+                    Notification::make()
+                    ->title('Sukses')
+                    ->body('Kategori baru berhasil ditambahkan.')
+                    ->success()
+                    ->seconds(3)
+                    ->send();
+                })->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
-                Select::make('satuan_pestisida_id')->label('Satuan')->placeholder('Pilih satuan pestisida')
-                ->options(SatuanPestisida::all()->pluck('nama_satuan', 'id'))->required(),
+                TextInput::make('jumlah_persediaan')
+                    ->numeric()->label('Jumlah Persediaan')->placeholder('Masukkan jumlah persediaan')
+                    ->rules(['required'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                        ])->markAsRequired(),
+
+                Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")
             ]);
     }
 
@@ -63,13 +134,35 @@ class PestisidaResource extends Resource
     {
         return $table
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
+            ->recordUrl(false)
             ->columns([
-                TextColumn::make('nama_pestisida')->label('Nama Pestisida'),
-                TextColumn::make('satuan.nama_satuan')->label('Satuan')->alignCenter(),
-                TextColumn::make('bentuk.nama_bentuk')->label('Bentuk')->alignCenter(),
-                TextColumn::make('kategori.nama_kategori')->label('Kategori')->alignCenter(),
-                TextColumn::make('jumlah_persediaan')->label('Jumlah Persediaan')->alignCenter(),
-            ])
+                TextColumn::make('nama_pestisida')
+                    ->label('Nama Pestisida')
+                    ->searchable()->sortable(),
+
+                TextColumn::make('bentuk.nama_bentuk')
+                    ->label('Bentuk')->alignCenter()
+                    ->searchable(),
+
+                TextColumn::make('kategori.nama_kategori')
+                    ->label('Kategori')->alignCenter()
+                    ->searchable(),
+
+                TextColumn::make('jumlah_persediaan')
+                    ->label('Jumlah Persediaan')->alignCenter()
+                    ->sortable(),
+
+                TextColumn::make('satuan.nama_satuan')
+                    ->label('Satuan')->alignCenter(),
+
+                TextColumn::make('created_at')
+                    ->label('Dibuat Pada')->dateTime('l, j M Y')
+                    ->sortable(),
+
+                TextColumn::make('keterangan')->label('Keterangan')
+                    ->placeholder('Tidak ada keterangan yang ditambahkan.')
+                    ->toggleable(isToggledHiddenByDefault:true)
+            ])->searchDebounce('300ms')
             ->filters([
                 //
             ])

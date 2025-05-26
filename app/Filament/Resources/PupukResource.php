@@ -126,7 +126,7 @@ class PupukResource extends Resource
                             'required' => 'Tolong isi bagian ini.',
                         ])->markAsRequired(),
 
-                 Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")
+                Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")
             ]);
     }
 
@@ -162,7 +162,7 @@ class PupukResource extends Resource
                 TextColumn::make('keterangan')->label('Keterangan')
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')
                     ->toggleable(isToggledHiddenByDefault:true)
-            ])
+            ])->searchDebounce('300ms')
             ->filters([
                 //
             ])
