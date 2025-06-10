@@ -7,8 +7,10 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\KategoriBibit;
+use Filament\Facades\Filament;
 use App\Models\PersediaanBibit;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
@@ -36,9 +38,10 @@ class PersediaanBibitResource extends Resource
         ->schema([
             TextInput::make("jenis_bibit")
                 ->label("Jenis Bibit")->placeholder("Masukkan Nama Bibit")
-                ->rules(['required','min:3'])->validationMessages([
+                ->rules(['required','min:3', 'unique:persediaan_bibit,jenis_bibit'])->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
-                        'min' => 'Minimal Harus 3 karakter'
+                        'min' => 'Minimal Harus 3 karakter',
+                        'unique' => 'Data sudah ada'
                 ])->markAsRequired(),
 
             Select::make("kategori_bibit_id")
@@ -74,7 +77,18 @@ class PersediaanBibitResource extends Resource
                             'min' => 'Minimal Harus 3 karakter'
                         ])->markAsRequired(),
 
-            Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")
+            TextInput::make('#')
+                    ->helperText('Otomatis diambil dari user yang login saat ini.')
+                    ->label('Pencatat')->placeholder(Filament::auth()->user()->name)
+                    ->dehydrated(false)
+                    ->markAsRequired()
+                    ->readOnly(),
+
+            Hidden::make('user_id')
+                ->default(Filament::auth()->user()->id)
+                ->dehydrated(),
+
+            Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")->columnSpanFull()
         ]);
     }
 
@@ -95,13 +109,22 @@ class PersediaanBibitResource extends Resource
                     ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
                     ->label('Jumlah Stok')->sortable(),
 
+                TextColumn::make('pencatat.name')
+                    ->label('Pencatat')
+                    ->toggleable(isToggledHiddenByDefault:true),
+
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')->dateTime('l, j M Y')
-                    ->sortable(),
+                    ->sortable()->toggleable(),
+
+                TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')->dateTime('l, j M Y')
+                    ->sortable()->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('keterangan')->label('Keterangan')
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')
                     ->toggleable(isToggledHiddenByDefault:true)
+
             ])->searchPlaceholder('Cari nama bibit')->searchDebounce('300ms')
             ->filters([
                 //

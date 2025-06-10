@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class PersediaanBibit extends Model
 {
     protected $table = "persediaan_bibit";
-    protected $fillable = ["jenis_bibit", "kategori_bibit_id", "jumlah_persediaan", "keterangan"];
+    protected $guarded = [];
+
+    public function pencatat(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function kategori(): BelongsTo {
         return $this->belongsTo(KategoriBibit::class, "kategori_bibit_id");

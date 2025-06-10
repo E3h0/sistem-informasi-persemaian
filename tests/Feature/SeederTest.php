@@ -59,7 +59,9 @@ test('Memastikan PeersediaanBibitSeeder dapat berjalan dengan baik', function ()
 
     // reset id counter ke 0
     DB::table("kategori_bibit")->truncate();
+    DB::table("users")->truncate();
 
+    $this->seed(UserSeeder::class);
     $this->seed(KategoriBibitSeeder::class);
     $this->seed(PersediaanBibitSeeder::class);
 
@@ -70,7 +72,9 @@ test("Memastikan TargetProduksiSeeder dapat berjalan dengan baik", function () {
 
     DB::table("kategori_bibit")->truncate();
     DB::table("persediaan_bibit")->truncate();
+    DB::table("users")->truncate();
 
+    $this->seed(UserSeeder::class);
     $this->seed(KategoriBibitSeeder::class);
     $this->seed(PersediaanBibitSeeder::class);
     $this->seed(TargetProduksiSeeder::class);
@@ -82,7 +86,9 @@ test("Memastikan MutasiBibitSeeder dapat berjalan dengan baik", function () {
 
     DB::table("kategori_bibit")->truncate();
     DB::table("persediaan_bibit")->truncate();
+    DB::table("users")->truncate();
 
+    $this->seed(UserSeeder::class);
     $this->seed(KategoriBibitSeeder::class);
     $this->seed(PersediaanBibitSeeder::class);
 
@@ -196,9 +202,10 @@ test("Memastikan DatabaseSeeder dapat berjalan dengan baik", function() {
     DB::table("kategori_pupuk")->truncate();
     DB::table("satuan_pupuk")->truncate();
     DB::table("bentuk_pupuk")->truncate();
+    DB::table("users")->truncate();
 
     $this->seed(DatabaseSeeder::class);
-    
+
     expect(User::count())->toBeGreaterThan(0);
     expect(KategoriBibit::count())->toBeGreaterThan(0);
     expect(PersediaanBibit::count())->toBeGreaterThan(0);
