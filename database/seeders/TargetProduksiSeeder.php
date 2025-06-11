@@ -18,6 +18,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 1300000,
             "sudah_diproduksi" => 1300000,
             "sudah_distribusi" => 847077,
+            "user_id" => 1,
             "stok_akhir" => 452923
         ]);
         TargetProduksi::create([
@@ -25,6 +26,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 100000,
             "sudah_diproduksi" => 100000,
             "sudah_distribusi" => 100000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -32,6 +34,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 10000,
             "sudah_diproduksi" => 10000,
             "sudah_distribusi" => 10000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -39,6 +42,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 100000,
             "sudah_diproduksi" => 100000,
             "sudah_distribusi" => 100000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -46,6 +50,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 50000,
             "sudah_diproduksi" => 50000,
             "sudah_distribusi" => 50000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -53,6 +58,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 150000,
             "sudah_diproduksi" => 150000,
             "sudah_distribusi" => 96224,
+            "user_id" => 1,
             "stok_akhir" => 53776
         ]);
         TargetProduksi::create([
@@ -60,6 +66,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 50000,
             "sudah_diproduksi" => 50000,
             "sudah_distribusi" => 49896,
+            "user_id" => 1,
             "stok_akhir" => 104
         ]);
         TargetProduksi::create([
@@ -67,6 +74,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 80000,
             "sudah_diproduksi" => 80000,
             "sudah_distribusi" => 67276,
+            "user_id" => 1,
             "stok_akhir" => 12724
         ]);
         TargetProduksi::create([
@@ -74,6 +82,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 20000,
             "sudah_diproduksi" => 20000,
             "sudah_distribusi" => 20000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -81,6 +90,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 50000,
             "sudah_diproduksi" => 50000,
             "sudah_distribusi" => 50000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -88,6 +98,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 50000,
             "sudah_diproduksi" => 50000,
             "sudah_distribusi" => 50000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -95,6 +106,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 150000,
             "sudah_diproduksi" => 150000,
             "sudah_distribusi" => 150000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -102,6 +114,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 150000,
             "sudah_diproduksi" => 150000,
             "sudah_distribusi" => 150000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -109,6 +122,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 100000,
             "sudah_diproduksi" => 100000,
             "sudah_distribusi" => 100000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -116,6 +130,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 400000,
             "sudah_diproduksi" => 400000,
             "sudah_distribusi" => 400000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -123,6 +138,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 200000,
             "sudah_diproduksi" => 200000,
             "sudah_distribusi" => 143485,
+            "user_id" => 1,
             "stok_akhir" => 56515
         ]);
         TargetProduksi::create([
@@ -130,6 +146,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 200000,
             "sudah_diproduksi" => 200000,
             "sudah_distribusi" => 148591,
+            "user_id" => 1,
             "stok_akhir" => 51409
         ]);
         TargetProduksi::create([
@@ -137,6 +154,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 200000,
             "sudah_diproduksi" => 200000,
             "sudah_distribusi" => 200000,
+            "user_id" => 1,
             "stok_akhir" => 0
         ]);
         TargetProduksi::create([
@@ -144,6 +162,7 @@ class TargetProduksiSeeder extends Seeder
             "target_produksi" => 100000,
             "sudah_diproduksi" => 100000,
             "sudah_distribusi" => 76137,
+            "user_id" => 1,
             "stok_akhir" => 23863
         ]);
     }

@@ -20,6 +20,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PersediaanBibitResource\Pages;
 use App\Filament\Resources\PersediaanBibitResource\RelationManagers;
+use Filament\Forms\Get;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rule;
 
 class PersediaanBibitResource extends Resource
 {
@@ -38,7 +41,10 @@ class PersediaanBibitResource extends Resource
         ->schema([
             TextInput::make("jenis_bibit")
                 ->label("Jenis Bibit")->placeholder("Masukkan Nama Bibit")
-                ->rules(['required','min:3', 'unique:persediaan_bibit,jenis_bibit'])->validationMessages([
+                ->rules(fn (Get $get, ?Model $record): array => [
+                    'required','min:3',
+                    Rule::unique('persediaan_bibit', 'jenis_bibit')->ignore($record)])
+                ->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
                         'min' => 'Minimal Harus 3 karakter',
                         'unique' => 'Data sudah ada'
@@ -78,11 +84,11 @@ class PersediaanBibitResource extends Resource
                         ])->markAsRequired(),
 
             TextInput::make('#')
-                    ->helperText('Otomatis diambil dari user yang login saat ini.')
-                    ->label('Pencatat')->placeholder(Filament::auth()->user()->name)
-                    ->dehydrated(false)
-                    ->markAsRequired()
-                    ->readOnly(),
+                ->helperText('Otomatis diambil dari user yang login saat ini.')
+                ->label('Pencatat')->placeholder(Filament::auth()->user()->name)
+                ->dehydrated(false)
+                ->markAsRequired()
+                ->readOnly(),
 
             Hidden::make('user_id')
                 ->default(Filament::auth()->user()->id)

@@ -10,17 +10,19 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Support\RawJs;
 use App\Models\TargetProduksi;
+use Filament\Facades\Filament;
 use App\Models\PersediaanBibit;
+use Illuminate\Validation\Rule;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
-use function Laravel\Prompts\textarea;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
 use App\Filament\Resources\TargetProduksiResource\Pages;
 
 
@@ -53,9 +55,13 @@ class TargetProduksiResource extends Resource
                     ->options(PersediaanBibit::all()->pluck('jenis_bibit', 'id'))
                     ->label('Jenis Bibit')->placeholder('Pilih Jenis Bibit')
                     ->searchable()->searchPrompt('Cari Nama Bibit')
-                    ->rules(['required'])->validationMessages([
+                    ->rules(fn (Get $get, ?Model $record): array => [
+                        'required',
+                        Rule::unique('target_produksi', 'bibit_id')->ignore($record)
+                    ])->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
-                    ])->markAsRequired(),
+                        'unique' => 'Data sudah ada'
+                ])->markAsRequired(),
 
                 TextInput::make('target_produksi')
                     ->numeric()
@@ -72,7 +78,7 @@ class TargetProduksiResource extends Resource
                     ])->markAsRequired(),
 
                 TextInput::make('sudah_distribusi')
-                    ->reactive()
+                    ->live(debounce:390)
                     ->afterStateUpdated(function (Set $set, Get $get, $state){
                         $sudah_prod = $get('sudah_diproduksi');
                         $set('stok_akhir', $sudah_prod-$state);
@@ -91,8 +97,19 @@ class TargetProduksiResource extends Resource
                         'required' => 'Tolong isi bagian ini.',
                     ])->markAsRequired(),
 
+                TextInput::make('#')
+                    ->helperText('Otomatis diambil dari user yang login saat ini.')
+                    ->label('Pencatat')->placeholder(Filament::auth()->user()->name)
+                    ->dehydrated(false)
+                    ->markAsRequired()
+                    ->readOnly(),
+
+                Hidden::make('user_id')
+                    ->default(Filament::auth()->user()->id)
+                    ->dehydrated(),
+
                 Textarea::make('keterangan')
-                ->label('Keterangan')->placeholder('Tambahkan Keterangan')
+                ->label('Keterangan')->placeholder('Tambahkan Keterangan')->columnSpanFull()
             ]);
     }
 
@@ -123,8 +140,16 @@ class TargetProduksiResource extends Resource
                     ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
                     ->sortable(),
 
+                TextColumn::make('pencatat.name')
+                    ->label('Pencatat')
+                    ->toggleable(isToggledHiddenByDefault:true),
+
                 TextColumn::make('created_at')->label('Dibuat Pada')->dateTime('l, j M Y')
                     ->sortable(),
+
+                TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')->dateTime('l, j M Y')
+                    ->sortable()->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('keterangan')->label('Keterangan')
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')
@@ -138,7 +163,10 @@ class TargetProduksiResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()->label('Hapus')
                 ->modalHeading('Konfirmasi Penghapusan')->modalDescription('Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat dikembalikan!')->successNotification(
-                    Notification::make()->success()->title('Berhasil Dihapus')->body('Data Berhasil Dihapus')->color('success')->seconds(3)
+                    Notification::make()
+                        ->success()->title('Berhasil Dihapus')
+                        ->body('Data Berhasil Dihapus')
+                        ->color('success')->seconds(3)
                 ),
 
             ])

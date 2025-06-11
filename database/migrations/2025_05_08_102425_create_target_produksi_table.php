@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('target_produksi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("bibit_id")->constrained("persediaan_bibit");
+            $table->foreignId("bibit_id")->unique()->constrained("persediaan_bibit");
             $table->integer("target_produksi");
             $table->integer("sudah_diproduksi");
             $table->integer("sudah_distribusi");
             $table->integer("stok_akhir");
             $table->text('keterangan')->nullable();
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }
