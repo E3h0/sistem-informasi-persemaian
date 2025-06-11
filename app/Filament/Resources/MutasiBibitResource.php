@@ -4,21 +4,26 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\MutasiBibit;
+use Filament\Facades\Filament;
 use App\Models\PersediaanBibit;
+use Illuminate\Validation\Rule;
 use Filament\Resources\Resource;
 use function Laravel\Prompts\select;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Support\Enums\Alignment;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ColumnGroup;
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MutasiBibitResource\Pages;
@@ -49,9 +54,16 @@ class MutasiBibitResource extends Resource
         return $form
             ->schema([
                 Select::make('bibit_id')
-                    ->options(PersediaanBibit::all()->pluck('jenis_bibit', 'id'))->label('Jenis Bibit')
-                    ->searchable()->searchPrompt('Cari nama bibit')->placeholder('Pilih Jenis Bibit')->required()
-                    ->columnSpanFull(),
+                    ->options(PersediaanBibit::all()->pluck('jenis_bibit', 'id'))
+                    ->label('Jenis Bibit')->placeholder('Pilih Jenis Bibit')
+                    ->searchable()->searchPrompt('Cari nama bibit')
+                    ->rules(fn (Get $get, ?Model $record): array => [
+                        'required',
+                        Rule::unique('mutasi_bibit', 'bibit_id')->ignore($record)
+                    ])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                        'unique' => 'Data sudah ada'
+                    ])->markAsRequired()->columnSpanFull(),
 
                 Section::make('GHA')
                     ->description('Germination House Area')
@@ -61,28 +73,28 @@ class MutasiBibitResource extends Resource
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired(),
+                        ])->markAsRequired()->default(0),
 
                         TextInput::make('gha2')->label('Blok 2')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired(),
+                        ])->markAsRequired()->default(0),
 
                         TextInput::make('gha3')->label('Blok 3')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired(),
+                        ])->markAsRequired()->default(0),
 
                         TextInput::make('gha4')->label('Blok 4')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired(),
+                        ])->markAsRequired()->default(0),
                 ])->columns(4),
 
                 Section::make('AHA')
@@ -93,28 +105,28 @@ class MutasiBibitResource extends Resource
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired(),
+                        ])->markAsRequired()->default(0),
 
                         TextInput::make('aha2')->label('Blok 2')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired(),
+                        ])->markAsRequired()->default(0),
 
                         TextInput::make('aha3')->label('Blok 3')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired(),
+                        ])->markAsRequired()->default(0),
 
                         TextInput::make('aha4')->label('Blok 4')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired(),
+                        ])->markAsRequired()->default(0),
                     ])->columns(4),
 
                 Section::make('OGA')
@@ -125,33 +137,49 @@ class MutasiBibitResource extends Resource
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                                 'required' => 'Tolong isi bagian ini.',
-                            ])->markAsRequired(),
+                            ])->markAsRequired()->default(0),
 
                         TextInput::make('oga2')->label('Blok 2')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                                 'required' => 'Tolong isi bagian ini.',
-                            ])->markAsRequired(),
+                            ])->markAsRequired()->default(0),
 
                         TextInput::make('oga3')->label('Blok 3')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
                             ->rules(['required'])->validationMessages([
                                 'required' => 'Tolong isi bagian ini.',
-                            ])->markAsRequired(),
+                            ])->markAsRequired()->default(0),
 
                         TextInput::make('oga4')->label('Blok 4')
                         ->numeric()->columnSpan(1)
                         ->placeholder('Masukkan jumlah bibit')
                         ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired(),
+                        ])->markAsRequired()->default(0),
                     ])->columns(4),
+
+                TextInput::make('siap_distribusi')
+                    ->numeric()
+                    ->label('Siap Distribusi')->placeholder('Masukkan Jumlah Bibit Yang Siap Distribusi (opsional)')
+                    ->columnSpan(2),
+
+                TextInput::make('#')
+                    ->helperText('Otomatis diambil dari user yang login saat ini.')
+                    ->label('Pencatat')->placeholder(Filament::auth()->user()->name)
+                    ->dehydrated(false)
+                    ->markAsRequired()
+                    ->readOnly()->columnSpan(2),
+
+                Hidden::make('user_id')
+                    ->default(Filament::auth()->user()->id)
+                    ->dehydrated(),
 
                 Textarea::make("keterangan")
                     ->placeholder("Tambahkan Keterangan")->columnSpanFull()
-            ]);
+            ])->columns(4);
     }
 
     public static function table(Table $table): Table
@@ -216,10 +244,19 @@ class MutasiBibitResource extends Resource
                         ->sortable()
 
                 ])->alignment(Alignment::Center),
+
+                TextColumn::make('pencatat.name')
+                    ->label('Pencatat')
+                    ->toggleable(isToggledHiddenByDefault:true),
+
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')->dateTime('l, j M Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault:true),
+
+                TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')->dateTime('l, j M Y')
+                    ->sortable()->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('keterangan')->label('Keterangan')
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')

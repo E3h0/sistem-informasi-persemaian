@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('mutasi_bibit', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("bibit_id")->constrained("persediaan_bibit");
+            $table->foreignId("bibit_id")->unique()->constrained("persediaan_bibit");
+            $table->foreignId('user_id')->constrained('users');
             $table->integer("gha1");
             $table->integer("gha2");
             $table->integer("gha3");

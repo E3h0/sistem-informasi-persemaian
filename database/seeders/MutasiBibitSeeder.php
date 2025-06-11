@@ -15,6 +15,7 @@ class MutasiBibitSeeder extends Seeder
     {
         MutasiBibit::create([
             "bibit_id" => 1,
+            "user_id" => 1,
             "gha1" => 32652,
             "gha2" => 78500,
             "gha3" => 100000,
