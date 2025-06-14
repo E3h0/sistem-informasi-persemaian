@@ -4,14 +4,19 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Facades\Filament;
+use Illuminate\Validation\Rule;
 use Filament\Resources\Resource;
 use App\Models\KategoriAlatKerja;
 use App\Models\PersediaanAlatKerja;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,11 +47,16 @@ class PersediaanAlatKerjaResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('nama_barang')->label('Nama Barang')
-                    ->placeholder('Masukkan nama barang')
-                    ->rules(['required','min:3'])->validationMessages([
+                 TextInput::make("nama_barang")
+                    ->label("Nama Barang")->placeholder("Masukkan Nama Barang")
+                    ->rules(fn (Get $get, ?Model $record): array => [
+                        'required','min:3',
+                        Rule::unique('persediaan_alat_kerja', 'nama_barang')->ignore($record)
+                    ])
+                ->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
-                        'min' => 'Minimal Harus 3 karakter'
+                        'min' => 'Minimal Harus 3 karakter',
+                        'unique' => 'Data sudah ada'
                 ])->markAsRequired(),
 
                 Select::make('kategori_id')
@@ -86,6 +96,10 @@ class PersediaanAlatKerjaResource extends Resource
                         'required' => 'Tolong isi bagian ini.',
                     ])->markAsRequired(),
 
+                Hidden::make('user_id')
+                    ->default(Filament::auth()->user()->id)
+                    ->dehydrated(),
+
                 Textarea::make('keterangan')
                     ->label('Keterangan')->placeholder('Masukkan keterangan')->columnSpanFull()
             ]);
@@ -111,9 +125,13 @@ class PersediaanAlatKerjaResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('jumlah_dipakai')
-                ->label('Jumlah Dipakai')
-                ->sortable()
-                ->numeric()->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    ->label('Jumlah Dipakai')
+                    ->sortable()
+                    ->numeric()->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                TextColumn::make('pencatat.name')
+                    ->label('Pencatat')
+                    ->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('keterangan')->label('Keterangan')
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')
@@ -122,6 +140,11 @@ class PersediaanAlatKerjaResource extends Resource
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')->dateTime('l, j M Y')
                     ->sortable(),
+
+                TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')->dateTime('l, j M Y')
+                    ->sortable()->toggleable(isToggledHiddenByDefault:true),
+                    
             ])->searchPlaceholder('Cari nama barang')->searchDebounce('300ms')
             ->filters([
                 //

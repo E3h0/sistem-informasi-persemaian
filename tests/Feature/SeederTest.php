@@ -107,7 +107,9 @@ test('Memastikan KategoriAlatKerjaSeeder dapat berjalan dengan baik', function (
 test('Memastikan PersediaanAlatKerjaSeeder dapat berjalan dengan baik', function () {
 
     DB::table("kategori_alat_kerja")->truncate();
+    DB::table("users")->truncate();
 
+    $this->seed(UserSeeder::class);
     $this->seed(KategoriAlatKerjaSeeder::class);
     $this->seed(PersediaanAlatKerjaSeeder::class);
 

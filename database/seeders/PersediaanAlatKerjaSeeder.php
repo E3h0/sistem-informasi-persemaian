@@ -18,6 +18,7 @@ class PersediaanAlatKerjaSeeder extends Seeder
             'kategori_id' => 1,
             'jumlah_persediaan' => 10,
             'jumlah_dipakai' => 8,
+            'user_id' => 1,
             'keterangan' => 'rusak 2 buah'
         ]);
     }

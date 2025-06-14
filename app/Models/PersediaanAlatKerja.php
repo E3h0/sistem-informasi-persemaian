@@ -10,6 +10,10 @@ class PersediaanAlatKerja extends Model
     protected $table = 'persediaan_alat_kerja';
     protected $guarded = [];
 
+    public function pencatat(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    
     public function kategori(): BelongsTo {
         return $this->belongsTo(KategoriAlatKerja::class, 'kategori_id');
     }
