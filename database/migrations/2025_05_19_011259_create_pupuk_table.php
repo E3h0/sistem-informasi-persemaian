@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('pupuk', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_pupuk');
+            $table->string('nama_pupuk')->unique();
             $table->foreignId("satuan_pupuk_id")->constrained("satuan_pupuk");
             $table->foreignId("bentuk_pupuk_id")->constrained("bentuk_pupuk");
             $table->foreignId("kategori_pupuk_id")->constrained("kategori_pupuk");
             $table->integer('jumlah_persediaan');
             $table->string('keterangan')->nullable();
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

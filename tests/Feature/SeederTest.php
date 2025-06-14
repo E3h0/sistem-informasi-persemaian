@@ -145,7 +145,9 @@ test('Memastikan PupukSeeder dapat berjalan dengan baik', function() {
     DB::table("kategori_pupuk")->truncate();
     DB::table("satuan_pupuk")->truncate();
     DB::table("bentuk_pupuk")->truncate();
+    DB::table("users")->truncate();
 
+    $this->seed(UserSeeder::class);
     $this->seed(KategoriPupukSeeder::class);
     $this->seed(SatuanPupukSeeder::class);
     $this->seed(BentukPupukSeeder::class);

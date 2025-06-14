@@ -5,15 +5,20 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Pupuk;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\BentukPupuk;
 use App\Models\SatuanPupuk;
 use App\Models\KategoriPupuk;
+use Filament\Facades\Filament;
+use Illuminate\Validation\Rule;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
@@ -46,10 +51,15 @@ class PupukResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama_pupuk')
-                    ->label('Nama Pupuk')->placeholder('Masukkan nama pupuk')
-                    ->rules(['required'])->validationMessages([
+                    ->label("Nama Pupuk")->placeholder("Masukkan Nama Pupuk")
+                    ->rules(fn (Get $get, ?Model $record): array => [
+                        'required','min:3',
+                        Rule::unique('pupuk', 'nama_pupuk')->ignore($record)])
+                    ->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
-                    ])->markAsRequired(),
+                        'min' => 'Minimal Harus 3 karakter',
+                        'unique' => 'Data sudah ada'
+                ])->markAsRequired(),
 
                 Select::make('satuan_pupuk_id')->label('Satuan')
                     ->placeholder('Pilih satuan pupuk')
@@ -126,7 +136,18 @@ class PupukResource extends Resource
                             'required' => 'Tolong isi bagian ini.',
                         ])->markAsRequired(),
 
-                Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")
+                TextInput::make('#')
+                    ->helperText('Otomatis diambil dari user yang login saat ini.')
+                    ->label('Pencatat')->placeholder(Filament::auth()->user()->name)
+                    ->dehydrated(false)
+                    ->markAsRequired()
+                    ->readOnly(),
+
+                Hidden::make('user_id')
+                    ->default(Filament::auth()->user()->id)
+                    ->dehydrated(),
+
+                Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")->columnSpanFull()
             ]);
     }
 
@@ -155,9 +176,17 @@ class PupukResource extends Resource
                 TextColumn::make('satuan.nama_satuan')
                     ->label('Satuan'),
 
+                TextColumn::make('pencatat.name')
+                    ->label('Pencatat')
+                    ->toggleable(isToggledHiddenByDefault:true),
+
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')->dateTime('l, j M Y')
                     ->sortable(),
+                    
+                TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')->dateTime('l, j M Y')
+                    ->sortable()->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('keterangan')->label('Keterangan')
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')

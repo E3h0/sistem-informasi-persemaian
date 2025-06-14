@@ -11,6 +11,10 @@ class Pupuk extends Model
     protected $table = 'pupuk';
     protected $guarded = [];
 
+    public function pencatat(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    
     public function satuan(): BelongsTo {
         return $this->belongsTo(SatuanPupuk::class, 'satuan_pupuk_id');
     }
