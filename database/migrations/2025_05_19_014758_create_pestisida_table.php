@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('pestisida', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_pestisida');
+            $table->string('nama_pestisida')->unique();
             $table->foreignId("satuan_pestisida_id")->constrained("satuan_pestisida");
             $table->foreignId("bentuk_pestisida_id")->constrained("bentuk_pestisida");
             $table->foreignId("kategori_pestisida_id")->constrained("kategori_pestisida");
             $table->integer('jumlah_persediaan');
             $table->string('keterangan')->nullable();
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

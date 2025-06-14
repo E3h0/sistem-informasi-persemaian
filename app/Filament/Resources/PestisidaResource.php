@@ -4,16 +4,21 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use App\Models\Pestisida;
 use Filament\Tables\Table;
+use Filament\Facades\Filament;
 use App\Models\BentukPestisida;
 use App\Models\SatuanPestisida;
+use Illuminate\Validation\Rule;
 use Filament\Resources\Resource;
 use App\Models\KategoriPestisida;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
@@ -46,10 +51,15 @@ class PestisidaResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama_pestisida')
-                    ->label('Nama Pestisida')->placeholder('Masukkan nama pestisida')
-                    ->rules(['required'])->validationMessages([
+                    ->label("Nama Pestisida")->placeholder("Masukkan Nama Pestisida")
+                    ->rules(fn (Get $get, ?Model $record): array => [
+                        'required','min:3',
+                        Rule::unique('pestisida', 'nama_pestisida')->ignore($record)])
+                    ->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
-                    ])->markAsRequired(),
+                        'min' => 'Minimal Harus 3 karakter',
+                        'unique' => 'Data sudah ada'
+                ])->markAsRequired(),
 
                 Select::make('satuan_pestisida_id')->label('Satuan')
                     ->placeholder('Pilih satuan pestisida')
@@ -126,7 +136,18 @@ class PestisidaResource extends Resource
                             'required' => 'Tolong isi bagian ini.',
                         ])->markAsRequired(),
 
-                Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")
+                TextInput::make('#')
+                    ->helperText('Otomatis diambil dari user yang login saat ini.')
+                    ->label('Pencatat')->placeholder(Filament::auth()->user()->name)
+                    ->dehydrated(false)
+                    ->markAsRequired()
+                    ->readOnly(),
+
+                Hidden::make('user_id')
+                    ->default(Filament::auth()->user()->id)
+                    ->dehydrated(),
+
+                Textarea::make("keterangan")->placeholder("Tambahkan Keterangan")->columnSpanFull()
             ]);
     }
 
@@ -155,9 +176,17 @@ class PestisidaResource extends Resource
                 TextColumn::make('satuan.nama_satuan')
                     ->label('Satuan')->alignCenter(),
 
+                TextColumn::make('pencatat.name')
+                    ->label('Pencatat')
+                    ->toggleable(isToggledHiddenByDefault:true),
+
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')->dateTime('l, j M Y')
                     ->sortable(),
+
+                TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')->dateTime('l, j M Y')
+                    ->sortable()->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('keterangan')->label('Keterangan')
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')

@@ -11,6 +11,10 @@ class Pestisida extends Model
     protected $table = 'pestisida';
     protected $guarded = [];
 
+    public function pencatat(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function satuan(): BelongsTo {
         return $this->belongsTo(SatuanPestisida::class, 'satuan_pestisida_id');
     }

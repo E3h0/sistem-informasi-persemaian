@@ -186,7 +186,9 @@ test('Memastikan PestisidaSeeder dapat berjalan dengan baik', function() {
     DB::table("kategori_pestisida")->truncate();
     DB::table("satuan_pestisida")->truncate();
     DB::table("bentuk_pestisida")->truncate();
+    DB::table("users")->truncate();
 
+    $this->seed(UserSeeder::class);
     $this->seed(KategoriPestisidaSeeder::class);
     $this->seed(SatuanPestisidaSeeder::class);
     $this->seed(BentukPestisidaSeeder::class);
