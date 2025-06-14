@@ -109,11 +109,20 @@ class PenggunaanPupukResource extends Resource
                     ->label('Satuan'),
 
                 TextColumn::make('pencatat.name')
-                    ->label('Pencatat'),
+                    ->label('Pencatat')
+                    ->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('tanggal_penggunaan')
                     ->label('Tanggal Penggunaan')
                     ->sortable()->dateTime('l, j M Y'),
+
+                TextColumn::make('created_at')
+                    ->label('Dibuat Pada')->dateTime('l, j M Y')
+                    ->sortable()->toggleable(),
+
+                TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')->dateTime('l, j M Y')
+                    ->sortable()->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('keterangan')->label('Keterangan')
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')
