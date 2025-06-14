@@ -5,20 +5,24 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Validation\Rule;
 use Filament\Resources\Resource;
+use Illuminate\Support\HtmlString;
+use Livewire\Component as Livewire;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\Rules\Password;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
-use Illuminate\Support\HtmlString;
-use Illuminate\Validation\Rules\Password;
-use Livewire\Component as Livewire;
 
 class UserResource extends Resource
 {
@@ -43,11 +47,15 @@ class UserResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->label('Nama')->placeholder('Masukkan Nama')->label('Nama')
-                    ->rules(['required','min:3'])->validationMessages([
+                   ->label("Nama")->placeholder("Masukkan Nama User")
+                    ->rules(fn (Get $get, ?Model $record): array => [
+                        'required','min:3',
+                        Rule::unique('users', 'name')->ignore($record)])
+                    ->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
-                        'min' => 'Minimal Harus 3 karakter'
-                    ])->markAsRequired(),
+                        'min' => 'Minimal Harus 3 karakter',
+                        'unique' => 'Data sudah ada'
+                ])->markAsRequired(),
 
                 TextInput::make('email')
                     ->label('Email')->placeholder('Masukkan Email')
@@ -84,11 +92,14 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(false)
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
+
                 TextColumn::make('email')
                     ->searchable(),
+
                 TextColumn::make('role')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -97,17 +108,25 @@ class UserResource extends Resource
                         'Viewer' => 'danger',
                     })
                     ->searchable(),
+
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime('l, j M Y')
                     ->sortable(),
+
+                TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')->dateTime('l, j M Y')
+                    ->sortable()->toggleable(isToggledHiddenByDefault:true),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make()->label('Hapus')
+                ->modalHeading('Konfirmasi Penghapusan')->modalDescription('Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat dikembalikan!')->successNotification(
+                    Notification::make()->success()->title('Berhasil Dihapus')->body('Data Berhasil Dihapus')->color('success')->seconds(3)
+                ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
