@@ -245,6 +245,10 @@ class MutasiBibitResource extends Resource
 
                 ])->alignment(Alignment::Center),
 
+                TextColumn::make('siap_distribusi')->label('Siap Distribusi')
+                    ->placeholder('Tidak ada data yang ditambahkan.')
+                    ->toggleable(isToggledHiddenByDefault:true),
+
                 TextColumn::make('pencatat.name')
                     ->label('Pencatat')
                     ->toggleable(isToggledHiddenByDefault:true),
