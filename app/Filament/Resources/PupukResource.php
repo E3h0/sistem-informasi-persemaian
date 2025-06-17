@@ -62,6 +62,7 @@ class PupukResource extends Resource
                 ])->markAsRequired(),
 
                 Select::make('satuan_pupuk_id')->label('Satuan')
+                    ->live()
                     ->placeholder('Pilih satuan pupuk')
                     ->relationship('satuan', 'nama_satuan')
                     ->createOptionForm([
@@ -131,7 +132,31 @@ class PupukResource extends Resource
                     ])->markAsRequired(),
 
                 TextInput::make('jumlah_persediaan')
-                    ->numeric()->label('Jumlah Persediaan')->placeholder('Masukkan jumlah persediaan')
+                    ->placeholder(function (Get $get) {
+                        $satuanId = $get('satuan_pupuk_id');
+
+                        if (!$satuanId) {
+                            return 'Masukkan jumlah persediaan';
+                        }
+
+                        $pupuk = SatuanPupuk::find($satuanId);
+                        $satuan = $pupuk->nama_satuan ?? 'unit yang dipilih';
+
+                        return "Masukkan jumlah persediaan dalam satuan $satuan";
+                    })
+                    ->suffix(function (Get $get) {
+                        $satuanId = $get('satuan_pupuk_id');
+
+                        if (!$satuanId) {
+                            return '';
+                        }
+
+                        $pupuk = SatuanPupuk::find($satuanId);
+                        $satuan = $pupuk->nama_satuan ?? '';
+
+                        return "$satuan";
+                    })
+                    ->numeric()->label('Jumlah Persediaan')
                     ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
                         ])->markAsRequired(),
@@ -183,7 +208,7 @@ class PupukResource extends Resource
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')->dateTime('l, j M Y')
                     ->sortable(),
-                    
+
                 TextColumn::make('updated_at')
                     ->label('Diperbarui Pada')->dateTime('l, j M Y')
                     ->sortable()->toggleable(isToggledHiddenByDefault:true),

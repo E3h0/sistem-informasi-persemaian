@@ -62,6 +62,7 @@ class PestisidaResource extends Resource
                 ])->markAsRequired(),
 
                 Select::make('satuan_pestisida_id')->label('Satuan')
+                    ->live()
                     ->placeholder('Pilih satuan pestisida')
                     ->relationship('satuan', 'nama_satuan')
                     ->createOptionForm([
@@ -131,7 +132,31 @@ class PestisidaResource extends Resource
                     ])->markAsRequired(),
 
                 TextInput::make('jumlah_persediaan')
-                    ->numeric()->label('Jumlah Persediaan')->placeholder('Masukkan jumlah persediaan')
+                    ->placeholder(function (Get $get) {
+                        $satuanId = $get('satuan_pestisida_id');
+
+                        if (!$satuanId) {
+                            return 'Masukkan jumlah persediaan';
+                        }
+
+                        $pestisida = SatuanPestisida::find($satuanId);
+                        $satuan = $pestisida->nama_satuan ?? 'unit yang dipilih';
+
+                        return "Masukkan jumlah persediaan dalam satuan $satuan";
+                    })
+                    ->suffix(function (Get $get) {
+                        $satuanId = $get('satuan_pestisida_id');
+
+                        if (!$satuanId) {
+                            return '';
+                        }
+
+                        $pestisida = SatuanPestisida::find($satuanId);
+                        $satuan = $pestisida->nama_satuan ?? '';
+
+                        return "$satuan";
+                    })
+                    ->numeric()->label('Jumlah Persediaan')
                     ->rules(['required'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
                         ])->markAsRequired(),

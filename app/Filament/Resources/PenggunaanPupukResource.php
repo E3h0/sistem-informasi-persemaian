@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Pupuk;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Facades\Filament;
@@ -49,6 +50,7 @@ class PenggunaanPupukResource extends Resource
         return $form
             ->schema([
                 Select::make('pupuk_id')
+                    ->live()
                     ->options(Pupuk::all()->pluck('nama_pupuk', 'id'))
                     ->label('Nama Pupuk')->placeholder('Pilih pupuk')->searchable()->searchPrompt('Cari pupuk')
                     ->rules(['required'])->validationMessages([
@@ -56,7 +58,31 @@ class PenggunaanPupukResource extends Resource
                     ])->markAsRequired(),
 
                 TextInput::make('jumlah_penggunaan')
-                    ->label('Jumlah Penggunaan')->placeholder('Masukkan jumlah penggunaan')
+                    ->placeholder(function (Get $get) {
+                        $pupukId = $get('pupuk_id');
+
+                        if (!$pupukId) {
+                            return 'Masukkan jumlah penggunaan';
+                        }
+
+                        $pupuk = PenggunaanPupuk::with('satuanPupuk')->find($pupukId);
+                        $satuan = $pupuk->satuanPupuk->nama_satuan ?? 'unit yang dipilih';
+
+                        return "Masukkan jumlah penggunaan pupuk dalam satuan $satuan";
+                    })
+                    ->suffix(function (Get $get) {
+                        $pupukId = $get('pupuk_id');
+
+                        if (!$pupukId) {
+                            return '';
+                        }
+
+                        $pupuk = PenggunaanPupuk::with('satuanPupuk')->find($pupukId);
+                        $satuan = $pupuk->satuanPupuk->nama_satuan ?? '';
+
+                        return "$satuan";
+                    })
+                    ->label('Jumlah Penggunaan')
                     ->numeric()
                     ->rules(['required'])->validationMessages([
                         'required' => 'Tolong isi bagian ini.',

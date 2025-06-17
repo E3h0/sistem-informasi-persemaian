@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use App\Models\Pestisida;
 use Filament\Tables\Table;
@@ -49,6 +50,7 @@ class PenggunaanPestisidaResource extends Resource
         return $form
             ->schema([
                 Select::make('pestisida_id')
+                    ->live()
                     ->options(Pestisida::all()->pluck('nama_pestisida', 'id'))
                     ->label('Nama Pestisida')->placeholder('Pilih pestisida')->searchable()->searchPrompt('Cari pestisida')
                     ->rules(['required'])->validationMessages([
@@ -56,7 +58,31 @@ class PenggunaanPestisidaResource extends Resource
                     ])->markAsRequired(),
 
                 TextInput::make('jumlah_penggunaan')
-                    ->label('Jumlah Penggunaan')->placeholder('Masukkan jumlah penggunaan')
+                    ->placeholder(function (Get $get) {
+                        $pestisidaId = $get('pestisida_id');
+
+                        if (!$pestisidaId) {
+                            return 'Masukkan jumlah penggunaan';
+                        }
+
+                        $pestisida = PenggunaanPestisida::with('satuanPestisida')->find($pestisidaId);
+                        $satuan = $pestisida->satuanPestisida->nama_satuan ?? 'unit yang dipilih';
+
+                        return "Masukkan jumlah penggunaan pupuk dalam satuan $satuan";
+                    })
+                    ->suffix(function (Get $get) {
+                        $pestisidaId = $get('pestisida_id');
+
+                        if (!$pestisidaId) {
+                            return '';
+                        }
+
+                        $pestisida = PenggunaanPestisida::with('satuanPestisida')->find($pestisidaId);
+                        $satuan = $pestisida->satuanPestisida->nama_satuan ?? '';
+
+                        return "$satuan";
+                    })
+                    ->label('Jumlah Penggunaan')
                     ->numeric()
                     ->rules(['required'])->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
