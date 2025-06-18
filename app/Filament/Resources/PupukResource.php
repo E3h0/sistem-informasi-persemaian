@@ -90,11 +90,24 @@ class PupukResource extends Resource
                     ->relationship('bentuk', 'nama_bentuk')
                     ->createOptionForm([
                     TextInput::make('nama_bentuk')
-                        ->required()
                         ->label('Nama Bentuk')->placeholder('Masukkan Nama Bentuk')
-                        ->rules(['min:3'])->validationMessages([
-                            'min' => 'Minimal harus 3 karakter'
-                        ])
+                        ->rules(fn (?Model $record): array => [
+                            'required','min:3',
+                            Rule::unique('bentuk_pupuk', 'nama_bentuk')->ignore($record)])
+                        ->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'min' => 'Minimal harus 3 karakter',
+                            'unique' => 'Data sudah ada'
+                        ])->markAsRequired()
+                        ->live(debounce:400)
+                        ->afterStateUpdated(function ($state, $set) {
+                            $set('nama_bentuk', ucfirst(strtolower($state)));
+                        }),
+
+                    Hidden::make('user_id')
+                        ->default(Filament::auth()->user()->id)
+                        ->dehydrated(),
+
                 ])->createOptionModalHeading('Tambah Bentuk')
                 ->createOptionUsing(function (array $data) {
                     BentukPupuk::create($data);
@@ -104,9 +117,7 @@ class PupukResource extends Resource
                     ->success()
                     ->seconds(3)
                     ->send();
-                })->rules(['required'])->validationMessages([
-                        'required' => 'Tolong isi bagian ini.',
-                    ])->markAsRequired(),
+                }),
 
                 Select::make('kategori_pupuk_id')
                     ->label('Kategori')->placeholder('Pilih kategori pupuk')

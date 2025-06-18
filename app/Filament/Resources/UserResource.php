@@ -28,11 +28,9 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $modelLabel = "Kelola Hak Akses User";
 
-    protected static ?string $modelLabel = "Kelola User";
-
-    protected static ?string $pluralModelLabel = "Kelola User";
+    protected static ?string $pluralModelLabel = "Kelola Hak Akses User";
 
     protected static ?string $slug = "kelola-user";
 
