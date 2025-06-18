@@ -13,7 +13,15 @@ class BentukPestisidaSeeder extends Seeder
      */
     public function run(): void
     {
-        BentukPestisida::create(['nama_bentuk' => 'Padat']);
-        BentukPestisida::create(['nama_bentuk' => 'Cair']);
+        BentukPestisida::create([
+            'nama_bentuk' => 'Padat',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        BentukPestisida::create([
+            'nama_bentuk' => 'Cair',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
     }
 }
