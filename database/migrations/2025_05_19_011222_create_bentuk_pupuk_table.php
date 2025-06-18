@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('bentuk_pupuk', function (Blueprint $table) {
             $table->id();
             $table->string('nama_bentuk');
+            $table->foreignId('user_id')->constrained('users');
+            $table->string("keterangan")->nullable();
             $table->timestamps();
         });
     }

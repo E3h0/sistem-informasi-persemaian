@@ -13,7 +13,16 @@ class BentukPupukSeeder extends Seeder
      */
     public function run(): void
     {
-        BentukPupuk::create(['nama_bentuk' => 'Padat']);
-        BentukPupuk::create(['nama_bentuk' => 'Cair']);
+        BentukPupuk::create([
+            'nama_bentuk' => 'Padat',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+
+        BentukPupuk::create([
+            'nama_bentuk' => 'Cair',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
     }
 }
