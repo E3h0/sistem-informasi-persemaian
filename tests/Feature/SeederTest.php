@@ -118,6 +118,9 @@ test('Memastikan PersediaanAlatKerjaSeeder dapat berjalan dengan baik', function
 
 test('Memastikan KategoriPupukSeeder dapat berjalan dengan baik', function() {
 
+    DB::table("users")->truncate();
+
+    $this->seed(UserSeeder::class);
     $this->seed(KategoriPupukSeeder::class);
 
     expect(KategoriPupuk::count())->toBeGreaterThan(0);
@@ -178,7 +181,7 @@ test('Memastikan SatuanPestisidaSeeder dapat berjalan dengan baik', function() {
 test('Memastikan BentukPestisidaSeeder dapat berjalan dengan baik', function() {
 
     DB::table("users")->truncate();
-    
+
     $this->seed(UserSeeder::class);
     $this->seed(BentukPestisidaSeeder::class);
     expect(BentukPestisida::count())->toBeGreaterThan(0);

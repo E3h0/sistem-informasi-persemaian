@@ -13,7 +13,15 @@ class KategoriPupukSeeder extends Seeder
      */
     public function run(): void
     {
-        KategoriPupuk::create(['nama_kategori' => 'Organik']);
-        KategoriPupuk::create(['nama_kategori' => 'Anorganik']);
+        KategoriPupuk::create([
+            'nama_kategori' => 'Organik',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        KategoriPupuk::create([
+            'nama_kategori' => 'Anorganik',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
     }
 }
