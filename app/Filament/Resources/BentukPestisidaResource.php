@@ -4,8 +4,8 @@ namespace App\Filament\Resources;
 
 use Filament\Tables;
 use Filament\Tables\Table;
-use App\Models\BentukPupuk;
 use Filament\Facades\Filament;
+use App\Models\BentukPestisida;
 use Illuminate\Validation\Rule;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Hidden;
@@ -14,17 +14,18 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use App\Filament\Resources\BentukPupukResource\Pages;
+use App\Filament\Resources\BentukPestisidaResource\Pages;
+use App\Filament\Resources\BentukPestisidaResource\RelationManagers;
 
-class BentukPupukResource extends Resource
+class BentukPestisidaResource extends Resource
 {
-    protected static ?string $model = BentukPupuk::class;
+    protected static ?string $model = BentukPestisida::class;
 
-    protected static ?string $modelLabel = "Bentuk Pupuk";
-    protected static ?string $pluralModelLabel = "Bentuk Pupuk";
-    protected static ?string $slug = "bentuk-pupuk";
-    protected static ?string $breadcrumb = "Bentuk Pupuk";
-    protected static ?int $navigationSort = 2;
+    protected static ?string $modelLabel = "Bentuk Pestisida";
+    protected static ?string $pluralModelLabel = "Bentuk Pestisida";
+    protected static ?string $slug = "bentuk-pestisida";
+    protected static ?string $breadcrumb = "Bentuk Pestisida";
+    protected static ?int $navigationSort = 3;
     protected static ?string $navigationGroup = 'Pengaturan';
 
     public static function table(Table $table): Table
@@ -34,6 +35,7 @@ class BentukPupukResource extends Resource
             ->recordUrl(false)
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
             ->columns([
+
                 TextColumn::make('nama_bentuk')
                     ->label('Nama Bentuk')
                     ->searchable(),
@@ -60,20 +62,20 @@ class BentukPupukResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->modalHeading('Edit Data Bentuk Pupuk')
+                    ->modalHeading('Edit Data Bentuk Pestisida')
                     ->form([
                         TextInput::make('nama_bentuk')
                             ->label('Nama Bentuk')
                             ->placeholder('Masukkan Nama Bentuk')
                             ->rules(fn (?Model $record): array => [
                                 'required','min:3',
-                                Rule::unique('bentuk_pupuk', 'nama_bentuk')->ignore($record)])
+                                Rule::unique('bentuk_pestisida', 'nama_bentuk')->ignore($record)])
                             ->validationMessages([
                                 'required' => 'Tolong isi bagian ini.',
                                 'min' => 'Minimal harus 3 karakter',
                                 'unique' => 'Data sudah ada'
                             ])->markAsRequired()
-                            ->live(debounce:1000)
+                            ->live(debounce:500)
                             ->afterStateUpdated(function ($state, $set) {
                                 $set('nama_bentuk', ucfirst(strtolower($state)));
                             }),
@@ -90,13 +92,13 @@ class BentukPupukResource extends Resource
                         Notification::make()->success()->title('Berhasil Diedit')->body('Data berhasil diedit')->color('success')->seconds(3)
                     ),
 
-                Tables\Actions\DeleteAction::make()
+                 Tables\Actions\DeleteAction::make()
                     ->action(function ($record){
-                        if ($record->pupuk()->count() > 0) {
+                        if ($record->pestisida()->count() > 0) {
                             Notification::make()
                                 ->danger()
                                 ->title('Gagal, Tidak Dapat Menghapus')
-                                ->body('Bentuk pupuk ini sedang digunakan di data pupuk')
+                                ->body('Bentuk pestisida ini sedang digunakan di data pestisida')
                                 ->send();
                             return;
                         }
@@ -131,7 +133,7 @@ class BentukPupukResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBentukPupuks::route('/'),
+            'index' => Pages\ListBentukPestisidas::route('/')
         ];
     }
 }

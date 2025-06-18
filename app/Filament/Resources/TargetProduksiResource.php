@@ -78,7 +78,7 @@ class TargetProduksiResource extends Resource
                     ])->markAsRequired(),
 
                 TextInput::make('sudah_distribusi')
-                    ->live(debounce:390)
+                    ->live(onBlur:true, debounce:50)
                     ->afterStateUpdated(function (Set $set, Get $get, $state){
                         $sudah_prod = $get('sudah_diproduksi');
                         $set('stok_akhir', $sudah_prod-$state);
