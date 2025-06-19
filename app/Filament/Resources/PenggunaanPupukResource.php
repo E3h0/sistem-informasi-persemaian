@@ -65,8 +65,8 @@ class PenggunaanPupukResource extends Resource
                             return 'Masukkan jumlah penggunaan';
                         }
 
-                        $pupuk = PenggunaanPupuk::with('satuanPupuk')->find($pupukId);
-                        $satuan = $pupuk->satuanPupuk->nama_satuan ?? 'unit yang dipilih';
+                        $pupuk = Pupuk::with('satuan')->find($pupukId);
+                        $satuan = $pupuk->satuan->nama_satuan ?? 'unit yang dipilih';
 
                         return "Masukkan jumlah penggunaan pupuk dalam satuan $satuan";
                     })
@@ -77,8 +77,8 @@ class PenggunaanPupukResource extends Resource
                             return '';
                         }
 
-                        $pupuk = PenggunaanPupuk::with('satuanPupuk')->find($pupukId);
-                        $satuan = $pupuk->satuanPupuk->nama_satuan ?? '';
+                        $pupuk = Pupuk::with('satuan')->find($pupukId);
+                        $satuan = $pupuk->satuan->nama_satuan ?? '';
 
                         return "$satuan";
                     })

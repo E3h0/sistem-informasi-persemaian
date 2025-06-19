@@ -65,8 +65,8 @@ class PenggunaanPestisidaResource extends Resource
                             return 'Masukkan jumlah penggunaan';
                         }
 
-                        $pestisida = PenggunaanPestisida::with('satuanPestisida')->find($pestisidaId);
-                        $satuan = $pestisida->satuanPestisida->nama_satuan ?? 'unit yang dipilih';
+                        $pestisida = Pestisida::with('satuan')->find($pestisidaId);
+                        $satuan = $pestisida->satuan->nama_satuan ?? 'unit yang dipilih';
 
                         return "Masukkan jumlah penggunaan pupuk dalam satuan $satuan";
                     })
@@ -77,8 +77,8 @@ class PenggunaanPestisidaResource extends Resource
                             return '';
                         }
 
-                        $pestisida = PenggunaanPestisida::with('satuanPestisida')->find($pestisidaId);
-                        $satuan = $pestisida->satuanPestisida->nama_satuan ?? '';
+                        $pestisida = Pestisida::with('satuan')->find($pestisidaId);
+                        $satuan = $pestisida->satuan->nama_satuan ?? '';
 
                         return "$satuan";
                     })
