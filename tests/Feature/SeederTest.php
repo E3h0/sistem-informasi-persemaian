@@ -184,6 +184,9 @@ test('Memastikan KategoriPestisidaSeeder dapat berjalan dengan baik', function()
 
 test('Memastikan SatuanPestisidaSeeder dapat berjalan dengan baik', function() {
 
+    DB::table("users")->truncate();
+
+    $this->seed(UserSeeder::class);
     $this->seed(SatuanPestisidaSeeder::class);
 
     expect(SatuanPestisida::count())->toBeGreaterThan(0);

@@ -13,9 +13,25 @@ class SatuanPestisidaSeeder extends Seeder
      */
     public function run(): void
     {
-        SatuanPestisida::create(['nama_satuan' => 'Kilogram (kg)']);
-        SatuanPestisida::create(['nama_satuan' => 'Gram (g)']);
-        SatuanPestisida::create(['nama_satuan' => 'Liter (l)']);
-        SatuanPestisida::create(['nama_satuan' => 'Mililiter (mL)']);
+        SatuanPestisida::create([
+            'nama_satuan' => 'Kilogram (kg)',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        SatuanPestisida::create([
+            'nama_satuan' => 'Gram (g)',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        SatuanPestisida::create([
+            'nama_satuan' => 'Liter (l)',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        SatuanPestisida::create([
+            'nama_satuan' => 'Mililiter (mL)',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
     }
 }
