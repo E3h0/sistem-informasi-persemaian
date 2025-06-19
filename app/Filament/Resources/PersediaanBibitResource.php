@@ -54,12 +54,26 @@ class PersediaanBibitResource extends Resource
                 ->relationship('kategori', 'nama_kategori')
                 ->placeholder('Pilih kategori bibit')
                 ->createOptionForm([
-                    TextInput::make('nama_kategori')
-                        ->required()
-                        ->label('Nama Kategori')->placeholder('Masukkan Nama Kategori')
-                        ->rules(['min:3'])->validationMessages([
-                            'min' => 'Minimal harus 3 karakter'
-                        ])
+                     TextInput::make('nama_kategori')
+                        ->label('Nama Kategori')
+                        ->placeholder('Masukkan Nama Kategori')
+                        ->rules(fn (?Model $record): array => [
+                            'required','min:3',
+                            Rule::unique('kategori_bibit', 'nama_kategori')->ignore($record)])
+                        ->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'min' => 'Minimal harus 3 karakter',
+                            'unique' => 'Data sudah ada'
+                        ])->markAsRequired()
+                        ->live(debounce:1000)
+                        ->afterStateUpdated(function ($state, $set) {
+                            $set('nama_kategori', ucfirst(strtolower($state)));
+                        }),
+
+                    Hidden::make('user_id')
+                        ->default(Filament::auth()->user()->id)
+                        ->dehydrated(),
+
                 ])->createOptionModalHeading('Tambah Kategori Bibit')
                 ->createOptionUsing(function (array $data) {
                     $category = KategoriBibit::create($data);
