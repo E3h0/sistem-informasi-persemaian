@@ -135,6 +135,9 @@ test('Memastikan KategoriPupukSeeder dapat berjalan dengan baik', function() {
 
 test('Memastikan SatuanPupukSeeder dapat berjalan dengan baik', function() {
 
+    DB::table("users")->truncate();
+
+    $this->seed(UserSeeder::class);
     $this->seed(SatuanPupukSeeder::class);
 
     expect(SatuanPupuk::count())->toBeGreaterThan(0);

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class SatuanPupuk extends Model
 {
     protected $table = 'satuan_pupuk';
-    protected $fillable = ['nama_satuan'];
+    protected $guarded = [];
 
     public function pupuk(): HasMany {
         return $this->hasMany(Pupuk::class, 'satuan_pupuk_id', 'id');

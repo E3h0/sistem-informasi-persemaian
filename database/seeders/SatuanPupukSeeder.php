@@ -13,9 +13,25 @@ class SatuanPupukSeeder extends Seeder
      */
     public function run(): void
     {
-        SatuanPupuk::create(['nama_satuan' => 'Kilogram (kg)']);
-        SatuanPupuk::create(['nama_satuan' => 'Gram (g)']);
-        SatuanPupuk::create(['nama_satuan' => 'Liter (l)']);
-        SatuanPupuk::create(['nama_satuan' => 'Mililiter (mL)']);
+        SatuanPupuk::create([
+            'nama_satuan' => 'Kilogram (kg)',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        SatuanPupuk::create([
+            'nama_satuan' => 'Gram (g)',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        SatuanPupuk::create([
+            'nama_satuan' => 'Liter (l)',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        SatuanPupuk::create([
+            'nama_satuan' => 'Mililiter (mL)',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
     }
 }
