@@ -13,8 +13,22 @@ class KategoriPestisidaSeeder extends Seeder
      */
     public function run(): void
     {
-        KategoriPestisida::create(['nama_kategori' => 'Insektisida']);
-        KategoriPestisida::create(['nama_kategori' => 'Fungisida']);
-        KategoriPestisida::create(['nama_kategori' => 'Herbisida']);
+        KategoriPestisida::create([
+            'nama_kategori' => 'Insektisida',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+
+        KategoriPestisida::create([
+            'nama_kategori' => 'Fungisida',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+
+        KategoriPestisida::create([
+            'nama_kategori' => 'Herbisida',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
     }
 }
