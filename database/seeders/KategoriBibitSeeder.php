@@ -13,23 +13,21 @@ class KategoriBibitSeeder extends Seeder
      */
     public function run(): void
     {
-        // $data = [
-        //     [
-        //         "nama_kategori" => "Kayu-kayuan"
-        //     ],
-        //     [
-        //         "nama_kategori" => "Estetika"
-        //     ],
-        //     [
-        //         "nama_kategori" => "Hasil Hutan Non Kayu"
-        //     ],
-        // ];
+        KategoriBibit::create([
+            "nama_kategori" => "Kayu-kayuan",
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        KategoriBibit::create([
+            "nama_kategori" => "Estetika",
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        KategoriBibit::create([
+            "nama_kategori" => "Hasil Hutan Non Kayu",
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
 
-        // KategoriBibit::insert($data);
-
-        KategoriBibit::create(["nama_kategori" => "Kayu-kayuan"]);
-        KategoriBibit::create(["nama_kategori" => "Estetika"]);
-        KategoriBibit::create(["nama_kategori" => "Hasil Hutan Non Kayu"]);
-        
     }
 }

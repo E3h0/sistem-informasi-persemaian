@@ -48,7 +48,10 @@ test('Memastikan UserSeeder dapat berjalan dengan baik', function () {
 
 test('Memastikan KategoriBibitSeeder dapat berjalan dengan baik', function () {
 
+    DB::table("users")->truncate();
+
     // jalankan seeder
+    $this->seed(UserSeeder::class);
     $this->seed(KategoriBibitSeeder::class);
 
     // konfirmasi data di database
