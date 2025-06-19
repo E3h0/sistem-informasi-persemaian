@@ -67,11 +67,24 @@ class PestisidaResource extends Resource
                     ->relationship('satuan', 'nama_satuan')
                     ->createOptionForm([
                     TextInput::make('nama_satuan')
-                        ->required()
-                        ->label('Nama Satuan')->placeholder('Masukkan Nama Satuan')
-                        ->rules(['min:3'])->validationMessages([
-                            'min' => 'Minimal harus 3 karakter'
-                        ])
+                        ->label('Nama Satuan')
+                        ->placeholder('Masukkan Nama Satuan')
+                        ->rules(fn (?Model $record): array => [
+                            'required','min:3',
+                            Rule::unique('satuan_pestisida', 'nama_satuan')->ignore($record)])
+                        ->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'min' => 'Minimal harus 3 karakter',
+                            'unique' => 'Data sudah ada'
+                        ])->markAsRequired()
+                        ->live(debounce:1000)
+                        ->afterStateUpdated(function ($state, $set) {
+                            $set('nama_satuan', ucfirst($state));
+                        }),
+
+                    Hidden::make('user_id')
+                        ->default(Filament::auth()->user()->id)
+                        ->dehydrated(),
                 ])->createOptionModalHeading('Tambah Satuan')
                 ->createOptionUsing(function (array $data) {
                     SatuanPestisida::create($data);
@@ -145,7 +158,7 @@ class PestisidaResource extends Resource
                     Hidden::make('user_id')
                         ->default(Filament::auth()->user()->id)
                         ->dehydrated(),
-                        
+
                 ])->createOptionModalHeading('Tambah Kategori')
                 ->createOptionUsing(function (array $data) {
                     KategoriPestisida::create($data);
