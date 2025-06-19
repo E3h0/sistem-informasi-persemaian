@@ -63,11 +63,25 @@ class PersediaanAlatKerjaResource extends Resource
                     ->label('Kategori')->options(KategoriAlatKerja::all()->pluck('nama_kategori', 'id'))
                     ->placeholder('Pilih kategori barang')->createOptionForm([
                     TextInput::make('nama_kategori')
-                        ->required()
-                        ->label('Nama Kategori')->placeholder('Masukkan Nama Kategori')
-                        ->rules(['min:3'])->validationMessages([
-                            'min' => 'Minimal harus 3 karakter'
-                        ])
+                        ->label('Nama Kategori')
+                        ->placeholder('Masukkan Nama Kategori')
+                        ->rules(fn (?Model $record): array => [
+                            'required','min:3',
+                            Rule::unique('kategori_alat_kerja', 'nama_kategori')->ignore($record)])
+                        ->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'min' => 'Minimal harus 3 karakter',
+                            'unique' => 'Data sudah ada'
+                        ])->markAsRequired()
+                        ->live(debounce:1000)
+                        ->afterStateUpdated(function ($state, $set) {
+                            $set('nama_kategori', ucfirst(strtolower($state)));
+                        }),
+
+                    Hidden::make('user_id')
+                        ->default(Filament::auth()->user()->id)
+                        ->dehydrated(),
+                        
                     ])->createOptionModalHeading('Tambah Kategori Barang')
                     ->createOptionUsing(function (array $data) {
                         $category = KategoriAlatKerja::create($data);
@@ -144,7 +158,7 @@ class PersediaanAlatKerjaResource extends Resource
                 TextColumn::make('updated_at')
                     ->label('Diperbarui Pada')->dateTime('l, j M Y')
                     ->sortable()->toggleable(isToggledHiddenByDefault:true),
-                    
+
             ])->searchPlaceholder('Cari nama barang')->searchDebounce('300ms')
             ->filters([
                 //
