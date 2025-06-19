@@ -102,6 +102,9 @@ test("Memastikan MutasiBibitSeeder dapat berjalan dengan baik", function () {
 
 test('Memastikan KategoriAlatKerjaSeeder dapat berjalan dengan baik', function () {
 
+    DB::table("users")->truncate();
+
+    $this->seed(UserSeeder::class);
     $this->seed(KategoriAlatKerjaSeeder::class);
 
     expect(KategoriAlatKerja::count())->toBeGreaterThan(0);

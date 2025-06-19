@@ -13,7 +13,15 @@ class KategoriAlatKerjaSeeder extends Seeder
      */
     public function run(): void
     {
-        KategoriAlatKerja::create(['nama_kategori' => 'Persiapan Lahan']);
-        KategoriAlatKerja::create(['nama_kategori' => 'Media Tanam']);
+        KategoriAlatKerja::create([
+            'nama_kategori' => 'Persiapan Lahan',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        KategoriAlatKerja::create([
+            'nama_kategori' => 'Media Tanam',
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
     }
 }
