@@ -4,25 +4,34 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
+use Filament\Infolists;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Js;
 use App\Models\KategoriBibit;
 use Filament\Facades\Filament;
 use App\Models\PersediaanBibit;
+use Illuminate\Validation\Rule;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Infolists\Components\TextEntry;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Actions;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Actions\Action;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PersediaanBibitResource\Pages;
+use Filament\Infolists\Components\TextEntry as ComponentsTextEntry;
 use App\Filament\Resources\PersediaanBibitResource\RelationManagers;
-use Filament\Forms\Get;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Validation\Rule;
+use Filament\Tables\Actions\ViewAction;
 
 class PersediaanBibitResource extends Resource
 {
@@ -135,7 +144,7 @@ class PersediaanBibitResource extends Resource
     {
         return $table
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
-            ->recordUrl(false)
+            ->recordUrl( fn (Model $record): string => route('filament.admin.resources.persediaan-bibit.view', ['record' => $record]) )
             ->columns([
                 TextColumn::make('jenis_bibit')
                     ->label('Nama Bibit')
@@ -178,6 +187,42 @@ class PersediaanBibitResource extends Resource
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make()
+                    ->schema([
+                        Infolists\Components\TextEntry::make('jenis_bibit')->label('Jenis Bibit')->columns(1),
+                        Infolists\Components\TextEntry::make('kategori.nama_kategori')->label('Kategori Bibit')->columns(1),
+                        Infolists\Components\TextEntry::make('jumlah_persediaan')->label('Jumlah Persediaan')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                        Infolists\Components\TextEntry::make('pencatat.name')->label('Pencatat')
+                            ->badge()
+                            ->color(function ($record): string {
+                                $role = $record->pencatat->role;
+                                return match ($role){
+                                    'Admin' => 'success',
+                                    'Editor' => 'warning',
+                                    'Viewer' => 'danger',
+                                };
+                            }),
+                        Infolists\Components\TextEntry::make('created_at')->label('Dibuat Pada')->dateTime('l, j M Y'),
+                        Infolists\Components\TextEntry::make('updated_at')->label('Diperbarui Pada')->dateTime('l, j M Y'),
+                        Infolists\Components\TextEntry::make('keterangan')->label('Keterangan')->placeholder('Tidak ada keterangan yang ditambahkan')->columnSpanFull(),
+
+                    ])->columns(2),
+                    Actions::make([
+                        Action::make('kembali')
+                            ->label('Kembali')
+                            // ->alpineClickHandler('window.location.href = ' . Js::from(static::getUrl("index")) . '')
+                            ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . Js::from(static::getUrl()) . ')')
+                            ->icon('heroicon-o-arrow-left')
+                            ->color('gray')
+                            ->button()
+                    ])->alignLeft(),
+            ]);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -191,6 +236,7 @@ class PersediaanBibitResource extends Resource
             'index' => Pages\ListPersediaanBibits::route('/'),
             'create' => Pages\CreatePersediaanBibit::route('/create'),
             'edit' => Pages\EditPersediaanBibit::route('/{record}/edit'),
+            'view' => Pages\ViewPersediaanBibit::route('/{record}'),
         ];
     }
 }
