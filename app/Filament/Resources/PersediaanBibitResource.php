@@ -27,6 +27,7 @@ use Illuminate\Validation\Rule;
 class PersediaanBibitResource extends Resource
 {
     protected static ?string $model = PersediaanBibit::class;
+    protected static ?string $recordTitleAttribute = 'jenis_bibit';
     protected static ?string $modelLabel = "Persediaan Bibit";
     protected static ?string $pluralModelLabel = "Persediaan Bibit";
     protected static ?string $navigationIcon = 'tabler-seeding';
@@ -34,6 +35,24 @@ class PersediaanBibitResource extends Resource
     protected static ?string $breadcrumb = "Persediaan Bibit";
     protected static ?int $navigationSort = 1;
     protected static ?string $navigationGroup = 'Kelola Bibit';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['jenis_bibit', 'kategori.nama_kategori'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Kategori' => $record->kategori->nama_kategori,
+            'Stok' => number_format($record->jumlah_persediaan, 0, ',', '.')
+        ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['kategori']);
+    }
 
     public static function form(Form $form): Form
     {
