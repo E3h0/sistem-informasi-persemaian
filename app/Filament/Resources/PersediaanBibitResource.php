@@ -63,6 +63,11 @@ class PersediaanBibitResource extends Resource
         return parent::getGlobalSearchEloquentQuery()->with(['kategori']);
     }
 
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return PersediaanBibitResource::getUrl('view', ['record' => $record]);
+    }
+    
     public static function form(Form $form): Form
     {
         return $form
