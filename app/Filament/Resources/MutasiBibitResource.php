@@ -5,28 +5,33 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Get;
+use Filament\Infolists;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Js;
 use App\Models\MutasiBibit;
 use Filament\Facades\Filament;
 use App\Models\PersediaanBibit;
 use Illuminate\Validation\Rule;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
-use function Laravel\Prompts\select;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Support\Enums\Alignment;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
-
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ColumnGroup;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Actions;
+use Illuminate\Contracts\Support\Htmlable;
+use Filament\Infolists\Components\Actions\Action;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MutasiBibitResource\Pages;
+use Filament\Infolists\Components\Section as InfoSection;
 use App\Filament\Resources\MutasiBibitResource\RelationManagers;
 
 class MutasiBibitResource extends Resource
@@ -48,6 +53,34 @@ class MutasiBibitResource extends Resource
     protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationGroup = 'Kelola Bibit';
+
+    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+    {
+        return $record->bibit->jenis_bibit;
+    }
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['bibit.jenis_bibit'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Total di GHA' => number_format($record->totalGha(), 0, ',', '.'),
+            'Total di AHA' => number_format($record->totalAha(), 0, ',', '.'),
+            'Total di OGA' => number_format($record->totalOga(), 0, ',', '.')
+        ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['bibit']);
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return MutasiBibitResource::getUrl('view', ['record' => $record]);
+    }
 
     public static function form(Form $form): Form
     {
@@ -186,7 +219,9 @@ class MutasiBibitResource extends Resource
     {
         return $table
          ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
-            ->recordUrl(false)
+            ->recordUrl( function (Model $record):string {
+                return MutasiBibitResource::getUrl('view', ['record' => $record]);
+            })
             ->columns([
                 TextColumn::make('bibit.jenis_bibit')
                     ->label('Jenis Bibit')->searchable(),
@@ -283,6 +318,118 @@ class MutasiBibitResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                InfoSection::make()
+                    ->schema([
+                        Infolists\Components\TextEntry::make('bibit.jenis_bibit')
+                            ->label('Jenis Bibit'),
+
+                        Infolists\Components\TextEntry::make('kategori.nama_kategori')
+                            ->label('Kategori Bibit'),
+                    ])->columns(2),
+
+                InfoSection::make('GHA')
+                    ->description('Germination House Area')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('gha1')
+                            ->label('Blok 1')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('gha2')
+                            ->label('Blok 2')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('gha3')
+                            ->label('Blok 3')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('gha4')
+                            ->label('Blok 4')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    ])
+                    ->columns(4),
+
+                InfoSection::make('AHA')
+                    ->description('Aclimatization House Area')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('aha1')
+                            ->label('Blok 1')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('aha2')
+                            ->label('Blok 2')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('aha3')
+                            ->label('Blok 3')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('aha4')
+                            ->label('Blok 4')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    ])
+                    ->columns(4),
+
+                InfoSection::make('OGA')
+                    ->description('Open Growth Area')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('oga1')
+                            ->label('Blok 1')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('oga2')
+                            ->label('Blok 2')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('oga3')
+                            ->label('Blok 3')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('oga4')
+                            ->label('Blok 4')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    ])
+                    ->columns(4),
+
+                InfoSection::make()
+                    ->schema([
+
+                         Infolists\Components\TextEntry::make('pencatat.name')->label('Pencatat')
+                            ->badge()
+                            ->color(function ($record): string {
+                                $role = $record->pencatat->role;
+                                return match ($role){
+                                    'Admin' => 'success',
+                                    'Editor' => 'warning',
+                                    'Viewer' => 'danger',
+                                };
+                            }),
+
+                        Infolists\Components\TextEntry::make('created_at')
+                            ->label('Dibuat Pada')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('updated_at')
+                            ->label('Diperbarui Pada')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('keterangan')
+                            ->label('Keterangan')
+                            ->placeholder('Tidak ada keterangan yang ditambahkan')
+                    ])->columns(4),
+                Actions::make([
+                    Action::make('kembali')
+                        ->label('Kembali')
+                        // ->alpineClickHandler('window.location.href = ' . Js::from(static::getUrl("index")) . '')
+                        ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . Js::from(static::getUrl()) . ')')
+                        ->icon('heroicon-o-arrow-left')
+                        ->color('gray')
+                        ->button()
+                ])->alignLeft(),
+            ]);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -296,6 +443,7 @@ class MutasiBibitResource extends Resource
             'index' => Pages\ListMutasiBibits::route('/'),
             'create' => Pages\CreateMutasiBibit::route('/create'),
             'edit' => Pages\EditMutasiBibit::route('/{record}/edit'),
+            'view' => Pages\ViewMutasiBibit::route('/{record}')
         ];
     }
 }

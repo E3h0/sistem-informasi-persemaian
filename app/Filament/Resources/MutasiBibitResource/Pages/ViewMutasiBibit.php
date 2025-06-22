@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\TargetProduksiResource\Pages;
+namespace App\Filament\Resources\MutasiBibitResource\Pages;
 
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
-use App\Filament\Resources\TargetProduksiResource;
+use App\Filament\Resources\MutasiBibitResource;
 
-class ViewTargetProduksi extends ViewRecord
+class ViewMutasiBibit extends ViewRecord
 {
-    protected static string $resource = TargetProduksiResource::class;
+    protected static string $resource = MutasiBibitResource::class;
     protected static ?string $breadcrumb = "Detail";
 
     public function getHeading(): string|Htmlable
