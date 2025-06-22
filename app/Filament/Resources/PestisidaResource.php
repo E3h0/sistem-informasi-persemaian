@@ -5,13 +5,16 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Get;
+use Filament\Infolists;
 use Filament\Forms\Form;
 use App\Models\Pestisida;
 use Filament\Tables\Table;
+use Illuminate\Support\Js;
 use Filament\Facades\Filament;
 use App\Models\BentukPestisida;
 use App\Models\SatuanPestisida;
 use Illuminate\Validation\Rule;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use App\Models\KategoriPestisida;
 use Filament\Forms\Components\Hidden;
@@ -22,6 +25,10 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Actions;
+use Filament\Infolists\Components\Section;
+use Illuminate\Contracts\Support\Htmlable;
+use Filament\Infolists\Components\Actions\Action;
 use App\Filament\Resources\PestisidaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PestisidaResource\RelationManagers;
@@ -45,6 +52,34 @@ class PestisidaResource extends Resource
     protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationGroup = 'Kelola Barang';
+
+    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+    {
+        return $record->nama_pestisida;
+    }
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['nama_pestisida', 'bentuk.nama_bentuk', 'kategori.nama_kategori'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Bentuk' => $record->bentuk->nama_bentuk,
+            'Kategori' => $record->kategori->nama_kategori,
+            'Jumlah Tersedia' => number_format($record->jumlah_persediaan, 0, ',', '.') . ' ' . $record->satuan->nama_satuan,
+        ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['satuan', 'bentuk', 'kategori']);
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return PestisidaResource::getUrl('view', ['record' => $record]);
+    }
 
     public static function form(Form $form): Form
     {
@@ -221,7 +256,9 @@ class PestisidaResource extends Resource
     {
         return $table
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
-            ->recordUrl(false)
+            ->recordUrl( function (Model $record):string {
+                return PestisidaResource::getUrl('view', ['record' => $record]);
+            })
             ->columns([
                 TextColumn::make('nama_pestisida')
                     ->label('Nama Pestisida')
@@ -275,6 +312,62 @@ class PestisidaResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make()
+                    ->schema([
+                        Infolists\Components\TextEntry::make('nama_pestisida')
+                            ->label('Nama Pestisida')->columns(1),
+
+                        Infolists\Components\TextEntry::make('kategori.nama_kategori')
+                            ->label('Kategori Pestisida')->columns(1),
+
+                        Infolists\Components\TextEntry::make('bentuk.nama_bentuk')
+                            ->label('Bentuk Pestisida'),
+
+                        Infolists\Components\TextEntry::make('jumlah_persediaan')
+                            ->label('Jumlah Tersedia')
+                            ->formatStateUsing(function ($state, $record){
+                                return number_format($state, 0, ',', '.')  . ' ' . $record->satuan->nama_satuan;
+                            }),
+
+                        Infolists\Components\TextEntry::make('pencatat.name')->label('Pencatat')
+                            ->badge()
+                            ->color(function ($record): string {
+                                $role = $record->pencatat->role;
+                                return match ($role){
+                                    'Admin' => 'success',
+                                    'Editor' => 'warning',
+                                    'Viewer' => 'danger',
+                                };
+                            }),
+
+                        Infolists\Components\TextEntry::make('created_at')
+                            ->label('Dibuat Pada')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('updated_at')
+                            ->label('Diperbarui Pada')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('keterangan')
+                            ->label('Keterangan')
+                            ->placeholder('Tidak ada keterangan yang ditambahkan')
+                            // ->columnSpanFull(),
+
+                    ])->columns(2),
+                    Actions::make([
+                        Action::make('kembali')
+                            ->label('Kembali')
+                            // ->alpineClickHandler('window.location.href = ' . Js::from(static::getUrl("index")) . '')
+                            ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . Js::from(static::getUrl()) . ')')
+                            ->icon('heroicon-o-arrow-left')
+                            ->color('gray')
+                            ->button()
+                    ])->alignLeft(),
+            ]);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -288,6 +381,7 @@ class PestisidaResource extends Resource
             'index' => Pages\ListPestisidas::route('/'),
             'create' => Pages\CreatePestisida::route('/create'),
             'edit' => Pages\EditPestisida::route('/{record}/edit'),
+            'view' => Pages\ViewPestisida::route('/{record}')
         ];
     }
 }
