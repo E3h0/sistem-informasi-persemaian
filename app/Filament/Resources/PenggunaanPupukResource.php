@@ -6,21 +6,30 @@ use Filament\Forms;
 use Filament\Tables;
 use App\Models\Pupuk;
 use Filament\Forms\Get;
+use Filament\Infolists;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Js;
 use Filament\Facades\Filament;
+use Illuminate\Support\Carbon;
 use App\Models\PenggunaanPupuk;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Actions;
+use Filament\Infolists\Components\Section;
+use Illuminate\Contracts\Support\Htmlable;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Infolists\Components\Actions\Action;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PenggunaanPupukResource\Pages;
 use App\Filament\Resources\PenggunaanPupukResource\RelationManagers;
@@ -44,6 +53,34 @@ class PenggunaanPupukResource extends Resource
     protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationGroup = 'Kelola Barang';
+
+    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+    {
+         return $record->pupuk->nama_pupuk;
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['tanggal_penggunaan', 'pupuk.nama_pupuk'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Tanggal Penggunaan' => Carbon::parse($record->tanggal_penggunaan)->translatedFormat('l, j F Y'),
+            'Jumlah Penggunaan' => number_format($record->jumlah_penggunaan, 0, ',', '.') . ' ' . $record->satuanPupuk->nama_satuan,
+        ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['pupuk', 'satuanPupuk']);
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return PenggunaanPupukResource::getUrl('view', ['record' => $record]);
+    }
 
     public static function form(Form $form): Form
     {
@@ -114,7 +151,9 @@ class PenggunaanPupukResource extends Resource
     {
         return $table
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
-            ->recordUrl(false)
+            ->recordUrl( function (Model $record):string {
+                return PenggunaanPupukResource::getUrl('view', ['record' => $record]);
+            })
             ->columns([
                 TextColumn::make('pupuk.nama_pupuk')
                     ->label('Nama Pupuk')
@@ -171,6 +210,65 @@ class PenggunaanPupukResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make()
+                    ->schema([
+                        Infolists\Components\TextEntry::make('pupuk.nama_pupuk')
+                            ->label('Nama Pupuk'),
+
+                        Infolists\Components\TextEntry::make('kategoriPupuk.nama_kategori')
+                            ->label('Kategori Bibit'),
+
+                        Infolists\Components\TextEntry::make('BentukPupuk.nama_bentuk')
+                            ->label('Bentuk Pupuk'),
+
+                        Infolists\Components\TextEntry::make('jumlah_penggunaan')
+                            ->label('Jumlah Penggunaan')
+                            ->formatStateUsing(function ($state, $record){
+                                return number_format($state, 0, ',', '.')  . ' ' . $record->satuanPupuk->nama_satuan;
+                            }),
+
+                        Infolists\Components\TextEntry::make('pencatat.name')->label('Pencatat')
+                            ->badge()
+                            ->color(function ($record): string {
+                                $role = $record->pencatat->role;
+                                return match ($role){
+                                    'Admin' => 'success',
+                                    'Editor' => 'warning',
+                                    'Viewer' => 'danger',
+                                };
+                            }),
+
+                        Infolists\Components\TextEntry::make('tanggal_penggunaan')
+                            ->label('Tanggal Penggunaan')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('created_at')
+                            ->label('Dibuat Pada')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('updated_at')
+                            ->label('Diperbarui Pada')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('keterangan')
+                            ->label('Keterangan')
+                            ->placeholder('Tidak ada keterangan yang ditambahkan')
+                            // ->columnSpanFull(),
+
+                    ])->columns(2),
+                    Actions::make([
+                        Action::make('kembali')
+                            ->label('Kembali')
+                            // ->alpineClickHandler('window.location.href = ' . Js::from(static::getUrl("index")) . '')
+                            ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . Js::from(static::getUrl()) . ')')
+                            ->icon('heroicon-o-arrow-left')
+                            ->color('gray')
+                            ->button()
+                    ])->alignLeft(),
+            ]);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -184,6 +282,7 @@ class PenggunaanPupukResource extends Resource
             'index' => Pages\ListPenggunaanPupuks::route('/'),
             'create' => Pages\CreatePenggunaanPupuk::route('/create'),
             'edit' => Pages\EditPenggunaanPupuk::route('/{record}/edit'),
+            'view' => Pages\ViewPenggunaanPupuk::route('/{record}')
         ];
     }
 }
