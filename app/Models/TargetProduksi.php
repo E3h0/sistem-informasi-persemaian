@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class TargetProduksi extends Model
 {
@@ -16,5 +17,9 @@ class TargetProduksi extends Model
 
     public function bibit(): BelongsTo {
         return $this->belongsTo(PersediaanBibit::class, "bibit_id");
+    }
+
+    public function kategori(): HasOneThrough {
+        return $this->hasOneThrough(KategoriBibit::class, PersediaanBibit::class, 'id', 'id', 'bibit_id', 'kategori_bibit_id');
     }
 }

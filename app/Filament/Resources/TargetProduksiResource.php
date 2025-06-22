@@ -6,13 +6,16 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Infolists;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Js;
 use Filament\Support\RawJs;
 use App\Models\TargetProduksi;
 use Filament\Facades\Filament;
 use App\Models\PersediaanBibit;
 use Illuminate\Validation\Rule;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
@@ -22,6 +25,10 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Actions;
+use Filament\Infolists\Components\Section;
+use Illuminate\Contracts\Support\Htmlable;
+use Filament\Infolists\Components\Actions\Action;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\TargetProduksiResource\Pages;
 
@@ -46,6 +53,35 @@ class TargetProduksiResource extends Resource
 
     protected static ?string $navigationGroup = 'Kelola Bibit';
 
+    // protected static ?string $recordTitleAttribute = 'bibit.jenis_bibit';
+
+    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+    {
+        return $record->bibit->jenis_bibit;
+    }
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['bibit.jenis_bibit'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Target Produksi' => number_format($record->target_produksi, 0, ',', '.'),
+            'Realisasi Produksi' => number_format($record->sudah_diproduksi, 0, ',', '.'),
+            'Sudah Didistribusi' => number_format($record->sudah_distribusi, 0, ',', '.')
+        ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['bibit']);
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return TargetProduksiResource::getUrl('view', ['record' => $record]);
+    }
 
     public static function form(Form $form): Form
     {
@@ -117,7 +153,9 @@ class TargetProduksiResource extends Resource
     {
         return $table
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
-            ->recordUrl(false)
+            ->recordUrl( function (Model $record):string {
+                return TargetProduksiResource::getUrl('view', ['record' => $record]);
+            })
             ->columns([
                 TextColumn::make("bibit.jenis_bibit")
                     ->label("Jenis Bibit")
@@ -177,6 +215,69 @@ class TargetProduksiResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make()
+                    ->schema([
+                        Infolists\Components\TextEntry::make('bibit.jenis_bibit')
+                            ->label('Jenis Bibit')->columns(1),
+
+                        Infolists\Components\TextEntry::make('kategori.nama_kategori')
+                            ->label('Kategori Bibit')->columns(1),
+
+                        Infolists\Components\TextEntry::make('target_produksi')
+                            ->label('Target Produksi')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('sudah_diproduksi')
+                            ->label('Realisasi Produksi')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('sudah_distribusi')
+                            ->label('Sudah Didistribusi')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('stok_akhir')
+                            ->label('Stok Akhir')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('pencatat.name')->label('Pencatat')
+                            ->badge()
+                            ->color(function ($record): string {
+                                $role = $record->pencatat->role;
+                                return match ($role){
+                                    'Admin' => 'success',
+                                    'Editor' => 'warning',
+                                    'Viewer' => 'danger',
+                                };
+                            }),
+
+                        Infolists\Components\TextEntry::make('created_at')
+                            ->label('Dibuat Pada')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('updated_at')
+                            ->label('Diperbarui Pada')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('keterangan')
+                            ->label('Keterangan')
+                            ->placeholder('Tidak ada keterangan yang ditambahkan')
+                            // ->columnSpanFull(),
+
+                    ])->columns(2),
+                    Actions::make([
+                        Action::make('kembali')
+                            ->label('Kembali')
+                            // ->alpineClickHandler('window.location.href = ' . Js::from(static::getUrl("index")) . '')
+                            ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . Js::from(static::getUrl()) . ')')
+                            ->icon('heroicon-o-arrow-left')
+                            ->color('gray')
+                            ->button()
+                    ])->alignLeft(),
+            ]);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -190,13 +291,7 @@ class TargetProduksiResource extends Resource
             'index' => Pages\ListTargetProduksis::route('/'),
             'create' => Pages\CreateTargetProduksi::route('/create'),
             'edit' => Pages\EditTargetProduksi::route('/{record}/edit'),
+            'view' => Pages\ViewTargetProduksi::route('/{record}')
         ];
     }
-
-    // app/Filament/Resources/TargetProduksiResource.php
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()->with(['bibit']);
-    }
-
 }

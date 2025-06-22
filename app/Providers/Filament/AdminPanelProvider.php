@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName("Administrasi")
-            ->spa()
+            // ->spa()
             ->colors([
                 'primary' => Color::Amber,
             ])
