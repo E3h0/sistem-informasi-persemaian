@@ -274,6 +274,7 @@ class PestisidaResource extends Resource
 
                 TextColumn::make('jumlah_persediaan')
                     ->label('Jumlah Persediaan')->alignCenter()
+                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
                     ->sortable(),
 
                 TextColumn::make('satuan.nama_satuan')

@@ -220,7 +220,7 @@ class PenggunaanPupukResource extends Resource
                             ->label('Nama Pupuk'),
 
                         Infolists\Components\TextEntry::make('kategoriPupuk.nama_kategori')
-                            ->label('Kategori Bibit'),
+                            ->label('Kategori Pupuk'),
 
                         Infolists\Components\TextEntry::make('BentukPupuk.nama_bentuk')
                             ->label('Bentuk Pupuk'),
