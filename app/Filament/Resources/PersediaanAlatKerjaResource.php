@@ -3,12 +3,15 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
+use Filament\Infolists;
 use Filament\Tables;
 use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Js;
 use Filament\Facades\Filament;
 use Illuminate\Validation\Rule;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use App\Models\KategoriAlatKerja;
 use App\Models\PersediaanAlatKerja;
@@ -20,6 +23,10 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Actions;
+use Filament\Infolists\Components\Section;
+use Illuminate\Contracts\Support\Htmlable;
+use Filament\Infolists\Components\Actions\Action;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PersediaanAlatKerjaResource\Pages;
 use App\Filament\Resources\PersediaanAlatKerjaResource\RelationManagers;
@@ -41,6 +48,33 @@ class PersediaanAlatKerjaResource extends Resource
     protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationGroup = 'Kelola Barang';
+
+    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+    {
+        return $record->nama_barang;
+    }
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['nama_barang', 'kategori.nama_kategori'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Kategori' => $record->kategori->nama_kategori,
+            'Jumlah Tersedia' => number_format($record->jumlah_persediaan, 0, ',', '.'),
+        ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['kategori']);
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return PersediaanAlatKerjaResource::getUrl('view', ['record' => $record]);
+    }
 
 
     public static function form(Form $form): Form
@@ -81,7 +115,7 @@ class PersediaanAlatKerjaResource extends Resource
                     Hidden::make('user_id')
                         ->default(Filament::auth()->user()->id)
                         ->dehydrated(),
-                        
+
                     ])->createOptionModalHeading('Tambah Kategori Barang')
                     ->createOptionUsing(function (array $data) {
                         $category = KategoriAlatKerja::create($data);
@@ -123,7 +157,9 @@ class PersediaanAlatKerjaResource extends Resource
     {
         return $table
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
-            ->recordUrl(false)
+            ->recordUrl( function (Model $record):string {
+                return PersediaanAlatKerjaResource::getUrl('view', ['record' => $record]);
+            })
             ->columns([
                 TextColumn::make('nama_barang')
                     ->label('Nama Barang')->searchable()
@@ -177,6 +213,61 @@ class PersediaanAlatKerjaResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make()
+                    ->schema([
+                        Infolists\Components\TextEntry::make('nama_barang')
+                            ->label('Nama Barang')->columns(1),
+
+                        Infolists\Components\TextEntry::make('kategori.nama_kategori')
+                            ->label('Kategori Barang')->columns(1),
+
+                        Infolists\Components\TextEntry::make('jumlah_persediaan')
+                            ->label('Jumlah Tersedia')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('jumlah_dipakai')
+                            ->label('Jumlah Dipakai')
+                            ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+
+                        Infolists\Components\TextEntry::make('pencatat.name')->label('Pencatat')
+                            ->badge()
+                            ->color(function ($record): string {
+                                $role = $record->pencatat->role;
+                                return match ($role){
+                                    'Admin' => 'success',
+                                    'Editor' => 'warning',
+                                    'Viewer' => 'danger',
+                                };
+                            }),
+
+                        Infolists\Components\TextEntry::make('created_at')
+                            ->label('Dibuat Pada')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('updated_at')
+                            ->label('Diperbarui Pada')->dateTime('l, j M Y'),
+
+                        Infolists\Components\TextEntry::make('keterangan')
+                            ->label('Keterangan')
+                            ->placeholder('Tidak ada keterangan yang ditambahkan')
+                            // ->columnSpanFull(),
+
+                    ])->columns(2),
+                    Actions::make([
+                        Action::make('kembali')
+                            ->label('Kembali')
+                            // ->alpineClickHandler('window.location.href = ' . Js::from(static::getUrl("index")) . '')
+                            ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . Js::from(static::getUrl()) . ')')
+                            ->icon('heroicon-o-arrow-left')
+                            ->color('gray')
+                            ->button()
+                    ])->alignLeft(),
+            ]);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -190,6 +281,7 @@ class PersediaanAlatKerjaResource extends Resource
             'index' => Pages\ListPersediaanAlatKerjas::route('/'),
             'create' => Pages\CreatePersediaanAlatKerja::route('/create'),
             'edit' => Pages\EditPersediaanAlatKerja::route('/{record}/edit'),
+            'view' => Pages\ViewPersediaanAlatKerja::route('/{record}')
         ];
     }
 }
