@@ -13,6 +13,7 @@ use Filament\Actions\Exports\Enums\ExportFormat;
 use App\Filament\Exports\PersediaanBibitExporter;
 use Filament\Actions\Exports\Jobs\CreateXlsxFile;
 use App\Filament\Resources\PersediaanBibitResource;
+use Illuminate\Support\Facades\Auth;
 
 class ListPersediaanBibits extends ListRecords
 {
@@ -36,6 +37,7 @@ class ListPersediaanBibits extends ListRecords
                     $action->label('Konfirmasi');
                 })
                 ->modalDescription("Silahkan pilih kolom dan sesuaikan namanya.")
+                ->visible(fn (): bool => Auth::user()->isAdmin() || Auth::user()->isEditor())
         ];
     }
 }
