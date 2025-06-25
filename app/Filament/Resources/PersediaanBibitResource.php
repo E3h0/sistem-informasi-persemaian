@@ -67,7 +67,7 @@ class PersediaanBibitResource extends Resource
     {
         return PersediaanBibitResource::getUrl('view', ['record' => $record]);
     }
-    
+
     public static function form(Form $form): Form
     {
         return $form
@@ -184,10 +184,35 @@ class PersediaanBibitResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()->label('Hapus')
-                ->modalHeading('Konfirmasi Penghapusan')->modalDescription('Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat dikembalikan!')->successNotification(
-                    Notification::make()->success()->title('Berhasil Dihapus')->body('Data Berhasil Dihapus')->color('success')->seconds(3)
-                ),
+                Tables\Actions\DeleteAction::make()
+                    ->action(function ($record){
+                            if ($record->targetProduksi()->count() > 0) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Gagal, Tidak Dapat Menghapus')
+                                    ->body('Bibit ini sedang digunakan di data Target Produksi')
+                                    ->send();
+                                return;
+                            }
+                            elseif ($record->mutasiBibit()->count() > 0) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Gagal, Tidak Dapat Menghapus')
+                                    ->body('Beibit ini sedang digunakan di data Mutasi Bibit')
+                                    ->send();
+                                return;
+                            }
+                            $record->delete();
+                            Notification::make()
+                                    ->success()
+                                    ->title('Berhasil Dihapus')
+                                    ->body('Data berhasil dihapus')
+                                    ->send();
+                    })
+                    ->label('Hapus')
+                    ->modalHeading('Konfirmasi Penghapusan')->modalDescription('Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat dikembalikan!')->successNotification(
+                        Notification::make()->success()->title('Berhasil Dihapus')->body('Data Berhasil Dihapus')->color('success')->seconds(3)
+                    ),
             ])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
