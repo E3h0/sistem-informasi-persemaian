@@ -294,6 +294,7 @@ class PupukResource extends Resource
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')
                     ->toggleable(isToggledHiddenByDefault:true)
             ])->searchDebounce('300ms')
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

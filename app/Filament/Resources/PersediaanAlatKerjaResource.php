@@ -196,6 +196,7 @@ class PersediaanAlatKerjaResource extends Resource
                     ->sortable()->toggleable(isToggledHiddenByDefault:true),
 
             ])->searchPlaceholder('Cari nama barang')->searchDebounce('300ms')
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

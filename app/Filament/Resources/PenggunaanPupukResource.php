@@ -192,7 +192,7 @@ class PenggunaanPupukResource extends Resource
                 TextColumn::make('keterangan')->label('Keterangan')
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')
                     ->toggleable(isToggledHiddenByDefault:true)
-            ])
+            ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

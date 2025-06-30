@@ -179,6 +179,7 @@ class PersediaanBibitResource extends Resource
                     ->toggleable(isToggledHiddenByDefault:true)
 
             ])->searchPlaceholder('Cari nama bibit')->searchDebounce('300ms')
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

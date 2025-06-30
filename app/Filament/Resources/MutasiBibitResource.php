@@ -301,6 +301,7 @@ class MutasiBibitResource extends Resource
                     ->placeholder('Tidak ada keterangan yang ditambahkan.')
                     ->toggleable(isToggledHiddenByDefault:true)
             ])->searchPlaceholder('Cari nama bibit')->searchDebounce('300ms')
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
