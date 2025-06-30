@@ -16,6 +16,7 @@ class PersediaanAlatKerjaSeeder extends Seeder
         PersediaanAlatKerja::create([
             'nama_barang' => 'Cangkul',
             'kategori_id' => 1,
+            'satuan_id' => 1,
             'jumlah_persediaan' => 10,
             'jumlah_dipakai' => 8,
             'user_id' => 1,

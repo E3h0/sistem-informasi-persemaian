@@ -16,6 +16,7 @@ use Database\Seeders\PupukSeeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\PersediaanAlatKerja;
 use App\Models\Pestisida;
+use App\Models\SatuanAlatKerja;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\PestisidaSeeder;
@@ -31,6 +32,7 @@ use Database\Seeders\SatuanPestisidaSeeder;
 use Database\Seeders\KategoriAlatKerjaSeeder;
 use Database\Seeders\KategoriPestisidaSeeder;
 use Database\Seeders\PersediaanAlatKerjaSeeder;
+use Database\Seeders\SatuanAlatKerjaSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -100,6 +102,16 @@ test("Memastikan MutasiBibitSeeder dapat berjalan dengan baik", function () {
     expect(MutasiBibit::count())->toBeGreaterThan(0);
 });
 
+test('Memastikan SatuanAlatKerjaSeeder dapat berjalan dengan baik', function () {
+
+    DB::table("users")->truncate();
+
+    $this->seed(UserSeeder::class);
+    $this->seed(SatuanAlatKerjaSeeder::class);
+
+    expect(SatuanAlatKerja::count())->toBeGreaterThan(0);
+});
+
 test('Memastikan KategoriAlatKerjaSeeder dapat berjalan dengan baik', function () {
 
     DB::table("users")->truncate();
@@ -113,10 +125,12 @@ test('Memastikan KategoriAlatKerjaSeeder dapat berjalan dengan baik', function (
 test('Memastikan PersediaanAlatKerjaSeeder dapat berjalan dengan baik', function () {
 
     DB::table("kategori_alat_kerja")->truncate();
+    DB::table("satuan_alat_kerja")->truncate();
     DB::table("users")->truncate();
 
     $this->seed(UserSeeder::class);
     $this->seed(KategoriAlatKerjaSeeder::class);
+    $this->seed(SatuanAlatKerjaSeeder::class);
     $this->seed(PersediaanAlatKerjaSeeder::class);
 
     expect(PersediaanAlatKerja::count())->toBeGreaterThan(0);
@@ -223,6 +237,7 @@ test("Memastikan DatabaseSeeder dapat berjalan dengan baik", function() {
 
     DB::table("kategori_bibit")->truncate();
     DB::table("persediaan_bibit")->truncate();
+    DB::table("satuan_alat_kerja")->truncate();
     DB::table("kategori_alat_kerja")->truncate();
     DB::table("kategori_pestisida")->truncate();
     DB::table("satuan_pestisida")->truncate();
@@ -239,6 +254,7 @@ test("Memastikan DatabaseSeeder dapat berjalan dengan baik", function() {
     expect(PersediaanBibit::count())->toBeGreaterThan(0);
     expect(TargetProduksi::count())->toBeGreaterThan(0);
     expect(MutasiBibit::count())->toBeGreaterThan(0);
+    expect(SatuanAlatKerja::count())->toBeGreaterThan(0);
     expect(KategoriAlatKerja::count())->toBeGreaterThan(0);
     expect(PersediaanAlatKerja::count())->toBeGreaterThan(0);
     expect(KategoriPupuk::count())->toBeGreaterThan(0);

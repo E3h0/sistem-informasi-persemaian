@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             TargetProduksiSeeder::class,
             MutasiBibitSeeder::class,
             KategoriAlatKerjaSeeder::class,
+            SatuanAlatKerjaSeeder::class,
             PersediaanAlatKerjaSeeder::class,
             KategoriPupukSeeder::class,
             SatuanPupukSeeder::class,
