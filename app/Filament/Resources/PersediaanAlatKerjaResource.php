@@ -207,8 +207,8 @@ class PersediaanAlatKerjaResource extends Resource
                             return 'Masukkan jumlah persediaan';
                         }
 
-                        $pestisida = SatuanAlatKerja::find($satuanId);
-                        $satuan = $pestisida->nama_satuan ?? 'unit yang dipilih';
+                        $satuanAlatKerja = SatuanAlatKerja::find($satuanId);
+                        $satuan = $satuanAlatKerja->nama_satuan ?? 'unit yang dipilih';
 
                         return "Masukkan jumlah persediaan dalam satuan $satuan";
                     })
@@ -219,8 +219,8 @@ class PersediaanAlatKerjaResource extends Resource
                             return '';
                         }
 
-                        $pestisida = SatuanAlatKerja::find($satuanId);
-                        $satuan = $pestisida->nama_satuan ?? '';
+                        $satuanAlatKerja = SatuanAlatKerja::find($satuanId);
+                        $satuan = $satuanAlatKerja->nama_satuan ?? '';
 
                         return "$satuan";
                     })
@@ -233,7 +233,7 @@ class PersediaanAlatKerjaResource extends Resource
                     ->dehydrated(),
 
                 Textarea::make('keterangan')
-                    ->label('Keterangan')->placeholder('Masukkan keterangan')->columnSpanFull()
+                    ->label('Keterangan')->placeholder('Masukkan keterangan')
             ]);
     }
 
