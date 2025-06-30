@@ -30,6 +30,7 @@ use Filament\Infolists\Components\Actions\Action;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PersediaanAlatKerjaResource\Pages;
 use App\Filament\Resources\PersediaanAlatKerjaResource\RelationManagers;
+use App\Models\SatuanAlatKerja;
 
 class PersediaanAlatKerjaResource extends Resource
 {
@@ -93,6 +94,43 @@ class PersediaanAlatKerjaResource extends Resource
                         'unique' => 'Data sudah ada'
                 ])->markAsRequired(),
 
+                Select::make('satuan_id')->label('Satuan')
+                    ->live()
+                    ->placeholder('Pilih satuan alat kerja')
+                    ->relationship('satuan', 'nama_satuan')
+                    ->createOptionForm([
+                    TextInput::make('nama_satuan')
+                        ->label('Nama Satuan')
+                        ->placeholder('Masukkan Nama Satuan')
+                        ->rules(fn (?Model $record): array => [
+                            'required','min:3',
+                            Rule::unique('satuan_alat_kerja', 'nama_satuan')->ignore($record)])
+                        ->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'min' => 'Minimal harus 3 karakter',
+                            'unique' => 'Data sudah ada'
+                        ])->markAsRequired()
+                        ->live(debounce:1000)
+                        ->afterStateUpdated(function ($state, $set) {
+                            $set('nama_satuan', ucfirst($state));
+                        }),
+
+                    Hidden::make('user_id')
+                        ->default(Filament::auth()->user()->id)
+                        ->dehydrated(),
+                ])->createOptionModalHeading('Tambah Satuan')
+                ->createOptionUsing(function (array $data) {
+                    SatuanAlatKerja::create($data);
+                    Notification::make()
+                    ->title('Sukses')
+                    ->body('Satuan baru berhasil ditambahkan.')
+                    ->success()
+                    ->seconds(3)
+                    ->send();
+                })->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
+
                 Select::make('kategori_id')
                     ->label('Kategori')->options(KategoriAlatKerja::all()->pluck('nama_kategori', 'id'))
                     ->placeholder('Pilih kategori barang')->createOptionForm([
@@ -132,14 +170,60 @@ class PersediaanAlatKerjaResource extends Resource
 
                 TextInput::make('jumlah_persediaan')
                     ->numeric()->label('Jumlah Persediaan')
-                    ->placeholder('Masukkan jumlah persediaan')
+                    ->placeholder(function (Get $get) {
+                        $satuanId = $get('satuan_id');
+
+                        if (!$satuanId) {
+                            return 'Masukkan jumlah persediaan';
+                        }
+
+                        $satuanAlatKerja = SatuanAlatKerja::find($satuanId);
+                        $satuan = $satuanAlatKerja->nama_satuan ?? 'unit yang dipilih';
+
+                        return "Masukkan jumlah persediaan dalam satuan $satuan";
+                    })
+                    ->suffix(function (Get $get) {
+                        $satuanId = $get('satuan_id');
+
+                        if (!$satuanId) {
+                            return '';
+                        }
+
+                        $satuanAlatKerja = SatuanAlatKerja::find($satuanId);
+                        $satuan = $satuanAlatKerja->nama_satuan ?? '';
+
+                        return "$satuan";
+                    })
                     ->rules(['required'])->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
                     ])->markAsRequired(),
 
                 TextInput::make('jumlah_dipakai')
                     ->numeric()->label('Jumlah Dipakai')
-                    ->placeholder('Masukkan jumlah persediaan')
+                    ->placeholder(function (Get $get) {
+                        $satuanId = $get('satuan_id');
+
+                        if (!$satuanId) {
+                            return 'Masukkan jumlah persediaan';
+                        }
+
+                        $pestisida = SatuanAlatKerja::find($satuanId);
+                        $satuan = $pestisida->nama_satuan ?? 'unit yang dipilih';
+
+                        return "Masukkan jumlah persediaan dalam satuan $satuan";
+                    })
+                    ->suffix(function (Get $get) {
+                        $satuanId = $get('satuan_id');
+
+                        if (!$satuanId) {
+                            return '';
+                        }
+
+                        $pestisida = SatuanAlatKerja::find($satuanId);
+                        $satuan = $pestisida->nama_satuan ?? '';
+
+                        return "$satuan";
+                    })
                     ->rules(['required'])->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
                     ])->markAsRequired(),

@@ -13,8 +13,13 @@ class PersediaanAlatKerja extends Model
     public function pencatat(): BelongsTo {
         return $this->belongsTo(User::class, 'user_id');
     }
-    
+
     public function kategori(): BelongsTo {
         return $this->belongsTo(KategoriAlatKerja::class, 'kategori_id');
     }
+
+    public function satuan(): BelongsTo {
+        return $this->belongsTo(SatuanAlatKerja::class, 'satuan_id');
+    }
+
 }
