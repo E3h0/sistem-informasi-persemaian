@@ -67,7 +67,7 @@ class PupukResource extends Resource
         return [
             'Bentuk' => $record->bentuk->nama_bentuk,
             'Kategori' => $record->kategori->nama_kategori,
-            'Jumlah Tersedia' => number_format($record->jumlah_persediaan, 0, ',', '.') . ' ' . $record->satuan->nama_satuan,
+            'Jumlah Tersedia' => number_format($record->jumlah_persediaan, 0, ',', '.') . ' ' . strtolower($record->satuan->nama_satuan),
         ];
     }
 
@@ -272,15 +272,19 @@ class PupukResource extends Resource
 
                 TextColumn::make('jumlah_persediaan')
                     ->label('Jumlah Persediaan')
-                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    ->formatStateUsing(fn ($state, $record) =>
+                        number_format($state, 0, ',', '.') . ' ' . strtolower($record->satuan->nama_satuan)
+                    )
+                    // ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
                     ->searchable()->sortable(),
 
                 TextColumn::make('satuan.nama_satuan')
-                    ->label('Satuan'),
+                    ->label('Satuan')
+                    ->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('pencatat.name')
                     ->label('Pencatat')
-                    ->toggleable(isToggledHiddenByDefault:true),
+                    ->toggleable(isToggledHiddenByDefault:false),
 
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')->dateTime('l, j M Y')

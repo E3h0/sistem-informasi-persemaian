@@ -67,7 +67,7 @@ class PestisidaResource extends Resource
         return [
             'Bentuk' => $record->bentuk->nama_bentuk,
             'Kategori' => $record->kategori->nama_kategori,
-            'Jumlah Tersedia' => number_format($record->jumlah_persediaan, 0, ',', '.') . ' ' . $record->satuan->nama_satuan,
+            'Jumlah Tersedia' => number_format($record->jumlah_persediaan, 0, ',', '.') . ' ' . strtolower($record->satuan->nama_satuan),
         ];
     }
 
@@ -265,24 +265,27 @@ class PestisidaResource extends Resource
                     ->searchable()->sortable(),
 
                 TextColumn::make('bentuk.nama_bentuk')
-                    ->label('Bentuk')->alignCenter()
+                    ->label('Bentuk')
                     ->searchable(),
 
                 TextColumn::make('kategori.nama_kategori')
-                    ->label('Kategori')->alignCenter()
+                    ->label('Kategori')
                     ->searchable(),
 
                 TextColumn::make('jumlah_persediaan')
-                    ->label('Jumlah Persediaan')->alignCenter()
-                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    ->label('Jumlah Persediaan')
+                    ->formatStateUsing(fn ($state, $record) =>
+                        number_format($state, 0, ',', '.') . ' ' . strtolower($record->satuan->nama_satuan)
+                    )
                     ->sortable(),
 
                 TextColumn::make('satuan.nama_satuan')
-                    ->label('Satuan')->alignCenter(),
+                    ->label('Satuan')
+                    ->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('pencatat.name')
                     ->label('Pencatat')
-                    ->toggleable(isToggledHiddenByDefault:true),
+                    ->toggleable(isToggledHiddenByDefault:false),
 
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')->dateTime('l, j M Y')

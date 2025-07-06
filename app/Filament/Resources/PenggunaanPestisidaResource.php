@@ -68,7 +68,7 @@ class PenggunaanPestisidaResource extends Resource
     {
         return [
             'Tanggal Penggunaan' => Carbon::parse($record->tanggal_penggunaan)->translatedFormat('l, j F Y'),
-            'Jumlah Penggunaan' => number_format($record->jumlah_penggunaan, 0, ',', '.') . ' ' . $record->satuanPestisida->nama_satuan,
+            'Jumlah Penggunaan' => number_format($record->jumlah_penggunaan, 0, ',', '.') . ' ' . strtolower($record->satuanPestisida->nama_satuan),
         ];
     }
 
@@ -166,16 +166,19 @@ class PenggunaanPestisidaResource extends Resource
                     ->label('Kategori'),
 
                 TextColumn::make('jumlah_penggunaan')
-                    ->label('Jumlah Penggunaan')->numeric()->alignCenter()
+                    ->label('Jumlah Penggunaan')
                     ->sortable()
-                    ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    ->formatStateUsing(fn ($state, $record) =>
+                        number_format($state, 0, ',', '.') . ' ' . strtolower($record->satuanPestisida->nama_satuan)
+                    ),
 
                 TextColumn::make('satuanPestisida.nama_satuan')
-                    ->label('Satuan'),
+                    ->label('Satuan')
+                    ->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('pencatat.name')
                     ->label('Pencatat')
-                    ->sortable()->toggleable(isToggledHiddenByDefault:true),
+                    ->sortable()->toggleable(isToggledHiddenByDefault:false),
 
                 TextColumn::make('tanggal_penggunaan')
                     ->label('Tanggal Penggunaan')

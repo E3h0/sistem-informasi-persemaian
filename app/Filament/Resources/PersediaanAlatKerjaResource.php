@@ -63,7 +63,7 @@ class PersediaanAlatKerjaResource extends Resource
     {
         return [
             'Kategori' => $record->kategori->nama_kategori,
-            'Jumlah Tersedia' => number_format($record->jumlah_persediaan, 0, ',', '.'),
+            'Jumlah Tersedia' => number_format($record->jumlah_persediaan, 0, ',', '.') . ' ' . strtolower($record->satuan->nama_satuan),
         ];
     }
 
@@ -192,7 +192,7 @@ class PersediaanAlatKerjaResource extends Resource
                         $satuanAlatKerja = SatuanAlatKerja::find($satuanId);
                         $satuan = $satuanAlatKerja->nama_satuan ?? '';
 
-                        return "$satuan";
+                        return $satuan;
                     })
                     ->rules(['required'])->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
@@ -255,13 +255,21 @@ class PersediaanAlatKerjaResource extends Resource
 
                 TextColumn::make('jumlah_persediaan')
                     ->label('Jumlah Persediaan')
-                    ->numeric()->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
+                    ->formatStateUsing(fn ($state, $record) =>
+                        number_format($state, 0, ',', '.') . ' ' . strtolower($record->satuan->nama_satuan)
+                    )
                     ->sortable(),
 
                 TextColumn::make('jumlah_dipakai')
                     ->label('Jumlah Dipakai')
                     ->sortable()
-                    ->numeric()->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                    ->formatStateUsing(fn ($state, $record) =>
+                        number_format($state, 0, ',', '.') . ' ' . strtolower($record->satuan->nama_satuan)
+                    ),
+
+                TextColumn::make('satuan.nama_satuan')
+                    ->label('Satuan')
+                    ->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('pencatat.name')
                     ->label('Pencatat')
