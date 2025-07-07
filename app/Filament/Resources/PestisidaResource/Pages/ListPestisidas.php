@@ -25,7 +25,7 @@ class ListPestisidas extends ListRecords
                 ->fileName(fn (Export $export): string => "Pestisida-{$export->getKey()}.xlsx")
                 ->formats([ExportFormat::Xlsx])
                 ->color('success')
-                ->label('Eskpor data')
+                ->label('Ekspor data')
                 ->modalHeading('Ekspor Data Pestisida')
                 ->modalCancelAction(function (StaticAction $action) {
                     $action->label('Batalkan');

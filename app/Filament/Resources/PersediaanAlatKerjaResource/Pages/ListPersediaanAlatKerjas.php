@@ -24,7 +24,7 @@ class ListPersediaanAlatKerjas extends ListRecords
                 ->fileName(fn (Export $export): string => "PersediaanAlatKerja-{$export->getKey()}.xlsx")
                 ->formats([ExportFormat::Xlsx])
                 ->color('success')
-                ->label('Eskpor data')
+                ->label('Ekspor data')
                 ->modalHeading('Ekspor Data Persediaan Alat Kerja')
                 ->modalCancelAction(function (StaticAction $action) {
                     $action->label('Batalkan');

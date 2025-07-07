@@ -25,7 +25,7 @@ class ListMutasiBibits extends ListRecords
                 ->fileName(fn (Export $export): string => "MutasiBibit-{$export->getKey()}.xlsx")
                 ->formats([ExportFormat::Xlsx])
                 ->color('success')
-                ->label('Eskpor data')
+                ->label('Ekspor data')
                 ->modalHeading('Ekspor Data Mutasi Bibit')
                 ->modalCancelAction(function (StaticAction $action) {
                     $action->label('Batalkan');

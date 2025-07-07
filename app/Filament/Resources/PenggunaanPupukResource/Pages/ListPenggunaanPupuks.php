@@ -27,7 +27,7 @@ class ListPenggunaanPupuks extends ListRecords
                 ->fileName(fn (Export $export): string => "PenggunaanPupuk-{$export->getKey()}.xlsx")
                 ->formats([ExportFormat::Xlsx])
                 ->color('success')
-                ->label('Eskpor data')
+                ->label('Ekspor data')
                 ->modalHeading('Ekspor Data Penggunaan Pupuk')
                 ->modalCancelAction(function (StaticAction $action) {
                     $action->label('Batalkan');

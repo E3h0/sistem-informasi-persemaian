@@ -25,7 +25,7 @@ class ListTargetProduksis extends ListRecords
                 ->fileName(fn (Export $export): string => "Target&RealisasiProduksi-{$export->getKey()}.xlsx")
                 ->formats([ExportFormat::Xlsx])
                 ->color('success')
-                ->label('Eskpor data')
+                ->label('Ekspor data')
                 ->modalHeading('Ekspor Data Target & Realisasi Produksi')
                 ->modalCancelAction(function (StaticAction $action) {
                     $action->label('Batalkan');

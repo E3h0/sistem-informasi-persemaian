@@ -27,7 +27,7 @@ class ListPersediaanBibits extends ListRecords
                 ->fileName(fn (Export $export): string => "PersediaanBibit-{$export->getKey()}.xlsx")
                 ->formats([ExportFormat::Xlsx])
                 ->color('success')
-                ->label('Eskpor data')
+                ->label('Ekspor data')
                 ->modalHeading('Ekspor Data Persediaan Bibit')
                 ->modalCancelAction(function (StaticAction $action) {
                     $action->label('Batalkan');
