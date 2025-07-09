@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_barang')->unique();
             $table->foreignId('kategori_id')->constrained('kategori_alat_kerja');
+            $table->foreignId("satuan_id")->constrained("satuan_alat_kerja");
             $table->integer('jumlah_persediaan');
             $table->integer('jumlah_dipakai');
             $table->string('keterangan')->nullable();

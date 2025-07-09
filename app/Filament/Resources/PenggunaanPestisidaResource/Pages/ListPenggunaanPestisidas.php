@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources\PenggunaanPestisidaResource\Pages;
 
-use App\Filament\Exports\PenggunaanPestisidaExporter;
 use Filament\Actions;
 use Filament\Actions\ExportAction;
 use Filament\Actions\StaticAction;
+use Illuminate\Support\Facades\Auth;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Actions\Exports\Models\Export;
 use Filament\Actions\Exports\Enums\ExportFormat;
+use App\Filament\Exports\PenggunaanPestisidaExporter;
 use App\Filament\Resources\PenggunaanPestisidaResource;
 
 class ListPenggunaanPestisidas extends ListRecords
@@ -37,6 +38,7 @@ class ListPenggunaanPestisidas extends ListRecords
                     $action->label('Konfirmasi');
                 })
                 ->modalDescription("Silahkan pilih kolom dan sesuaikan namanya.")
+                ->visible(fn (): bool => Auth::user()->isAdmin() || Auth::user()->isEditor())
         ];
     }
 }

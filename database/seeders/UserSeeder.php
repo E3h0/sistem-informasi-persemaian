@@ -17,7 +17,8 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => config('app.admin_initial_password'),
-            'role' => 'Admin'
+            'role' => 'Admin',
+            'email_verified_at' => now(),
         ]);
     }
 }

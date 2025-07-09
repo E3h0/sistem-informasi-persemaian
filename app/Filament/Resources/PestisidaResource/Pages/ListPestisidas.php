@@ -5,6 +5,7 @@ namespace App\Filament\Resources\PestisidaResource\Pages;
 use Filament\Actions;
 use Filament\Actions\ExportAction;
 use Filament\Actions\StaticAction;
+use Illuminate\Support\Facades\Auth;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Exports\PestisidaExporter;
 use Filament\Actions\Exports\Models\Export;
@@ -35,6 +36,7 @@ class ListPestisidas extends ListRecords
                     $action->label('Konfirmasi');
                 })
                 ->modalDescription("Silahkan pilih kolom dan sesuaikan namanya.")
+                ->visible(fn (): bool => Auth::user()->isAdmin() || Auth::user()->isEditor())
         ];
     }
 }

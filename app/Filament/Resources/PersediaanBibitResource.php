@@ -16,9 +16,11 @@ use Illuminate\Validation\Rule;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Infolists\Components\TextEntry;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
@@ -31,7 +33,6 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PersediaanBibitResource\Pages;
 use Filament\Infolists\Components\TextEntry as ComponentsTextEntry;
 use App\Filament\Resources\PersediaanBibitResource\RelationManagers;
-use Filament\Tables\Actions\ViewAction;
 
 class PersediaanBibitResource extends Resource
 {
@@ -191,7 +192,8 @@ class PersediaanBibitResource extends Resource
                                 Notification::make()
                                     ->danger()
                                     ->title('Gagal, Tidak Dapat Menghapus')
-                                    ->body('Bibit ini sedang digunakan di data Target Produksi')
+                                    ->body('Data bibit ' . strtolower($record->jenis_bibit) . ' ini sedang digunakan di data Target Produksi')
+                                    ->sendToDatabase(Auth::user())
                                     ->send();
                                 return;
                             }
@@ -199,7 +201,8 @@ class PersediaanBibitResource extends Resource
                                 Notification::make()
                                     ->danger()
                                     ->title('Gagal, Tidak Dapat Menghapus')
-                                    ->body('Beibit ini sedang digunakan di data Mutasi Bibit')
+                                    ->body('Data bibit ' . strtolower($record->jenis_bibit) . ' ini sedang digunakan di data Mutasi Bibit')
+                                    ->sendToDatabase(Auth::user())
                                     ->send();
                                 return;
                             }

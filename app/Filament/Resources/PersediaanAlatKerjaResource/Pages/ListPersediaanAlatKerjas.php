@@ -5,6 +5,7 @@ namespace App\Filament\Resources\PersediaanAlatKerjaResource\Pages;
 use Filament\Actions;
 use Filament\Actions\ExportAction;
 use Filament\Actions\StaticAction;
+use Illuminate\Support\Facades\Auth;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Actions\Exports\Models\Export;
 use Filament\Actions\Exports\Enums\ExportFormat;
@@ -34,6 +35,7 @@ class ListPersediaanAlatKerjas extends ListRecords
                     $action->label('Konfirmasi');
                 })
                 ->modalDescription("Silahkan pilih kolom dan sesuaikan namanya.")
+                ->visible(fn (): bool => Auth::user()->isAdmin() || Auth::user()->isEditor())
         ];
     }
 }

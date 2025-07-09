@@ -5,6 +5,7 @@ namespace App\Filament\Resources\PupukResource\Pages;
 use Filament\Actions;
 use Filament\Actions\ExportAction;
 use Filament\Actions\StaticAction;
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Exports\PupukExporter;
 use App\Filament\Resources\PupukResource;
 use Filament\Resources\Pages\ListRecords;
@@ -35,6 +36,7 @@ class ListPupuks extends ListRecords
                     $action->label('Konfirmasi');
                 })
                 ->modalDescription("Silahkan pilih kolom dan sesuaikan namanya.")
+                ->visible(fn (): bool => Auth::user()->isAdmin() || Auth::user()->isEditor())
         ];
     }
 }
