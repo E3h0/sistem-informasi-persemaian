@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string("jenis_bibit")->unique();
             $table->foreignId("kategori_bibit_id")->constrained("kategori_bibit");
             $table->integer("jumlah_persediaan");
+            $table->string("pemasok")->nullable();
+            $table->date('tanggal_pembelian');
             $table->string("keterangan")->nullable();
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();

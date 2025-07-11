@@ -25,6 +25,7 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Section;
@@ -38,13 +39,13 @@ class PersediaanBibitResource extends Resource
 {
     protected static ?string $model = PersediaanBibit::class;
     protected static ?string $recordTitleAttribute = 'jenis_bibit';
-    protected static ?string $modelLabel = "Persediaan Bibit";
-    protected static ?string $pluralModelLabel = "Persediaan Bibit";
+    protected static ?string $modelLabel = "Persediaan Benih";
+    protected static ?string $pluralModelLabel = "Persediaan Benih";
     protected static ?string $navigationIcon = 'tabler-seeding';
-    protected static ?string $slug = "persediaan-bibit";
-    protected static ?string $breadcrumb = "Persediaan Bibit";
+    protected static ?string $slug = "persediaan-benih";
+    protected static ?string $breadcrumb = "Persediaan Benih";
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationGroup = 'Kelola Bibit';
+    protected static ?string $navigationGroup = 'Kelola Benih & Bibit';
 
     public static function getGloballySearchableAttributes(): array
     {
@@ -131,6 +132,22 @@ class PersediaanBibitResource extends Resource
                             'min' => 'Minimal Harus 3 karakter'
                         ])->markAsRequired(),
 
+            TextInput::make("pemasok")
+                ->label("Pemasok")->placeholder("Masukkan nama pemasok")
+                ->rules(['required','min:3'])
+                ->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                        'min' => 'Minimal Harus 3 karakter',
+                ])->markAsRequired(),
+
+            DatePicker::make('tanggal_pembelian')
+                ->label('Tanggal pembelian')
+                ->native(false)->placeholder('Masukkan tanggal pembelian')
+                ->displayFormat('l, j M Y')
+                ->rules(['required'])->validationMessages([
+                    'required' => 'Tolong isi bagian ini.',
+                ])->markAsRequired(),
+
             TextInput::make('#')
                 ->helperText('Otomatis diambil dari user yang login saat ini.')
                 ->label('Pencatat')->placeholder(Filament::auth()->user()->name)
@@ -150,7 +167,7 @@ class PersediaanBibitResource extends Resource
     {
         return $table
             ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
-            ->recordUrl( fn (Model $record): string => route('filament.admin.resources.persediaan-bibit.view', ['record' => $record]) )
+            ->recordUrl( fn (Model $record): string => route('filament.admin.resources.persediaan-benih.view', ['record' => $record]) )
             ->columns([
                 TextColumn::make('jenis_bibit')
                     ->label('Nama Bibit')
@@ -163,13 +180,20 @@ class PersediaanBibitResource extends Resource
                     ->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0)
                     ->label('Jumlah Stok')->sortable(),
 
+                TextColumn::make('pemasok')
+                    ->label('Pemasok'),
+
+                TextColumn::make('tanggal_pembelian')
+                    ->label('Tanggal Pembelian')->dateTime('l, j M Y')
+                    ->sortable()->toggleable(),
+
                 TextColumn::make('pencatat.name')
                     ->label('Pencatat')
                     ->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')->dateTime('l, j M Y')
-                    ->sortable()->toggleable(),
+                    ->sortable()->toggleable(isToggledHiddenByDefault:true),
 
                 TextColumn::make('updated_at')
                     ->label('Diperbarui Pada')->dateTime('l, j M Y')
@@ -230,6 +254,8 @@ class PersediaanBibitResource extends Resource
                         Infolists\Components\TextEntry::make('jenis_bibit')->label('Jenis Bibit')->columns(1),
                         Infolists\Components\TextEntry::make('kategori.nama_kategori')->label('Kategori Bibit')->columns(1),
                         Infolists\Components\TextEntry::make('jumlah_persediaan')->label('Jumlah Persediaan')->numeric(thousandsSeparator:'.', decimalSeparator:',', decimalPlaces:0),
+                        Infolists\Components\TextEntry::make('pemasok')->label('Pemasok')->columns(1),
+                        Infolists\Components\TextEntry::make('tanggal_pembelian')->label('Tanggal Pembelian')->dateTime('l, j M Y'),
                         Infolists\Components\TextEntry::make('pencatat.name')->label('Pencatat')
                             ->badge()
                             ->color(function ($record): string {

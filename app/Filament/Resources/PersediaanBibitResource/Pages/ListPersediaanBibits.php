@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 class ListPersediaanBibits extends ListRecords
 {
     protected static string $resource = PersediaanBibitResource::class;
-    protected static ?string $breadcrumb = "Daftar Persediaan Bibit";
+    protected static ?string $breadcrumb = "Daftar Persediaan Benih";
     protected function getHeaderActions(): array
     {
         return [
@@ -28,7 +28,7 @@ class ListPersediaanBibits extends ListRecords
                 ->formats([ExportFormat::Xlsx])
                 ->color('success')
                 ->label('Ekspor data')
-                ->modalHeading('Ekspor Data Persediaan Bibit')
+                ->modalHeading('Ekspor Data Persediaan Benih')
                 ->modalCancelAction(function (StaticAction $action) {
                     $action->label('Batalkan');
                     $action->color('danger');

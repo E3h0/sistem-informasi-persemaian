@@ -14,17 +14,42 @@ class KategoriBibitSeeder extends Seeder
     public function run(): void
     {
         KategoriBibit::create([
-            "nama_kategori" => "Kayu-kayuan",
+            "nama_kategori" => "Jenis Kayu",
             'user_id' => 1,
             'keterangan' => null
         ]);
         KategoriBibit::create([
-            "nama_kategori" => "Estetika",
+            "nama_kategori" => "Tanaman Hias",
             'user_id' => 1,
             'keterangan' => null
         ]);
         KategoriBibit::create([
-            "nama_kategori" => "Hasil Hutan Non Kayu",
+            "nama_kategori" => "Penghasil Non Kayu",
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        KategoriBibit::create([
+            "nama_kategori" => "Penutup Tanah",
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        KategoriBibit::create([
+            "nama_kategori" => "Tanaman Buah",
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        KategoriBibit::create([
+            "nama_kategori" => "Tanaman Atsiri",
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        KategoriBibit::create([
+            "nama_kategori" => "Rekalsitran",
+            'user_id' => 1,
+            'keterangan' => null
+        ]);
+        KategoriBibit::create([
+            'nama_kategori'=> 'Ortodoks',
             'user_id' => 1,
             'keterangan' => null
         ]);

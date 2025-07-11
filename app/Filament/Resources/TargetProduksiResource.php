@@ -51,7 +51,7 @@ class TargetProduksiResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationGroup = 'Kelola Bibit';
+    protected static ?string $navigationGroup = 'Kelola Benih & Bibit';
 
     // protected static ?string $recordTitleAttribute = 'bibit.jenis_bibit';
 
