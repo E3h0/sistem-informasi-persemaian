@@ -144,8 +144,11 @@ class PersediaanBibitResource extends Resource
                 ->label('Tanggal pembelian')
                 ->native(false)->placeholder('Masukkan tanggal pembelian')
                 ->displayFormat('l, j M Y')
-                ->rules(['required'])->validationMessages([
+                ->closeOnDateSelection()
+                ->maxDate(now())
+                ->rules(['required', 'date', 'before_or_equal:'. now()->endOfDay()])->validationMessages([
                     'required' => 'Tolong isi bagian ini.',
+                    'before_or_equal' => 'Tanggal pembelian tidak boleh melebihi hari ini.'
                 ])->markAsRequired(),
 
             TextInput::make('#')
