@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 class ListPersediaanBibits extends ListRecords
 {
     protected static string $resource = PersediaanBibitResource::class;
-    protected static ?string $breadcrumb = "Daftar Persediaan Benih";
+    protected static ?string $breadcrumb = "Daftar Persediaan Bibit";
     protected function getHeaderActions(): array
     {
         return [
