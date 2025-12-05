@@ -39,13 +39,13 @@ class PersediaanBibitResource extends Resource
 {
     protected static ?string $model = PersediaanBibit::class;
     protected static ?string $recordTitleAttribute = 'jenis_bibit';
-    protected static ?string $modelLabel = "Persediaan Benih";
-    protected static ?string $pluralModelLabel = "Persediaan Benih";
+    protected static ?string $modelLabel = "Persediaan Bibit";
+    protected static ?string $pluralModelLabel = "Persediaan Bibit";
     protected static ?string $navigationIcon = 'tabler-seeding';
-    protected static ?string $slug = "persediaan-benih";
-    protected static ?string $breadcrumb = "Persediaan Benih";
+    protected static ?string $slug = "persediaan-bibit";
+    protected static ?string $breadcrumb = "Persediaan Bibit";
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationGroup = 'Kelola Benih & Bibit';
+    protected static ?string $navigationGroup = 'Kelola Bibit';
 
     public static function getGloballySearchableAttributes(): array
     {
@@ -166,8 +166,8 @@ class PersediaanBibitResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->emptyStateHeading('Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
-            ->recordUrl( fn (Model $record): string => route('filament.admin.resources.persediaan-benih.view', ['record' => $record]) )
+            ->emptyStateHeading(heading: 'Belum ada data')->emptyStateDescription('Silahkan tambahkan data terlebih dahulu.')->emptyStateIcon('heroicon-o-exclamation-circle')
+            ->recordUrl( fn (Model $record): string => route('filament.admin.resources.persediaan-bibit.view', ['record' => $record]) )
             ->columns([
                 TextColumn::make('jenis_bibit')
                     ->label('Nama Bibit')

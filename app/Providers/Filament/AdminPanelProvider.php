@@ -57,7 +57,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->sidebarFullyCollapsibleOnDesktop()
             ->navigationGroups([
-                'Kelola Benih & Bibit',
+                'Kelola Bibit',
                 'Kelola Barang',
                 NavigationGroup::make('Pengaturan')
                     ->icon('heroicon-o-cog')

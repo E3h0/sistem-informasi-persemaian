@@ -52,7 +52,7 @@ class MutasiBibitResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $navigationGroup = 'Kelola Benih & Bibit';
+    protected static ?string $navigationGroup = 'Kelola Bibit';
 
     public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
     {
