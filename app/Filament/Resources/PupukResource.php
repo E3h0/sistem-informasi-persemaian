@@ -306,7 +306,7 @@ class PupukResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()->label('Hapus')
+                Tables\Actions\DeleteAction::make()
                     ->action(function ($record){
                         if ($record->penggunaan()->count() > 0) {
                             Notification::make()

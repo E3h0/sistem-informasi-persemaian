@@ -306,8 +306,31 @@ class PestisidaResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()->label('Hapus')
-                ->modalHeading('Konfirmasi Penghapusan')->modalDescription('Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat dikembalikan!')->successNotification(
-                    Notification::make()->success()->title('Berhasil Dihapus')->body('Data Berhasil Dihapus')->color('success')->seconds(3)
+                ->action(function ($record){
+                    if ($record->penggunaan()->count() > 0) {
+                        Notification::make()
+                            ->danger()
+                            ->title('Gagal, Tidak Dapat Menghapus')
+                            ->body('Data pestisida ini sedang digunakan di data penggunaan pestisida')
+                            ->send();
+                        return;
+                    }
+                    $record->delete();
+                    Notification::make()
+                            ->success()
+                            ->title('Berhasil Dihapus')
+                            ->body('Data berhasil dihapus')
+                            ->send();
+                    })
+                ->modalHeading('Konfirmasi Penghapusan')
+                ->modalDescription('Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat dikembalikan!')
+                ->successNotification(
+                    Notification::make()
+                    ->success()
+                    ->title('Berhasil Dihapus')
+                    ->body('Data Berhasil Dihapus')
+                    ->color('success')
+                    ->seconds(3)
                 ),
             ])
             ->bulkActions([
