@@ -127,9 +127,12 @@ class PenggunaanPestisidaResource extends Resource
 
                 DatePicker::make('tanggal_penggunaan')
                     ->native(false)->placeholder('Masukkan tanggal penggunaan')
-                    ->displayFormat('l, j M Y')
-                    ->rules(['required'])->validationMessages([
+                    ->displayFormat('l  , j M Y')
+                    ->closeOnDateSelection()
+                    ->maxDate(now())            
+                    ->rules(['required', 'before_or_equal:' . now()->endOfDay()])->validationMessages([
                         'required' => 'Tolong isi bagian ini.',
+                        'before_or_equal' => 'Tanggal pembelian tidak boleh melebihi hari ini.'
                     ])->markAsRequired(),
 
                 TextInput::make('#')
