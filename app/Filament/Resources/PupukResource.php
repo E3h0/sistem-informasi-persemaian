@@ -166,7 +166,9 @@ class PupukResource extends Resource
                     ->success()
                     ->seconds(3)
                     ->send();
-                }),
+                })->rules(['required'])->validationMessages([
+                        'required' => 'Tolong isi bagian ini.',
+                    ])->markAsRequired(),
 
                 Select::make('kategori_pupuk_id')
                     ->label('Kategori')->placeholder('Pilih kategori pupuk')
