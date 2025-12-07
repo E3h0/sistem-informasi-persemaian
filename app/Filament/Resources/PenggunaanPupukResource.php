@@ -121,8 +121,11 @@ class PenggunaanPupukResource extends Resource
                     })
                     ->label('Jumlah Penggunaan')
                     ->numeric()
-                    ->rules(['required'])->validationMessages([
-                        'required' => 'Tolong isi bagian ini.',
+                    ->gte(0)
+                    ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'gte' => 'Tidak boleh kurang dari 0.',
+                            'integer' => 'Gunakan bilangan bulat.'
                     ])->markAsRequired(),
 
                 DatePicker::make('tanggal_penggunaan')
