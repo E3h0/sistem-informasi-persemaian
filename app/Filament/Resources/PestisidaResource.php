@@ -233,9 +233,12 @@ class PestisidaResource extends Resource
                         return "$satuan";
                     })
                     ->numeric()->label('Jumlah Persediaan')
-                    ->rules(['required'])->validationMessages([
+                    ->gte(0)
+                    ->rules(['required', 'gte:0', 'integer'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired(),
+                            'gte' => 'Tidak boleh kurang dari 0.',
+                            'integer' => 'Gunakan bilangan bulat.'
+                    ])->markAsRequired(),
 
                 TextInput::make('#')
                     ->helperText('Otomatis diambil dari user yang login saat ini.')

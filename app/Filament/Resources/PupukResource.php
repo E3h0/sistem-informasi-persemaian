@@ -233,6 +233,7 @@ class PupukResource extends Resource
                         return "$satuan";
                     })
                     ->numeric()->label('Jumlah Persediaan')
+                    ->gte(0)
                     ->rules(['required', 'gte:0', 'integer'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
                             'gte' => 'Tidak boleh kurang dari 0.',
