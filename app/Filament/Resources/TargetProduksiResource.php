@@ -102,15 +102,19 @@ class TargetProduksiResource extends Resource
                 TextInput::make('target_produksi')
                     ->numeric()
                     ->label('Target Produksi')->placeholder('Masukkan Target Produksi')
-                    ->rules(['required'])->validationMessages([
-                        'required' => 'Tolong isi bagian ini.',
+                    ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'gte' => 'Tidak boleh kurang dari 0.',
+                            'integer' => 'Gunakan bilangan bulat.'
                     ])->markAsRequired(),
 
                 TextInput::make('sudah_diproduksi')
                     ->numeric()
                     ->label('Sudah Diproduksi')->placeholder('Masukkan Jumlah Bibit Yang Sudah Diproduksi')
-                    ->rules(['required'])->validationMessages([
-                        'required' => 'Tolong isi bagian ini.',
+                    ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'gte' => 'Tidak boleh kurang dari 0.',
+                            'integer' => 'Gunakan bilangan bulat.'
                     ])->markAsRequired(),
 
                 TextInput::make('sudah_distribusi')
@@ -121,16 +125,20 @@ class TargetProduksiResource extends Resource
                     })
                     ->numeric()
                     ->label('Sudah Distribusi')->placeholder('Masukkan Jumlah Bibit Yang Sudah Distribusi')
-                    ->rules(['required'])->validationMessages([
-                        'required' => 'Tolong isi bagian ini.',
+                    ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'gte' => 'Tidak boleh kurang dari 0.',
+                            'integer' => 'Gunakan bilangan bulat.'
                     ])->markAsRequired(),
 
 
                 TextInput::make('stok_akhir')
                     ->numeric()
                     ->label('Stok Akhir')->placeholder('Masukkan Jumlah Stok Akhir')
-                    ->rules(['required'])->validationMessages([
-                        'required' => 'Tolong isi bagian ini.',
+                    ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                            'required' => 'Tolong isi bagian ini.',
+                            'gte' => 'Tidak boleh kurang dari 0.',
+                            'integer' => 'Gunakan bilangan bulat.'
                     ])->markAsRequired(),
 
                 TextInput::make('#')
