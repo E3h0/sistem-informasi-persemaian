@@ -127,9 +127,11 @@ class PersediaanBibitResource extends Resource
             TextInput::make("jumlah_persediaan")
                 ->numeric()->label('Jumlah Persediaan')
                 ->placeholder("Masukkan jumlah Persediaan")
-                ->rules(['required','min:3'])->validationMessages([
+                ->gte(0)
+                ->rules(['required', 'gte:0', 'integer'])->validationMessages([
                             'required' => 'Tolong isi bagian ini.',
-                            'min' => 'Minimal Harus 3 karakter'
+                            'gte' => 'Tidak boleh kurang dari 0.',
+                            'integer' => 'Gunakan bilangan bulat.'
                         ])->markAsRequired(),
 
             TextInput::make("pemasok")
