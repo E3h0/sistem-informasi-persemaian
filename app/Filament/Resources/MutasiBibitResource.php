@@ -104,30 +104,38 @@ class MutasiBibitResource extends Resource
                         TextInput::make('gha1')->label('Blok 1')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
-                            'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired()->default(0),
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
+                            ])->markAsRequired()->default(0),
 
                         TextInput::make('gha2')->label('Blok 2')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
-                            'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired()->default(0),
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
+                            ])->markAsRequired()->default(0),
 
                         TextInput::make('gha3')->label('Blok 3')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
-                            'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired()->default(0),
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                                    'required' => 'Tolong isi bagian ini.',
+                                    'gte' => 'Tidak boleh kurang dari 0.',
+                                    'integer' => 'Gunakan bilangan bulat.'
+                            ])->markAsRequired()->default(0),
 
                         TextInput::make('gha4')->label('Blok 4')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
-                            'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired()->default(0),
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
+                            ])->markAsRequired()->default(0),
                 ])->columns(4),
 
                 Section::make('AHA')
@@ -136,30 +144,38 @@ class MutasiBibitResource extends Resource
                         TextInput::make('aha1')->label('Blok 1')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
-                            'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired()->default(0),
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
+                            ])->markAsRequired()->default(0),
 
                         TextInput::make('aha2')->label('Blok 2')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
-                            'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired()->default(0),
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
+                            ])->markAsRequired()->default(0),
 
                         TextInput::make('aha3')->label('Blok 3')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
-                            'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired()->default(0),
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
+                            ])->markAsRequired()->default(0),
 
                         TextInput::make('aha4')->label('Blok 4')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
-                            'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired()->default(0),
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
+                            ])->markAsRequired()->default(0),
                     ])->columns(4),
 
                 Section::make('OGA')
@@ -168,35 +184,47 @@ class MutasiBibitResource extends Resource
                         TextInput::make('oga1')->label('Blok 1')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
                                 'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
                             ])->markAsRequired()->default(0),
 
                         TextInput::make('oga2')->label('Blok 2')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
                                 'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
                             ])->markAsRequired()->default(0),
 
                         TextInput::make('oga3')->label('Blok 3')
                             ->numeric()->columnSpan(1)
                             ->placeholder('Masukkan jumlah bibit')
-                            ->rules(['required'])->validationMessages([
+                            ->rules(['required', 'gte:0', 'integer'])->validationMessages([
                                 'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
                             ])->markAsRequired()->default(0),
 
                         TextInput::make('oga4')->label('Blok 4')
                         ->numeric()->columnSpan(1)
                         ->placeholder('Masukkan jumlah bibit')
-                        ->rules(['required'])->validationMessages([
-                            'required' => 'Tolong isi bagian ini.',
-                        ])->markAsRequired()->default(0),
+                        ->rules(['required', 'gte:0', 'integer'])->validationMessages([
+                                'required' => 'Tolong isi bagian ini.',
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
+                            ])->markAsRequired()->default(0),
                     ])->columns(4),
 
                 TextInput::make('siap_distribusi')
                     ->numeric()
                     ->label('Siap Distribusi')->placeholder('Masukkan Jumlah Bibit Yang Siap Distribusi (opsional)')
+                    ->rules(['gte:0', 'integer'])->validationMessages([           
+                                'gte' => 'Tidak boleh kurang dari 0.',
+                                'integer' => 'Gunakan bilangan bulat.'
+                            ])->markAsRequired()->default(0)
                     ->columnSpan(2),
 
                 TextInput::make('#')
